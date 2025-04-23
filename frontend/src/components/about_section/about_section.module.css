@@ -1,0 +1,24 @@
+.aboutSection {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.blockImg {
+  width: 55%;
+  text-align: center;
+}
+
+.blockContent {
+  width: 45%;
+  padding-right: 3rem;
+}
+
+.blockHeader > h3 {
+  color: #1F1F1F;
+  margin-bottom: 2rem;
+}
+
+.blockDesc {
+  font-size: 19px;
+}

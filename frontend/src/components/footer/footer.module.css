@@ -1,0 +1,37 @@
+.footer * {
+  color: #fff;
+}
+
+.footer {
+  width: 100%;
+  background-color: #4A90E2;
+  padding: 1rem 2rem;
+}
+
+.mainFooterBlock {
+  width: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.companyName > h4 {
+  margin-bottom: 1rem;
+}
+
+.companyContacts {
+  margin-bottom: 1rem;
+}
+
+.aboutBlock {
+  display: flex;
+  flex-direction: column;
+}
+
+.aboutBlock > a {
+  margin: .3rem 0;
+}
+
+.dataFooter > p {
+  font-size: 14px;
+}
