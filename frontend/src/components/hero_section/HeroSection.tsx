@@ -10,7 +10,8 @@ export default function HeroSection() {
       <div className={style.mainBlock}>
         <div className={style.mainBlockContent}>
           <div className={style.blockHeader}>
-            <h2>Юридические документы на все случаи жизни</h2>
+            <h2>Юридические документы</h2>
+            <h2>на все случаи жизни</h2>
           </div>
           <div className={style.blockDesc}>
             <h4>Быстро, надёжно, без лишнего</h4>
@@ -21,13 +22,12 @@ export default function HeroSection() {
             />
           </div>
         </div>
-
         <div className={style.mainBlockImg}>
           <Image
           src={'/images/main_img.png'}
           alt='main_img'
-          width={800}
-          height={800}
+          width={700}
+          height={600}
           />
         </div>
       </div>

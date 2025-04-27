@@ -17,7 +17,7 @@ export default function Header() {
         </div>
         <div className={style.navMenu}>
           <Link href='/#'>Главная</Link>
-          <Link href='/#'>Документы</Link>
+          <Link href='/docs'>Документы</Link>
           <Link href='/#'>FAQ</Link>
           <Link href='/#'>Контакты</Link>
         </div>

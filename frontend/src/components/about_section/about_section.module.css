@@ -2,15 +2,16 @@
   width: 100%;
   display: flex;
   align-items: center;
+  gap: 2rem;
 }
 
 .blockImg {
-  width: 55%;
+  width: 50%;
   text-align: center;
 }
 
 .blockContent {
-  width: 45%;
+  width: 50%;
   padding-right: 3rem;
 }
 
