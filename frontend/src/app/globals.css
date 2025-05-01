@@ -15,7 +15,6 @@ body {
 .container {
   max-width: 1300px;
   margin: 0 auto;
-  padding: 1rem 0;
 }
 
 a, a:visited {
@@ -102,7 +101,7 @@ button, input[type="submit"] {
 }
 
 button:hover {
-  background-color: rgba(129, 141, 236, 1);
+  background-color: #dbe0e7 ;
   border: none;
 }
 
