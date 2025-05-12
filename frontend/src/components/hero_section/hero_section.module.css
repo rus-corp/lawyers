@@ -1,0 +1,29 @@
+.heroSection {
+  width: 100%;
+  height: 70vh;
+}
+
+.mainBlock {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.mainBlockContent {
+  width: 50%;
+}
+
+.mainBlockImg {
+  width: 50%;
+  flex: 1 1 0%;
+}
+
+.blockHeader {
+  margin-bottom: 1rem;
+}
+
+.blockDesc * {
+  color: #1F1F1F;
+  margin-bottom: 2rem;
+}

@@ -1,0 +1,11 @@
+.btnContainer {
+  padding: .3rem 1.5rem;
+  width: 100%;
+}
+
+.btnContent {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 1rem;
+}

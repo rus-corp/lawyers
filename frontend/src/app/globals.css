@@ -1,0 +1,128 @@
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-sizing: border-box;
+  /* font-size: 15px; */
+}
+
+body {
+  /* max-width: 1400px; */
+  margin: 0 auto;
+}
+
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+a, a:visited {
+  text-decoration: none;
+  font-family: inherit;
+  transition: color .3s;
+  text-transform: uppercase;
+  color: #4A90E2;
+}
+
+
+a:hover {
+  color: #7B1E1E;
+}
+
+a:focus, a:active {
+  outline: none;
+}
+
+h1 {
+  font-size: 3.5rem;
+  color: #4A90E2;
+}
+
+h2 {
+  font-size: 2.7rem;
+  color: #4A90E2;
+}
+
+h3 {
+  font-size: 2rem;
+  color: #4A90E2;
+}
+
+h4 {
+  font-size: 1.4rem;
+  color: #4A90E2;
+}
+
+
+p {
+  font-family: inherit;
+  color: #3B3937;
+}
+
+span {
+  font-family: inherit;
+  color: #4A90E2;
+}
+
+
+
+ul {
+  /* list-style: none; */
+  cursor: pointer;
+}
+
+img, svg, video {
+  display: inline-block;
+  vertical-align: top;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Form */
+input, textarea, button, select {
+  font-family: "Exo 2", sans-serif;
+  font-size: inherit;
+  color: black;
+}
+
+button, input[type="submit"] {
+  display: inline-block;
+  box-shadow: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color .5s ease;
+  padding: 0.2rem;
+  /* border: solid black 1px; */
+  border-radius: 10px;
+  transition: .4s;
+  transform: all .4s ease;
+}
+
+button:hover {
+  background-color: #dbe0e7 ;
+  border: none;
+}
+
+button:active {
+  transform: scale(0.9);
+}
+
+button::-moz-focus-inner {
+  padding: 0;
+  border: none;
+}
+
+label {
+  cursor: pointer;
+}
+
+legend {
+  display: block;
+}
+
+footer {
+  color: #fff;
+}
+
