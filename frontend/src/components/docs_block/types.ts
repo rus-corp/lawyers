@@ -6,5 +6,4 @@ export type DocumentsType = {
   title: string;
   file: string;
   slug: string;
-  category: CategoryListType
 }

@@ -50,8 +50,10 @@ export default function DocsComponent() {
         </div>
         {documents.map((item: DocumentsType) => (
           <DocumnetItem key={item.id}
+          id={item.id}
           title={item.title}
           file={item.file}
+          slug={item.slug}
           />
         ))}
       </div>
@@ -61,10 +63,10 @@ export default function DocsComponent() {
 
 
 const DocumnetItem = ({
+  id,
   title,
   file,
   slug,
-  category,
 }:DocumentsType) => {
   return (
     <a href={file} download>

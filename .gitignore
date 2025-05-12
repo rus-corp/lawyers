@@ -4,6 +4,7 @@ __pycache__/
 .pytest_cache/
 .vscode
 req.http
+docker_data/
 
 # dependencies
 frontend/node_modules
