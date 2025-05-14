@@ -54,7 +54,7 @@ services:
     volumes:
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./docker_data/certbot:/var/www/certbot
-      - .docker_data/static:/app/static
+      - ./docker_data/static:/app/static
     depends_on:
       - api
       - web
