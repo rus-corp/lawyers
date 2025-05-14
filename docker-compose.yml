@@ -50,10 +50,11 @@ services:
     restart: always
     ports:
       - "80:80"
-      # - "443:443"
+      - "443:443"
     volumes:
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./docker_data/certbot:/var/www/certbot
+      - ./docker_data/letsencrypt:/etc/letsencrypt
       - ./docker_data/static:/app/static
     depends_on:
       - api
