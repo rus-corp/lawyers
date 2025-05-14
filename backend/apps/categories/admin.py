@@ -3,6 +3,9 @@ from mptt.admin import MPTTModelAdmin
 
 from .models import Category, Documents
 
+admin.site.site_header = 'Управление проектом Сам Себе Юрист'
+admin.site.site_title = 'Сам Себе Юрист Admin'
+admin.site.index_title = 'Админ панель'
 
 @admin.register(Category)
 class CategoryAdmin(MPTTModelAdmin):
