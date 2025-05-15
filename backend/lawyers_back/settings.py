@@ -15,9 +15,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9l$_&u9f7f(0izua-!(*9j=@o=nm%sj@6oeq-3&5#y%zjg^qa0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'https://xn-----6kcftbw0a5bcdgn8n.xn--p1ai',
+    'https://сам-себе-юрист.рф',
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
@@ -67,6 +72,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'lawyers_back.wsgi.application'
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://xn-----6kcftbw0a5bcdgn8n.xn--p1ai',
+    'https://сам-себе-юрист.рф'
 ]
 
 # Database
