@@ -18,8 +18,8 @@ SECRET_KEY = 'django-insecure-9l$_&u9f7f(0izua-!(*9j=@o=nm%sj@6oeq-3&5#y%zjg^qa0
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'https://xn-----6kcftbw0a5bcdgn8n.xn--p1ai',
-    'https://сам-себе-юрист.рф',
+    'xn-----6kcftbw0a5bcdgn8n.xn--p1ai',
+    'сам-себе-юрист.рф',
     'localhost',
     '127.0.0.1',
 ]
