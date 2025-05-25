@@ -1,5 +1,3 @@
-import { CategoryListType } from "../categories/types";
-
 
 export type DocumentsType = {
   id: number;
