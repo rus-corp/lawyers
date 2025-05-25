@@ -34,10 +34,19 @@
 }
 
 .sectionContent {
-  width: 80%;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 1rem;
+}
+
+.imgBlock {
+  width: 60%;
+}
+
+.textBlock {
+  width: 40%;
 }
 
 .sectionDesc {
@@ -53,7 +62,8 @@
   width: 100%;
 }
 
-.list {
-  padding-left: 20px;
-  list-style-type: disc;
+
+.advItem {
+  padding-left: 2rem;
+  margin: 2rem 0;
 }

@@ -1,0 +1,34 @@
+.newsList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  gap: 3rem;
+  margin-bottom: 2rem;
+}
+
+.newsItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  background-color: #EAF0F7;
+  border-radius: 12px;
+  min-width: 6rem;
+  min-height: 8rem;
+  height: 12rem;
+  cursor: pointer;
+}
+
+
+.imgBlock {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.newsContent {
+  padding: 1rem;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+}

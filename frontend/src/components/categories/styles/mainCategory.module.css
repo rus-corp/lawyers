@@ -16,14 +16,15 @@
   overflow: auto;
 }
 
-.categoryList {
+.mainCategoryList {
   width: 100%;
 }
 
 .categoryItem {
   width: 100%;
   cursor: pointer;
-  margin: .3rem 0;
+  margin: .7rem 0;
+  user-select: none;
   transition: background-color ease .5s;
 }
 
@@ -40,7 +41,7 @@
 .categoryContent {
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   gap: 1rem;
 }
 
@@ -51,4 +52,9 @@
 
 .categoryListBlock {
   transition: max-height 0.4s ease, opacity 0.4s ease;
+}
+
+.subCategoryListBlock {
+  width: 90%;
+  margin-left: 5%;
 }

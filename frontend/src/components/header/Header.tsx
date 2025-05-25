@@ -20,7 +20,7 @@ export default function Header() {
           <Link href='/#'>Главная</Link>
           <Link href='/docs'>Документы</Link>
           <Link href='/about'>О нас</Link>
-          <Link href='/#'>Контакты</Link>
+          <Link href='/news'>Новости</Link>
         </div>
         <div className={style.contacts}>
           <span>+7 (777) 987-65-43</span>

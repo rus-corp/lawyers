@@ -5,7 +5,7 @@ import style from '../styles/mainCategory.module.css'
 
 import { getCategoryBySlug } from '@/api';
 import { CategoryComponentProps, CategoryItemType } from '../types/types'
-// import SubCategoryComponent from '../subCategoryComponent/SubCategoryComponent';
+import SubCategoryComponent from '../subCategoryComponent/SubCategoryComponent';
 
 export default function CategoryComponent(
   { categorySlug }: CategoryComponentProps
@@ -60,7 +60,7 @@ const CategoryItem = ({ id, title, slug }: CategoryItemType) => {
           <p>{title}</p>
         </div>
       </div>
-      {/* {active && <SubCategoryComponent categorySlug={selectedCategory}/>} */}
+      {active && <SubCategoryComponent categorySlug={selectedCategory}/>}
     </>
   );
 }

@@ -55,10 +55,16 @@ h4 {
   color: #4A90E2;
 }
 
+h5 {
+  font-size: 1.2rem;
+  color: #4A90E2;
+}
+
 
 p {
   font-family: inherit;
   color: #3B3937;
+  font-size: 0.9rem;
 }
 
 span {
@@ -66,12 +72,10 @@ span {
   color: #4A90E2;
 }
 
-
-
 ul {
-  /* list-style: none; */
-  cursor: pointer;
+  list-style: none;
 }
+
 
 img, svg, video {
   display: inline-block;
