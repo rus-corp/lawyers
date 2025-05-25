@@ -63,7 +63,7 @@ const MainCategoryItem = ({ id, title, slug }: CategoryItemType) => {
           <p>{title}</p>
         </div>
       </div>
-      {active && <CategoryComponent mainCategorySlug={selectedCAtegory}/>}
+      {active && <CategoryComponent categorySlug={selectedCAtegory}/>}
     </>
   );
 }
