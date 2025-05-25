@@ -39,7 +39,7 @@ export default function AboutPageContent() {
           <h2>Почему выбирают нас:</h2>
         </div>
         <div className={style.sectionContent}>
-          <ul>
+          <ul className={style.list}>
             <li>
               <h4>Актуальность и надежность</h4>
               <p>

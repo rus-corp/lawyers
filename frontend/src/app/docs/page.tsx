@@ -1,14 +1,14 @@
 import React from 'react';
 
 import style from './docs.module.css'
-import Category from '@/components/categories/Category';
+import MainCategoryComponent from '@/components/categories/mainCategoryComponent/MainCategoryComponent';
 import DocsComponent from '@/components/docs_block/DocsComponent';
 
 export default function Docs() {
   return(
     <section className={style.docsPage}>
       <div className={style.blockContent}>
-        <Category />
+        <MainCategoryComponent />
         <DocsComponent />
         {/* <div className={style.blockDocs}>
           <div className={style.docsHeader}>

@@ -9,7 +9,8 @@ export default function Header() {
   return(
     <header className={style.header}>
         <div className={style.companyLogo}>
-          <Image src="/images/small_logo.png"
+          <Image src="/images/logo.png"
+          priority={true}
           width={150}
           height={150}
           alt='logo'

@@ -28,7 +28,7 @@ export default function Advantages() {
           content={'Гарантия защиты'}
           />
           <AdvantegeItem
-          img_source={'/block_img/note-tak.png'}
+          img_source={'/block_img/eco_img.png'}
           img_alt={'ecoimg'}
           content={'Экономия средств'}
           />
