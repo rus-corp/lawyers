@@ -22,7 +22,8 @@
 }
 
 .imgBlock {
-  width: 55%;
+  width: auto;
+  height: auto;
 }
 
 .aboutPageContent {
@@ -41,9 +42,6 @@
   margin-top: 1rem;
 }
 
-.imgBlock {
-  width: 60%;
-}
 
 .textBlock {
   width: 40%;

@@ -1,5 +1,6 @@
 export type CategoryComponentProps = {
   categorySlug: string;
+  clickedCategory: Function
 }
 
 
@@ -7,6 +8,7 @@ export type CategoryItemType = {
   id: number;
   title: string;
   slug: string;
+  clickedCategory: Function
 }
 
 export type CategoryListType = {
@@ -23,4 +25,8 @@ export type CategoryType = {
   children?: CategoryType[];
   isExpanded?: boolean;
   isLoading?: boolean;
+}
+
+export type MainCategoryProps = {
+  clickedCategory: Function
 }

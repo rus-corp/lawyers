@@ -1,0 +1,51 @@
+.politicBlock {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.politicContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 85%;
+}
+
+.blockHeader * {
+  color: black;
+}
+
+.blockHeader {
+  margin: 1.3rem;
+  text-align: center;
+}
+
+.blockDate {
+  text-align: end;
+  margin-bottom: 1rem;
+}
+
+.blockContent * {
+  color: black;
+}
+
+.blockContent {
+  margin-top: 2rem;
+}
+
+.contentItem {
+  margin: 2rem;
+}
+
+.contentItem > p:nth-child(n + 3) {
+  margin: .7rem;
+  text-indent: 2rem;
+}
+
+.contentItem > h4 {
+  margin-bottom: 1rem;
+}
+
+.contentItem > ul > li {
+  margin-left: 3rem;
+}

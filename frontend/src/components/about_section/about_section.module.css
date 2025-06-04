@@ -6,7 +6,8 @@
 }
 
 .blockImg {
-  width: 50%;
+  width: auto;
+  height: auto;
   text-align: center;
 }
 

@@ -20,7 +20,7 @@ class CategoryAdmin(MPTTModelAdmin):
 
 @admin.register(Documents)
 class DocumentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'category')
+    list_display = ('id', 'title', 'category', 'price')
     prepopulated_fields = {'slug': ('title',)}
     list_display_links = ('id', 'title',)
     search_fields = ('title',)

@@ -1,13 +1,14 @@
 "use client"
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import style from '../styles/mainCategory.module.css'
 import { CategoryComponentProps, CategoryItemType } from '../types/types';
 import { getCategoryBySlug } from '@/api';
 
 
 export default function SubCategoryComponent({
-  categorySlug
+  categorySlug, clickedCategory
 }: CategoryComponentProps) {
   const [categories, setCategories] = React.useState<CategoryItemType[]>([])
   const getCategoriesList = async (categorySlug: string) => {
@@ -18,7 +19,9 @@ export default function SubCategoryComponent({
     }
   }
   React.useEffect(() => {
-    getCategoriesList(categorySlug)
+    if (categorySlug) {
+      getCategoriesList(categorySlug)
+    }
   }, [categorySlug])
   return(
     <div className={style.subCategoryListBlock}>
@@ -27,6 +30,7 @@ export default function SubCategoryComponent({
         id={categoryItem.id}
         title={categoryItem.title}
         slug={categoryItem.slug}
+        clickedCategory={clickedCategory}
         />
       ))}
     </div>
@@ -34,12 +38,12 @@ export default function SubCategoryComponent({
 }
 
 
-const SubCategoryItem = ({ id, title, slug }: CategoryItemType) => {
+const SubCategoryItem = ({ id, title, slug, clickedCategory }: CategoryItemType) => {
+  const router = useRouter()
   const handleClick = (categorySlug: string) => {
-    console.log(categorySlug)
+    router.push(`/docs/${categorySlug}`)
   }
   return (
-    <>
       <div className={style.categoryItem}>
         <div
         className={style.categoryContent}
@@ -48,13 +52,11 @@ const SubCategoryItem = ({ id, title, slug }: CategoryItemType) => {
           <Image
           src={'/icons/note-tak.png'}
           alt='doc'
-          width={60}
-          height={60}
+          width={40}
+          height={40}
           />
           <p>{title}</p>
         </div>
       </div>
-      {/* {active && <CategoryComponent mainCategorySlug={active}/>} */}
-    </>
   );
 }

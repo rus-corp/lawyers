@@ -3,12 +3,12 @@ import React, { act } from 'react';
 import Image from 'next/image';
 import style from '../styles/mainCategory.module.css'
 
-import { CategoryItemType } from '../types/types';
+import { CategoryItemType, MainCategoryProps } from '../types/types';
 import { getCategories, getCategoryBySlug, getCategoryByParent } from '@/api';
 
 import CategoryComponent from '../categoryComponent/CategoryComponent';
 
-export default function MainCategoryComponent() {
+export default function MainCategoryComponent({ clickedCategory }: MainCategoryProps) {
   const [mainCategories, setMainCategories] = React.useState<CategoryItemType[]>([])
   const handleGetCategories = async () => {
     const response = await getCategories()
@@ -28,6 +28,7 @@ export default function MainCategoryComponent() {
             id={mainCategoryItem.id}
             title={mainCategoryItem.title}
             slug={mainCategoryItem.slug}
+            clickedCategory={clickedCategory}
             />
           ))}
         </div>
@@ -40,12 +41,13 @@ export default function MainCategoryComponent() {
 
 
 
-const MainCategoryItem = ({ id, title, slug }: CategoryItemType) => {
-  const [active, setActive] = React.useState<boolean>(false)
-  const [selectedCAtegory, setSelectedCategory] = React.useState('')
+const MainCategoryItem = ({ id, title, slug, clickedCategory }: CategoryItemType) => {
+  // const [active, setActive] = React.useState<boolean>(false)
+  // const [selectedCAtegory, setSelectedCategory] = React.useState('')
   const handleClick = (categorySlug: string) => {
-    setActive(!active)
-    setSelectedCategory(categorySlug)
+    // setActive(!active)
+    // setSelectedCategory(categorySlug)
+    clickedCategory(categorySlug)
   }
   return (
     <>
@@ -57,13 +59,13 @@ const MainCategoryItem = ({ id, title, slug }: CategoryItemType) => {
           <Image
           src={'/icons/note-tak.png'}
           alt='doc'
-          width={60}
-          height={60}
+          width={40}
+          height={40}
           />
           <p>{title}</p>
         </div>
       </div>
-      {active && <CategoryComponent categorySlug={selectedCAtegory}/>}
+      {/* {active && <CategoryComponent categorySlug={selectedCAtegory}/>} */}
     </>
   );
 }

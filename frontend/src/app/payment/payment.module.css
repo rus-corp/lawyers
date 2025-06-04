@@ -1,0 +1,41 @@
+.paymentModule {
+  width: 100%;
+}
+
+.blockHeader * {
+  color: black;
+}
+
+.blockHeader {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.blockDate {
+  text-align: end;
+}
+
+.blockContent * {
+  color: black;
+}
+
+.blockContent {
+  margin-top: 4rem;
+}
+
+.contentItem {
+  margin: 2rem;
+}
+
+.contentItem > p {
+  margin: .7rem;
+  text-indent: 2rem;
+}
+
+.contentItem > h4 {
+  margin-bottom: 1rem;
+}
+
+.contentItem > ul > li {
+  margin-left: 3rem;
+}

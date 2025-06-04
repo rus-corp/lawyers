@@ -18,18 +18,18 @@ export default function Footer() {
             </div>
           </div>
           <div className={style.aboutBlock}>
-            <Link href={'#'}>О нас</Link>
-            <Link href={'#'}>Документы</Link>
+            <Link href={'/about'}>О нас</Link>
+            <Link href={'/docs'}>Документы</Link>
             <Link href={'#'}>Контакты</Link>
           </div>
           <div className={style.aboutBlock}>
-          <Link href={'#'}>Пользовательское соглашение</Link>
-          <Link href={'#'}>Политика конфиденциальности</Link>
-          <Link href={'#'}>Условия оплаты</Link>
+            <Link href={'/offer'}>Публичная оферта</Link>
+            <Link href={'/politic'}>Политика конфиденциальности</Link>
+            <Link href={'/payment'}>Условия оплаты</Link>
           </div>
         </div>
         <div className={style.dataFooter}>
-          <p>© 2025 Legal Docs. Все права защищены</p>
+          <p>© 2025 Сам Себе Юрист. Все права защищены</p>
         </div>
 
       </div>

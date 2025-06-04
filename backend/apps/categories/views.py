@@ -40,3 +40,10 @@ class ParentCategoryView(generics.ListAPIView):
 class DocumentsListView(generics.ListAPIView):
   queryset = Documents.objects.all()
   serializer_class = DocumentsSerializer
+
+  def get_queryset(self, title):
+    documents = Documents.objects.all()
+    title = self.request.query_params.get('title')
+    if title:
+      queryset = queryset.filter(title__icontains=title)
+      return queryset

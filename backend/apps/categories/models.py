@@ -25,6 +25,7 @@ class Documents(models.Model):
   title = models.CharField(max_length=255, verbose_name='Название документа')
   file = models.FileField(verbose_name='Файл')
   slug = models.SlugField(max_length=255, unique=True, verbose_name='URL')
+  price = models.IntegerField(verbose_name='Цена', default=0)
   
   category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name='documents', verbose_name='Категория', null=True, blank=True)
   

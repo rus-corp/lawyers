@@ -17,6 +17,14 @@
   gap: 3rem;
 }
 
+.navMenu > a {
+  color: #4A90E2;
+}
+
+.navMenu > a:hover {
+  color: #7B1E1E;
+}
+
 .companyName > h1 {
   font-size: 2.5rem;
   color: #4A90E2;
