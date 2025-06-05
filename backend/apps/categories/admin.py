@@ -1,7 +1,7 @@
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
 
-from .models import Category, Documents
+from .models import Category, Documents, Instructions
 
 admin.site.site_header = 'Управление проектом Сам Себе Юрист'
 admin.site.site_title = 'Сам Себе Юрист Admin'
@@ -25,3 +25,8 @@ class DocumentAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'title',)
     search_fields = ('title',)
     list_filter = ('title',)
+
+
+@admin.register(Instructions)
+class InstructionsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'category',)

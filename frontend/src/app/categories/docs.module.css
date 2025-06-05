@@ -5,14 +5,25 @@
 
 .searchBlock {
   margin-top: 2rem;
-  width: 100%;
-  display: flex;
+  width: 35%;
+  margin-left: auto;
+  position: relative;
 }
 
 .headerSearch {
   margin-left: auto;
-  width: 35%;
+  width: 100%;
 }
+
+.searchCategoriesList {
+  position: absolute;
+  width: 100%;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 
 .blockContent {
   width: 100%;

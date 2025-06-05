@@ -36,3 +36,18 @@ class Documents(models.Model):
   
   def __str__(self):
     return self.title
+
+
+
+
+class Instructions(models.Model):
+  title = models.CharField(max_length=200, verbose_name='Название')
+  category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='instructions', verbose_name='Категория')
+
+  class Meta:
+    verbose_name = 'Инструкция'
+    verbose_name_plural = 'Инструкции'
+  
+
+  def __str__(self):
+    return self.title

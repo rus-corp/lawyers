@@ -7,14 +7,21 @@ from .serializers import CategorySerializer, DocumentsSerializer
 
 
 class CategoryView(generics.ListAPIView):
-  queryset = Category.objects.filter(level=0)
   serializer_class = CategorySerializer
+
+  def get_queryset(self):
+    title = self.request.query_params.get('title')
+    if title:
+      return Category.objects.filter(title__icontains=title)
+    # return Category.objects.filter(level=0)
+    return Category.objects.all()
 
 
 
 class SubCategoryView(generics.ListAPIView):
   queryset = Category.objects.all()
   serializer_class = CategorySerializer
+
   
   def get(self, request, slug):
     category = Category.objects.get(slug=slug)
@@ -45,5 +52,5 @@ class DocumentsListView(generics.ListAPIView):
     documents = Documents.objects.all()
     title = self.request.query_params.get('title')
     if title:
-      queryset = queryset.filter(title__icontains=title)
+      queryset = documents.filter(title__icontains=title)
       return queryset

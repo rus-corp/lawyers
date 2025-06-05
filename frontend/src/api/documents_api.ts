@@ -1,15 +1,9 @@
 import { backendUrl } from "./_variables";
 
 
-export const getDocumentsList = async (title?: string) => {
-  let url;
-  if (title) {
-    url = `categories/documents/?title=${encodeURIComponent(title)}`
-  } else {
-    url = 'categories/documents'
-  }
+export const getDocumentsList = async () => {
   try {
-    const response = await backendUrl.get(url)
+    const response = await backendUrl.get('categories/documents')
     return response.data;
   } catch (error) {
     console.error(error);

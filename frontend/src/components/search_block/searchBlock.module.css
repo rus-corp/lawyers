@@ -1,0 +1,17 @@
+
+
+.searchBlockList {
+  width: 98%;
+  background-color: #F5F7FA;
+  border-radius: 12px;
+  padding: .3rem .5rem;
+}
+
+.categoryItem {
+  cursor: pointer;
+  margin: .6rem 0;
+}
+
+.categoryItem:hover p {
+  color: #4A90E2;
+}
