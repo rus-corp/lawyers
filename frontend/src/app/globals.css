@@ -8,14 +8,15 @@
 }
 
 body {
-  /* max-width: 1400px; */
+  max-width: 1900px;
   width: 100%;
   margin: 0 auto;
 }
 
 .container {
-  max-width: 1400px;
+  width: 85%;
   margin: 0 auto;
+  /* padding: 0 4rem; */
 }
 
 a, a:visited {
@@ -23,7 +24,6 @@ a, a:visited {
   font-family: inherit;
   transition: color .3s;
   text-transform: uppercase;
-  color: #fff;
 }
 
 

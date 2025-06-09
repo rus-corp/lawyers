@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Link from 'next/link';
 import style from './backUpForm.module.css'
 import { CreateItemInput } from '@/ui/inputs/SearchInput';
 import TextAreaComponent from '@/ui/inputs/TextArea';
@@ -8,6 +8,7 @@ import MainBtn from '@/ui/buttons/MainBtn';
 import { createBackUp } from '@/api';
 
 export default function BackUpForm() {
+  const [checkBox, setCheckBox] = React.useState(false)
   const [formData, setFormData] = React.useState<FormDataType>({
     name: '',
     email: '',
@@ -30,13 +31,21 @@ export default function BackUpForm() {
 
   const handleSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault()
-    handleSendBackup(formData)
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      text: '',
-    })
+    if (checkBox) {
+      handleSendBackup(formData)
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        text: '',
+      })
+    } else {
+      alert('Пожалуйста, согласитесь с политикой конфиденциальности');
+    }
+  }
+
+  const handleCheckBox = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setCheckBox(ev.target.checked);
   }
   return(
     <form className={style.backupForm} onSubmit={handleSubmit}>
@@ -78,6 +87,10 @@ export default function BackUpForm() {
             fieldData={formData.text}
             handleChange={handleChange}
             />
+          </div>
+          <div className={style.agreeBlock}>
+            <input type="checkbox" onChange={handleCheckBox} />
+            <p>Нажимая "Отправить" вы соглашаетесь с&nbsp;&nbsp;<Link className={style.link} href={'/politic'}>Политикой конфиденциальности</Link></p>
           </div>
         </div>
       </div>

@@ -18,3 +18,14 @@
 .formField {
   margin: 1.2rem 0;
 }
+
+.agreeBlock {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.link {
+  color: red;
+  font-size: .9rem;
+}
