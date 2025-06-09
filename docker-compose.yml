@@ -4,8 +4,10 @@ networks:
 
 services:
   database:
+    build:
+      context: ./docker/postgres
+      dockerfile: Dockerfile
     container_name: database
-    image: postgres:15
     restart: always
     environment:
       LANG: ru_RU.UTF-8
