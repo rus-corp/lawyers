@@ -35,3 +35,20 @@
 .dataFooter > p {
   font-size: 14px;
 }
+
+@media (max-width: 820px) {
+  .mainFooterBlock {
+    width: 100%;
+  }
+
+  /* .companyName,
+  .companyContacts,
+  .aboutBlock {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .dataFooter > p {
+    font-size: 12px;
+  } */
+}

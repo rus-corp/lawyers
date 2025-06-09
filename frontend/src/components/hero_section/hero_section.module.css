@@ -27,3 +27,9 @@
   color: #1F1F1F;
   margin-bottom: 2rem;
 }
+
+@media (max-width: 820px) {
+  .heroSection {
+    height: auto;
+  }
+}

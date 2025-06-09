@@ -43,6 +43,7 @@ export default function AboutPageContent() {
             <Image
             src={'/about_img/gar_img.png'}
             alt="about"
+            layout="responsive"
             width={700}
             height={600}
             />

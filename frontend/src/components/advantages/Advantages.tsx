@@ -12,25 +12,25 @@ export default function Advantages() {
           <h3>Преимущества</h3>
         </div>
         <div className={style.advanContent}>
-        <AdvantegeItem
-          img_source={'/block_img/progress.png'}
-          img_alt={'timeimg'}
-          content={'Быстрая подготовка'}
+          <AdvantegeItem
+            img_source={'/block_img/progress.png'}
+            img_alt={'timeimg'}
+            content={'Быстрая подготовка'}
           />
           <AdvantegeItem
-          img_source={'/block_img/achievement.png'}
-          img_alt={'garimg'}
-          content={'Правовая уверенность'}
+            img_source={'/block_img/achievement.png'}
+            img_alt={'garimg'}
+            content={'Правовая уверенность'}
           />
           <AdvantegeItem
-          img_source={'/block_img/targe.png'}
-          img_alt={'protimg'}
-          content={'Гарантия защиты'}
+            img_source={'/block_img/targe.png'}
+            img_alt={'protimg'}
+            content={'Гарантия защиты'}
           />
           <AdvantegeItem
-          img_source={'/block_img/eco_img.png'}
-          img_alt={'ecoimg'}
-          content={'Экономия средств'}
+            img_source={'/block_img/eco_img.png'}
+            img_alt={'ecoimg'}
+            content={'Экономия средств'}
           />
         </div>
       </div>

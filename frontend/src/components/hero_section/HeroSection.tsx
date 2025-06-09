@@ -18,6 +18,7 @@ export default function HeroSection() {
           </div>
           <div className={style.blockBtn}>
             <MainBtn
+            handleRoute={'/categories'}
             btnTitle='Создать документ'
             />
           </div>

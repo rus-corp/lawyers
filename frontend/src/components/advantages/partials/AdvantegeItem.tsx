@@ -11,6 +11,7 @@ export default function AdvantegeItem({ img_source, img_alt, content }: AdvItemT
         <Image
         src={img_source}
         alt={img_alt}
+        layout="responsive"
         width={200}
         height={200}
         />

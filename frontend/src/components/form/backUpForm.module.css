@@ -29,3 +29,24 @@
   color: red;
   font-size: .9rem;
 }
+
+
+@media (max-width: 820px) {
+  .backupForm {
+    width: 90%;
+    padding: 1rem;
+  }
+  
+  .formHeader > h3 {
+    font-size: 1.2rem;
+  }
+  
+  .formField {
+    margin: .8rem 0;
+  }
+  
+  .link {
+    font-size: .8rem;
+  }
+  
+}
