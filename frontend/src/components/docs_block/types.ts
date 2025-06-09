@@ -1,7 +1,0 @@
-
-export type DocumentsType = {
-  id: number;
-  title: string;
-  file: string;
-  slug: string;
-}

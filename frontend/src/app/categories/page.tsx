@@ -73,18 +73,6 @@ export default function Docs() {
           categorySlug={clickedCategory}
           clickedCategory={handleClickSubCategory}
           />
-          {/* <DocsComponent /> */}
-          {/* <div className={style.blockDocs}>
-            <div className={style.docsHeader}>
-              <div className={style.headerTitle}>
-                <h3>Документы</h3>
-              </div>
-              <div className={style.headerSearch}>
-                <input type="text" />
-              </div>
-            </div>
-            <div className={style.docsFiles}></div>
-          </div> */}
         </div>
         <BackUpForm />
       </section>
