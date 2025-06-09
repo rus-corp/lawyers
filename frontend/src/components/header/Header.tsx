@@ -17,13 +17,13 @@ export default function Header() {
           />
         </div>
         <div className={style.navMenu}>
-          <Link href='/#'>Главная</Link>
+          <Link href='/'>Главная</Link>
           <Link href='/categories'>Документы</Link>
           <Link href='/about'>О нас</Link>
           <Link href='/news'>Новости</Link>
         </div>
         <div className={style.contacts}>
-          <span>+7 (777) 987-65-43</span>
+          <span>info@сам-себе-юрист.рф</span>
         </div>
     </header>
   );

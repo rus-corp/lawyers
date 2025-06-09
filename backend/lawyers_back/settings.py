@@ -15,7 +15,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = [
     'xn-----6kcftbw0a5bcdgn8n.xn--p1ai',
@@ -42,6 +42,12 @@ INSTALLED_APPS = [
     'apps.news',
     'apps.backup',
 ]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [],
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

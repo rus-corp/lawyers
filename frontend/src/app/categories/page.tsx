@@ -7,6 +7,7 @@ import CategoryComponent from '@/components/categories/categoryComponent/Categor
 import SubCategoryComponent from '@/components/categories/subCategoryComponent/SubCategoryComponent';
 import SearchBlockComponent from '@/components/search_block/SearchBlockComponent';
 import { CreateItemInput } from '@/ui/inputs/SearchInput';
+import BackUpForm from '@/components/form/BackUpForm';
 
 // import { getDocumentsList } from '@/api';
 import { getCategories } from '@/api';
@@ -25,12 +26,13 @@ export default function Docs() {
     setClickedMainCategory(categorySlug)
   }
   const handleCategoryClick = (categorySlug: string) => {
+    console.log(categorySlug)
     setClickedCategory(categorySlug)
   }
   const handleClickSubCategory = (categorySlug: string) => {
     console.log(categorySlug)
   }
-  const handleSearch = async (value: string) => {
+  const handleSearch = async (name: string, value: string) => {
     setSearchDoc(value);
     const response = await handleFindCategories(value)
   }
@@ -40,48 +42,53 @@ export default function Docs() {
     setSearchedCategories([])
   }
   return(
-    <section className={style.docsPage}>
-      <div className={style.searchBlock}>
-        <div className={style.headerSearch}>
-          <CreateItemInput
-          fieldType='text'
-          fieldName='search'
-          value={seacrhDoc}
-          changeFunc={handleSearch}
-          />
-        </div>
-        <div className={style.searchCategoriesList}>
-          <SearchBlockComponent
-          categoriesList={searchedCategories}
-          categoryClicked={handleClickedCategory}
-          />
-        </div>
-      </div>
-      <div className={style.blockContent}>
-        <MainCategoryComponent
-        clickedCategory={handleMainCategoryClick}
-        />
-        <CategoryComponent
-        categorySlug={clickedMainCategory}
-        clickedCategory={handleCategoryClick}
-        />
-        <SubCategoryComponent
-        categorySlug={clickedCategory}
-        clickedCategory={handleClickSubCategory}
-        />
-        {/* <DocsComponent /> */}
-        {/* <div className={style.blockDocs}>
-          <div className={style.docsHeader}>
-            <div className={style.headerTitle}>
-              <h3>Документы</h3>
-            </div>
-            <div className={style.headerSearch}>
-              <input type="text" />
-            </div>
+    <div className='container'>
+      <section className={style.docsPage}>
+        <div className={style.searchBlock}>
+          <div className={style.headerSearch}>
+            <CreateItemInput
+            fieldType='text'
+            fieldName='search'
+            value={seacrhDoc}
+            changeFunc={handleSearch}
+            placeholder='Поиск по документам'
+            />
           </div>
-          <div className={style.docsFiles}></div>
-        </div> */}
-      </div>
-    </section>
+          <div className={style.searchCategoriesList}>
+            <SearchBlockComponent
+            categoriesList={searchedCategories}
+            categoryClicked={handleClickedCategory}
+            />
+          </div>
+        </div>
+        <div className={style.blockContent}>
+          <MainCategoryComponent
+          clickedCategory={handleMainCategoryClick}
+          />
+          <CategoryComponent
+          categorySlug={clickedMainCategory}
+          clickedCategory={handleCategoryClick}
+          />
+          <SubCategoryComponent
+          categorySlug={clickedCategory}
+          clickedCategory={handleClickSubCategory}
+          />
+          {/* <DocsComponent /> */}
+          {/* <div className={style.blockDocs}>
+            <div className={style.docsHeader}>
+              <div className={style.headerTitle}>
+                <h3>Документы</h3>
+              </div>
+              <div className={style.headerSearch}>
+                <input type="text" />
+              </div>
+            </div>
+            <div className={style.docsFiles}></div>
+          </div> */}
+        </div>
+        <BackUpForm />
+      </section>
+
+    </div>
   );
 }

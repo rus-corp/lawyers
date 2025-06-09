@@ -6,7 +6,6 @@ import { MainBtnType } from '@/types';
 
 
 export default function MainBtn({ btnTitle }: MainBtnType) {
-  const handleClick = () => {}
   return(
     <button className={style.mainBtn}>{btnTitle}</button>
   );

@@ -7,11 +7,12 @@ export const CreateItemInput = ({
   fieldType,
   fieldName,
   value,
-  changeFunc
+  changeFunc,
+  placeholder
 }: InputPropsType) => {
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = ev.target
-    changeFunc(value)
+    const { name, value } = ev.target
+    changeFunc(name, value)
   }
   return (
     <div className={style.createField}>
@@ -21,7 +22,7 @@ export const CreateItemInput = ({
       name={fieldName}
       onChange={handleChange}
       value={value}
-      placeholder='Поиск по документам'
+      placeholder={placeholder}
       />
     </div>
   );

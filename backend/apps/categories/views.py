@@ -6,6 +6,21 @@ from .models import Category, Documents
 from .serializers import CategorySerializer, DocumentsSerializer
 
 
+class SearchView(generics.ListAPIView):
+  # queryset = Category.objects.all()
+  serializer_class = CategorySerializer
+
+  def get_queryset(self):
+    slug = self.kwargs['slug']
+    categories = Category.objects.filter(slug=slug)
+    if categories:
+      parents = categories.get_ancestors(include_self=True)
+      # get_ancestors(ascending=False, include_self=False)
+      print(parents)
+    return parents
+
+
+
 class CategoryView(generics.ListAPIView):
   serializer_class = CategorySerializer
 
@@ -13,8 +28,8 @@ class CategoryView(generics.ListAPIView):
     title = self.request.query_params.get('title')
     if title:
       return Category.objects.filter(title__icontains=title)
-    # return Category.objects.filter(level=0)
-    return Category.objects.all()
+    return Category.objects.filter(level=0)
+    # return Category.objects.all()
 
 
 
@@ -44,13 +59,9 @@ class ParentCategoryView(generics.ListAPIView):
 
 
 
-class DocumentsListView(generics.ListAPIView):
-  queryset = Documents.objects.all()
+class DocumentsView(generics.RetrieveAPIView):
   serializer_class = DocumentsSerializer
 
-  def get_queryset(self, title):
-    documents = Documents.objects.all()
-    title = self.request.query_params.get('title')
-    if title:
-      queryset = documents.filter(title__icontains=title)
-      return queryset
+  def get_object(self):
+    category = self.kwargs['slug']
+    return Documents.objects.get(category__slug=category)

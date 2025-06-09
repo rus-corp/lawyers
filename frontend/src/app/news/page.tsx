@@ -5,11 +5,13 @@ import NewsListComponent from "@/components/news_component/NewsListComponent";
 
 export default function NewsPage() {
   return(
-    <section className={style.newsPage}>
-      <div className={style.pageHeader}>
-        <h3>Новости</h3>
-      </div>
-      <NewsListComponent />
-    </section>
+    <div className="container">
+      <section className={style.newsPage}>
+        <div className={style.pageHeader}>
+          <h3>Новости</h3>
+        </div>
+        <NewsListComponent />
+      </section>
+    </div>
   );
 }

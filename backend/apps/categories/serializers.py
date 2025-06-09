@@ -12,9 +12,8 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class DocumentsSerializer(serializers.ModelSerializer):
-  file = serializers.FileField(use_url=True)
   category = CategorySerializer(read_only=True)
   
   class Meta:
     model = Documents
-    fields = ('id', 'title', 'file', 'slug', 'category', 'price')
+    fields = ('id', 'title', 'slug', 'category', 'price')

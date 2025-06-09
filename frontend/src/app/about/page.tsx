@@ -7,9 +7,11 @@ import style from './about_page.module.css'
 
 export default function About() {
   return(
-    <section className={style.aboutPage}>
-      <AboutPageHeader />
-      <AboutPageContent />
-    </section>
+    <div className="container">
+      <section className={style.aboutPage}>
+        <AboutPageHeader />
+        <AboutPageContent />
+      </section>
+    </div>
   );
 }

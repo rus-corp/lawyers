@@ -7,10 +7,10 @@ import Advantages from "@/components/advantages/Advantages";
 
 export default function Home() {
   return (
-    <>
+    <div className="container">
       <HeroSection />
       <AboutSection />
       <Advantages />
-    </>
+    </div>
   );
 }
