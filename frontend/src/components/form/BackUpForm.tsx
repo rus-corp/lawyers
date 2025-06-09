@@ -5,13 +5,14 @@ import { CreateItemInput } from '@/ui/inputs/SearchInput';
 import TextAreaComponent from '@/ui/inputs/TextArea';
 import { FormDataType } from './types';
 import MainBtn from '@/ui/buttons/MainBtn';
+import { createBackUp } from '@/api';
 
 export default function BackUpForm() {
   const [formData, setFormData] = React.useState<FormDataType>({
     name: '',
     email: '',
     phone: '',
-    message: '',
+    text: '',
   })
   const handleChange = (name: string, value: string) => {
     console.log(name, value)
@@ -20,15 +21,21 @@ export default function BackUpForm() {
       [name]: value
     }))
   }
+  const handleSendBackup = async (data: FormDataType) => {
+    const response = await createBackUp(data)
+    if (response.status === 201) {
+      console.log('Backup request sent successfully')
+    }
+  }
 
   const handleSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault()
-    console.log(formData)
+    handleSendBackup(formData)
     setFormData({
       name: '',
       email: '',
       phone: '',
-      message: '',
+      text: '',
     })
   }
   return(
@@ -66,9 +73,9 @@ export default function BackUpForm() {
           />
           <div className={style.formField}>
             <TextAreaComponent
-            fieldName={'message'}
+            fieldName={'text'}
             placeholder={'Сообщение'}
-            fieldData={formData.message}
+            fieldData={formData.text}
             handleChange={handleChange}
             />
           </div>

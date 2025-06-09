@@ -31,7 +31,7 @@ export default function SearchBlockComponent({ categoriesList, categoryClicked }
 const CategoryItem = ({title, slug, categoryClicked}: CategoryType) => {
   const handleClick = () => {
     if (categoryClicked) {
-      categoryClicked(slug)
+      categoryClicked(title, slug)
     }
   }
   return (

@@ -39,3 +39,14 @@ export const getCategoryByParent = async (categorySlug: string) => {
     throw error;
   }
 }
+
+
+export const getSeacrhCategories = async (searchQuery: string) => {
+  try {
+    const response = await backendUrl.get(`/categories/search/${searchQuery}/`);
+    return response;
+  } catch (error) {
+    console.error("Error fetching search categories:", error);
+    throw error;
+  }
+}

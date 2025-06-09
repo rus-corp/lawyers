@@ -10,17 +10,32 @@ import { CreateItemInput } from '@/ui/inputs/SearchInput';
 import BackUpForm from '@/components/form/BackUpForm';
 
 // import { getDocumentsList } from '@/api';
-import { getCategories } from '@/api';
+import { getCategories, getSeacrhCategories } from '@/api';
 
 export default function Docs() {
   const [clickedMainCategory, setClickedMainCategory] = React.useState('')
   const [clickedCategory, setClickedCategory] = React.useState('')
   const [seacrhDoc, setSearchDoc] = React.useState<string>('')
   const [searchedCategories, setSearchedCategories] = React.useState([])
+
   const handleFindCategories = async (value: string) => {
     const response = await getCategories(value)
     setSearchedCategories(response.data)
     return response
+  }
+  const handleSearchCategories = async (searchQuery: string) => {
+    const response = await getSeacrhCategories(searchQuery)
+    if (response.status === 200) {
+      const categoryData = response.data
+      console.log(categoryData)
+      if (categoryData.length === 3) {
+        setClickedCategory(categoryData[categoryData.length - 2].slug)
+        setClickedMainCategory(categoryData[categoryData.length - 3].slug)
+      } else if (categoryData.length === 2) {
+        console.log(categoryData)
+        setClickedMainCategory(categoryData[categoryData.length - 2].slug)
+      }
+    }
   }
   const handleMainCategoryClick = (categorySlug: string) => {
     setClickedMainCategory(categorySlug)
@@ -36,9 +51,11 @@ export default function Docs() {
     setSearchDoc(value);
     const response = await handleFindCategories(value)
   }
-  const handleClickedCategory = (category: string) => {
-    console.log(category)
-    setSearchDoc('')
+  const handleClickedCategory = (title: string, category: string) => {
+    console.log(title, category)
+    setSearchDoc(title)
+    const response = handleSearchCategories(category)
+    // setSearchDoc('')
     setSearchedCategories([])
   }
   return(
