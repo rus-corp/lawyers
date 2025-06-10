@@ -43,6 +43,8 @@ class Documents(models.Model):
 class Instructions(models.Model):
   title = models.CharField(max_length=200, verbose_name='Название')
   category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='instructions', verbose_name='Категория')
+  file = models.FileField(verbose_name='Файл', upload_to='instructions/', null=True, blank=True)
+
 
   class Meta:
     verbose_name = 'Инструкция'
