@@ -13,14 +13,13 @@ export default function Footer() {
               <h4>САМ СЕБЕ ЮРИСТ</h4>
             </div>
             <div className={style.companyContacts}>
-              <p>+7 (777) 987 65 43</p>
-              <p>sam.sebe.urist@mail.ru</p>
+              <p>info@сам-себе-юрист.рф</p>
             </div>
           </div>
           <div className={style.aboutBlock}>
             <Link href={'/about'}>О нас</Link>
-            <Link href={'/docs'}>Документы</Link>
-            <Link href={'#'}>Контакты</Link>
+            <Link href={'/categories'}>Документы</Link>
+            <Link href={'/contacts'}>Контакты</Link>
           </div>
           <div className={style.aboutBlock}>
             <Link href={'/offer'}>Публичная оферта</Link>

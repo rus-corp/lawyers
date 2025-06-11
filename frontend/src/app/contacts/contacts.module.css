@@ -1,0 +1,24 @@
+.contactsPage {
+  width: 100%;
+}
+
+.pageHeader {
+  width: 100%;
+}
+
+.headerDesc {
+  margin-top: 1rem;
+  width: 90%; 
+}
+
+.companyInfo {
+  margin-top: 2rem;
+}
+
+.infoContent {
+  margin-bottom: 2rem;
+}
+
+.formContainer {
+  width: 100%;
+}
