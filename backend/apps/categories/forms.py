@@ -14,12 +14,18 @@ class DocumentForm(forms.ModelForm):
 
 
 class CategoryAdminForm(forms.ModelForm):
-    parent = forms.ModelChoiceField(queryset=Category.objects.all())
+    parent = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        required=False,
+        # empty_label='--- Корневая категория (Уровень 0) ---'
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         choices = []
+        if not self.fields['parent'].required:
+            choices.append(('', self.fields['parent'].empty_label))
         for level in range(0, 4):
             cats = Category.objects.filter(level=level)
             if cats.exists():

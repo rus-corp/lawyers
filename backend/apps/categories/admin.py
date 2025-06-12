@@ -10,12 +10,13 @@ admin.site.index_title = 'Админ панель'
 
 @admin.register(Category)
 class CategoryAdmin(MPTTModelAdmin):
+    mptt_indented_field = 'title'
     list_display = ('pk', 'title', 'slug', 'parent')
     prepopulated_fields = {'slug': ('title',)}
     list_display_links = ('pk', 'title', 'slug')
     search_fields = ('title',)
     list_filter = ('parent',)
-    ordering = ('title',)
+    # ordering = ('parent',)
     mptt_level_indent = 40
     form = CategoryAdminForm
 
