@@ -9,14 +9,14 @@ admin.site.site_title = 'Сам Себе Юрист Admin'
 admin.site.index_title = 'Админ панель'
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(MPTTModelAdmin):
     list_display = ('pk', 'title', 'slug', 'parent')
     prepopulated_fields = {'slug': ('title',)}
     list_display_links = ('pk', 'title', 'slug')
     search_fields = ('title',)
     list_filter = ('parent',)
     ordering = ('title',)
-    # mptt_level_indent = 20
+    mptt_level_indent = 40
     form = CategoryAdminForm
 
 
