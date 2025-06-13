@@ -24,24 +24,24 @@ class CategoryAdmin(MPTTModelAdmin):
 
 @admin.register(Documents)
 class DocumentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'category', 'price')
+    list_display = ('id', 'category', 'title', 'price')
     prepopulated_fields = {'slug': ('title',)}
     list_display_links = ('id', 'title',)
     search_fields = ('title',)
     list_filter = ('title',)
     form = DocumentForm
 
-    def form_field_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "category":
-            kwargs["queryset"] = Category.objects.filter(documents__isnull=True)
-        return super().form_field_for_foreignkey(db_field, request, **kwargs)
+    # def form_field_for_foreignkey(self, db_field, request, **kwargs):
+    #     if db_field.name == "category":
+    #         kwargs["queryset"] = Category.objects.all()
+    #     return super().form_field_for_foreignkey(db_field, request, **kwargs)
     
-    def get_queryset(self, request):
-        categories = Category.objects.filter(documents__isnull=False)
-        return categories
+    # def get_queryset(self, request):
+    #     categories = Category.objects.filter(documents__isnull=False)
+    #     return categories
 
 
 @admin.register(Instructions)
 class InstructionsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'category',)
+    list_display = ('id', 'category', 'title',)
     form = InstructionAdminForm

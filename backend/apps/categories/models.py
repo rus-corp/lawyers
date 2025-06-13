@@ -27,7 +27,7 @@ class Documents(models.Model):
   slug = models.SlugField(max_length=255, unique=True, verbose_name='URL')
   price = models.IntegerField(verbose_name='Цена', default=0)
   
-  category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name='documents', verbose_name='Категория', null=True, blank=True)
+  category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='documents', verbose_name='Категория', null=True, blank=True)
   
   
   class Meta:
