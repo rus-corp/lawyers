@@ -15,7 +15,6 @@ export default function CategoryComponent(
   const getCategoriesList = async (categorySlug: string) => {
     const response = await getCategoryBySlug(categorySlug)
     if (response.status === 200) {
-      console.log(response.data)
       setCategories(response.data)
     }
   }
@@ -44,7 +43,6 @@ const CategoryItem = ({ id, title, slug, clickedCategory }: CategoryItemType) =>
   // const [active, setActive] = React.useState<boolean>(false)
   const [selectedCategory, setSelectedCategory] = React.useState<string>('')
   const handleClick = (categorySlug: string) => {
-    console.log(categorySlug)
     // setActive(!active)
     setSelectedCategory(categorySlug)
     clickedCategory(categorySlug)

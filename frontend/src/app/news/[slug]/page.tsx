@@ -12,7 +12,6 @@ export default function NewsItemPage({ params: { slug } }: Props) {
     const response = await getNewsItem(newsSlug)
     if (response?.status === 200) {
       setNewsItemData(response.data)
-      console.log(response.data)
     }
   }
 
@@ -24,7 +23,7 @@ export default function NewsItemPage({ params: { slug } }: Props) {
       <div className="container">
         <h3>{newsItemData?.title}</h3>
         <ArticleContent
-        htmlContent={newsItemData?.text}
+        htmlContent={newsItemData?.text || ''}
         />
       </div>
     </section>

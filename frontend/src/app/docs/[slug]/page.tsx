@@ -21,8 +21,6 @@ export default function DocItem({ params: { slug } }: DocProps) {
     setUserEmail(email);
     setIsModalOpen(false)
     router.push(`/payment_page/?amount=${documentData?.price}&documentId=${documentData?.id}&userEmail=${email}`)
-    console.log('Отправленный email:', email);
-    // Здесь можно перейти на страницу оплаты или отправить API-запрос
   };
 
   const handleGetDocument = async () => {

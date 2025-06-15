@@ -27,12 +27,10 @@ export default function Docs() {
     const response = await getSeacrhCategories(searchQuery)
     if (response.status === 200) {
       const categoryData = response.data
-      console.log(categoryData)
       if (categoryData.length === 3) {
         setClickedCategory(categoryData[categoryData.length - 2].slug)
         setClickedMainCategory(categoryData[categoryData.length - 3].slug)
       } else if (categoryData.length === 2) {
-        console.log(categoryData)
         setClickedMainCategory(categoryData[categoryData.length - 2].slug)
       }
     }
@@ -41,21 +39,18 @@ export default function Docs() {
     setClickedMainCategory(categorySlug)
   }
   const handleCategoryClick = (categorySlug: string) => {
-    console.log(categorySlug)
     setClickedCategory(categorySlug)
   }
   const handleClickSubCategory = (categorySlug: string) => {
-    console.log(categorySlug)
   }
+
   const handleSearch = async (name: string, value: string) => {
     setSearchDoc(value);
     const response = await handleFindCategories(value)
   }
   const handleClickedCategory = (title: string, category: string) => {
-    console.log(title, category)
     setSearchDoc(title)
     const response = handleSearchCategories(category)
-    // setSearchDoc('')
     setSearchedCategories([])
   }
   return(

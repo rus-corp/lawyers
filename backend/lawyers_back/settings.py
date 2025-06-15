@@ -152,12 +152,12 @@ LOGGING = {
     "handlers": {
         'console' : {'class': 'logging.StreamHandler' }
     },
-    'loggers': {
-        'django.db.backends': {
-            'handlers': ['console'],
-            'level': 'DEBUG'
-        }
-    }
+    # 'loggers': {
+    #     'django.db.backends': {
+    #         'handlers': ['console'],
+    #         'level': 'DEBUG'
+    #     }
+    # }
 }
 
 YOOKASSA_SHOP_ID = os.environ.get('SHOP_ID')
