@@ -15,7 +15,7 @@ const PaymentPage = () => {
   const documentId = searchParams.get('documentId');
   const userEmail = searchParams.get('userEmail')
   const [confirmationToken, setConfirmationToken] = useState<string | null>(null);
-  const returnUrl = 'https://сам-себе-юрист.рф/payment/success';
+  const returnUrl = 'https://сам-себе-юрист.рф/payment_page/success';
 
 
   const handleCreateOrder = async (createOrderData: CreateOrderData) => {
