@@ -22,9 +22,13 @@ export default function NewsItemPage({ params: { slug } }: Props) {
     <section className={style.newsItemPage}>
       <div className="container">
         <h3>{newsItemData?.title}</h3>
-        <ArticleContent
-        htmlContent={newsItemData?.text || ''}
-        />
+        {newsItemData ? (
+          <ArticleContent
+          htmlContent={newsItemData.text}
+          />
+        ) : (
+          <p>Загрузка...</p>
+        )}
       </div>
     </section>
   );

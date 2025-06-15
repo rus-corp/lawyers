@@ -66,7 +66,6 @@ const NewsItem = ({id, title, text, slug, img, created_at}: NewsItemType) => {
           <ArticleContent
           htmlContent={text.slice(0,200)}
           />
-          {/* <p>{text.slice(0,200)}</p> */}
         </div>
         <div className={style.newsData}>
           <p>{created_at}</p>
