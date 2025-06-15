@@ -14,7 +14,6 @@ export default function SubCategoryComponent({
   const getCategoriesList = async (categorySlug: string) => {
     const response = await getCategoryBySlug(categorySlug)
     if (response.status === 200) {
-      console.log(response.data)
       setCategories(response.data)
     }
   }

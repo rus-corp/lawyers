@@ -9,8 +9,8 @@ class News(models.Model):
   created_at = models.DateField(auto_now_add=True)
   
   class Meta:
-    verbose_name = 'Новость'
-    verbose_name_plural = 'Новости'
+    verbose_name = 'Статья'
+    verbose_name_plural = 'Статьи'
   
   
   def __str__(self):

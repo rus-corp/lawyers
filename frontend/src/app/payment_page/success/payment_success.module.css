@@ -1,0 +1,24 @@
+.paymentSuccess {
+  width: 100%;
+}
+
+.sectionBlock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: auto 0;
+  min-height: 75vh;
+
+}
+
+.blockContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.blockContent > p {
+  margin: 2rem;
+}

@@ -4,6 +4,7 @@ import React from 'react';
 import style from '../news_page.module.css'
 import { Props, NewsItemType } from '../types';
 import { getNewsItem } from '@/api';
+import ArticleContent from '@/ui/article_content/ArticleContent';
 
 export default function NewsItemPage({ params: { slug } }: Props) {
   const [newsItemData, setNewsItemData] = React.useState<NewsItemType>()
@@ -20,8 +21,12 @@ export default function NewsItemPage({ params: { slug } }: Props) {
   }, [])
   return(
     <section className={style.newsItemPage}>
-      <h3>{newsItemData?.title}</h3>
-      <p>{newsItemData?.text}</p>
+      <div className="container">
+        <h3>{newsItemData?.title}</h3>
+        <ArticleContent
+        htmlContent={newsItemData?.text}
+        />
+      </div>
     </section>
   );
 }

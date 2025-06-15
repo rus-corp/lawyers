@@ -2,10 +2,11 @@ import { getCategories, getCategoryBySlug, getCategoryByParent, getSeacrhCategor
 import { getDocument } from "./documents_api";
 import { createBackUp } from "./form_api";
 import { getNews, getNewsItem } from "./news_api";
+import { createNewOrder } from "./orders";
 
 export {
   getCategories, getCategoryBySlug,
   getCategoryByParent, getDocument,
   getNews, getNewsItem, createBackUp,
-  getSeacrhCategories
+  getSeacrhCategories, createNewOrder
 }

@@ -24,7 +24,7 @@ export default function Footer() {
           <div className={style.aboutBlock}>
             <Link href={'/offer'}>Публичная оферта</Link>
             <Link href={'/politic'}>Политика конфиденциальности</Link>
-            <Link href={'/payment'}>Условия оплаты</Link>
+            <Link href={'/payment_rules'}>Условия оплаты</Link>
           </div>
         </div>
         <div className={style.dataFooter}>

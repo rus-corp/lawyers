@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import style from './news.module.css'
 import { getNews } from '@/api';
+import ArticleContent from '@/ui/article_content/ArticleContent';
 
 import { NewsItemType } from './types';
 
@@ -14,7 +15,6 @@ export default function NewsListComponent() {
   const handleGetNewsList = async () => {
     const response = await getNews()
     if (response?.status === 200) {
-      console.log(response.data)
       setNews(response.data)
     }
   }
@@ -54,16 +54,19 @@ const NewsItem = ({id, title, text, slug, img, created_at}: NewsItemType) => {
         priority={true}
         src={img}
         alt='news_img'
-        width={200}
-        height={100}
+        width={400}
+        height={300}
         />
       </div>
       <div className={style.newsContent}>
         <div className={style.newsTitle}>
-          <h5>{title}</h5>
+          <h4>{title}</h4>
         </div>
         <div className={style.newsText}>
-          <p>{text.slice(0,200)}</p>
+          <ArticleContent
+          htmlContent={text.slice(0,200)}
+          />
+          {/* <p>{text.slice(0,200)}</p> */}
         </div>
         <div className={style.newsData}>
           <p>{created_at}</p>

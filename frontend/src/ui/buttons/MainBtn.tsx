@@ -6,10 +6,13 @@ import style from './main_btn.module.css'
 import { MainBtnType } from '@/types';
 
 
-export default function MainBtn({ btnTitle, handleRoute }: MainBtnType) {
+export default function MainBtn({ btnTitle, handleRoute, paymentBtn }: MainBtnType) {
   const router = useRouter();
   const handleButtonClick = () => {
-    if (handleRoute) {
+    if (paymentBtn) {
+      paymentBtn(true)
+    }
+    if (handleRoute) { 
       router.push(handleRoute);
     }
   };

@@ -1,20 +1,32 @@
 "use client"
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import style from '../docs_page.module.css'
 import { DocProps, DocumentType } from '../types';
 import { getDocument } from '../../../api';
 import MainBtn from '@/ui/buttons/MainBtn';
+import EmailModal from '@/ui/modal/EmailModal';
 
 
 
 export default function DocItem({ params: { slug } }: DocProps) {
+  const router = useRouter();
   const [documentData, setDocument] = React.useState<DocumentType>();
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [userEmail, setUserEmail] = React.useState('');
+  const [handleRoute, setHandleRoute] = React.useState('')
+  const handleEmailSubmit = (email: string) => {
+    setUserEmail(email);
+    setIsModalOpen(false)
+    router.push(`/payment_page/?amount=${documentData?.price}&documentId=${documentData?.id}&userEmail=${email}`)
+    console.log('Отправленный email:', email);
+    // Здесь можно перейти на страницу оплаты или отправить API-запрос
+  };
 
   const handleGetDocument = async () => {
     const doc = await getDocument(slug);
-    console.log(doc)
     setDocument(doc);
   };
 
@@ -34,15 +46,21 @@ export default function DocItem({ params: { slug } }: DocProps) {
               <div className={style.links}>
                 <Link href={'/offer'}>оферты</Link>  
                 <Link href={'/politic'}>Политикой конфиденциальности</Link>и
-                <Link href={'/payment'}>условиями оплаты</Link>
+                <Link href={'/payment_rules'}>условиями оплаты</Link>
               </div>
           </div>
         </div>
         <div className={style.payBtn}>
           <MainBtn
           btnTitle={`Оплатить документ ${documentData?.price} ₽`}
+          paymentBtn={setIsModalOpen}
           />
         </div>
+        <EmailModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleEmailSubmit}
+        />
       </div>
       <div className="container">
         <div className={style.pageContent}>
@@ -109,8 +127,6 @@ export default function DocItem({ params: { slug } }: DocProps) {
           </div>
         </div>
       </div>
-      {/* <p>{slug}</p> */}
-      {/* <p>docs page</p> */}
     </section>
   );
 }

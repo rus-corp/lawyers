@@ -8,7 +8,7 @@ export default function NewsPage() {
     <div className="container">
       <section className={style.newsPage}>
         <div className={style.pageHeader}>
-          <h3>Новости</h3>
+          <h3>Статьи</h3>
         </div>
         <NewsListComponent />
       </section>
