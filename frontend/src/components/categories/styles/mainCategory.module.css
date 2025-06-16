@@ -24,18 +24,34 @@
   cursor: pointer;
   margin-top: 1rem;
   user-select: none;
+  border-radius: 9px;
+  padding: 0 1rem;
   transition: background-color ease .5s;
 }
 
 .categoryItem:hover {
-  background-color: #dbe0e7;
+  /* background-color: #dbe0e7; */
   border-radius: 9px;
+}
+
+.mainCategoryItem:hover {
+  background-color: #2D9CDB;
+}
+
+.categoryCategoryItem:hover {
+  background-color: #4A90E2;
+}
+
+.subCategoryItem:hover {
+  background-color: #A7C4E8;
 }
 
 .categoryItem:active {
   transform: scale(.9);
-  background-color: #cfd6df;
+  /* background-color: #cfd6df; */
 }
+
+
 
 .categoryContent {
   display: flex;

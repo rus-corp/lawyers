@@ -8,6 +8,7 @@ import Link from 'next/link';
 export default function Header() {
   return(
     <header className={style.header}>
+      <Link href={'/'}>
         <div className={style.companyLogo}>
           <Image src="/images/logo.png"
           priority={true}
@@ -16,6 +17,7 @@ export default function Header() {
           alt='logo'
           />
         </div>
+      </Link> 
         <div className={style.navMenu}>
           <Link href='/'>Главная</Link>
           <Link href='/categories'>Документы</Link>

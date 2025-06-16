@@ -49,7 +49,7 @@ const CategoryItem = ({ id, title, slug, clickedCategory }: CategoryItemType) =>
   }
   return (
     <>
-      <div className={style.categoryItem}>
+      <div className={`${style.categoryItem} ${style.categoryCategoryItem}`}>
         <div
         className={style.categoryContent}
         onClick={() => handleClick(slug)}
@@ -60,7 +60,7 @@ const CategoryItem = ({ id, title, slug, clickedCategory }: CategoryItemType) =>
           width={40}
           height={40}
           />
-          <p>{title}</p>
+          <p style={{ fontSize: '1.1rem'}}>{title}</p>
         </div>
       </div>
       {/* {active && <SubCategoryComponent categorySlug={selectedCategory}/>} */}

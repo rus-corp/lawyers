@@ -43,7 +43,7 @@ const SubCategoryItem = ({ id, title, slug, clickedCategory }: CategoryItemType)
     router.push(`/docs/${categorySlug}`)
   }
   return (
-      <div className={style.categoryItem}>
+      <div className={`${style.categoryItem} ${style.subCategoryItem}`}>
         <div
         className={style.categoryContent}
         onClick={() => handleClick(slug)}
@@ -54,7 +54,7 @@ const SubCategoryItem = ({ id, title, slug, clickedCategory }: CategoryItemType)
           width={40}
           height={40}
           />
-          <p>{title}</p>
+          <p style={{ fontSize: '1rem'}}>{title}</p>
         </div>
       </div>
   );
