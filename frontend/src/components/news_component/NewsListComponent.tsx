@@ -1,6 +1,5 @@
 "use client"
 import React from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import style from './news.module.css'
 import { getNews } from '@/api';
@@ -45,19 +44,16 @@ const NewsItem = ({id, title, text, slug, img, created_at}: NewsItemType) => {
   const handleClick = () => {
     router.push(`/news/${slug}`)
   }
+  const handleValidateDate = (date: string) => {
+    const dateObj = new Date(date);
+    const formattedDate = dateObj.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    return formattedDate
+  }
+
   return (
     <div className={style.newsItem}
     onClick={handleClick}
     >
-      <div className={style.imgBlock}>
-        <Image
-        priority={true}
-        src={img}
-        alt='news_img'
-        width={400}
-        height={300}
-        />
-      </div>
       <div className={style.newsContent}>
         <div className={style.newsTitle}>
           <h4>{title}</h4>
@@ -68,7 +64,7 @@ const NewsItem = ({id, title, text, slug, img, created_at}: NewsItemType) => {
           />
         </div>
         <div className={style.newsData}>
-          <p>{created_at}</p>
+          <p>{handleValidateDate(created_at)}</p>
         </div>
       </div>
     </div>

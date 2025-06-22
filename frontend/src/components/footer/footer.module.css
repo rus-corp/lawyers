@@ -52,3 +52,17 @@
     font-size: 12px;
   } */
 }
+
+
+@media (max-width: 450px) {
+  .mainFooterBlock {
+    width: 100%;
+    display: block;
+  }
+  .companyBlock {
+    width: 100%;
+  }
+  .aboutBlock {
+    margin: 1rem 0;
+  }
+}

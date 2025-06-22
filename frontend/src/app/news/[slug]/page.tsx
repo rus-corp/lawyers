@@ -10,7 +10,9 @@ export default function NewsItemPage({ params: { slug } }: Props) {
   const [newsItemData, setNewsItemData] = React.useState<NewsItemType>()
   const handleGetNewItem = async (newsSlug: string) => {
     const response = await getNewsItem(newsSlug)
+    console.log(response?.data)
     if (response?.status === 200) {
+      
       setNewsItemData(response.data)
     }
   }

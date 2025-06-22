@@ -18,7 +18,7 @@ const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-manrope",
   display: "swap",
-  weight: '400',
+  weight: ['400', '700'],
 });
 
 

@@ -28,8 +28,25 @@
   margin-bottom: 2rem;
 }
 
+.blockBtn {
+  width: 100%;
+}
+
 @media (max-width: 820px) {
   .heroSection {
     height: auto;
+  }
+}
+
+
+@media (max-width: 450px) {
+  .heroSection {
+    height: auto;
+  }
+  .mainBlockImg {
+    display: none;
+  }
+  .mainBlockContent {
+    width: 100%;
   }
 }

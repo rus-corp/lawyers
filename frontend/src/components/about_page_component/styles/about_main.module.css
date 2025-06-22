@@ -102,3 +102,30 @@
   } */
   
 }
+
+@media (max-width: 450px) {
+  .mainHeader {
+    display: flex;
+    flex-direction: column-reverse;
+    margin-bottom: 1rem;
+  }
+  .headerBlock {
+    width: 100%;
+    text-align: center;
+  }
+  .aboutPageContent {
+    padding: 0 1rem;
+  }
+  .textBlock {
+    width: 100%;
+  }
+  .advItem {
+    padding-left: 0;
+  }
+  .advantagesSection {
+    margin-top: 1rem;
+  }
+  .sectionContent {
+    margin-top: 0;
+  }
+}

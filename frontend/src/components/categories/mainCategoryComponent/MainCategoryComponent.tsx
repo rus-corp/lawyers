@@ -2,11 +2,11 @@
 import React, { act } from 'react';
 import Image from 'next/image';
 import style from '../styles/mainCategory.module.css'
+import Link from 'next/link';
 
 import { CategoryItemType, MainCategoryProps } from '../types/types';
 import { getCategories, getCategoryBySlug, getCategoryByParent } from '@/api';
 
-import CategoryComponent from '../categoryComponent/CategoryComponent';
 
 export default function MainCategoryComponent({ clickedCategory }: MainCategoryProps) {
   const [mainCategories, setMainCategories] = React.useState<CategoryItemType[]>([])
@@ -20,7 +20,7 @@ export default function MainCategoryComponent({ clickedCategory }: MainCategoryP
   }, [])
 
   return(
-    <section className={style.categoriesBlock}>
+    <div className={style.categoriesBlock}>
       <div className={style.blockContent}>
         <div className={style.mainCategoryList}>
           {mainCategories.map((mainCategoryItem) => (
@@ -29,11 +29,12 @@ export default function MainCategoryComponent({ clickedCategory }: MainCategoryP
             title={mainCategoryItem.title}
             slug={mainCategoryItem.slug}
             clickedCategory={clickedCategory}
+            beforeLevelClickedCategory=''
             />
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -42,17 +43,13 @@ export default function MainCategoryComponent({ clickedCategory }: MainCategoryP
 
 
 const MainCategoryItem = ({ id, title, slug, clickedCategory }: CategoryItemType) => {
-  // const [active, setActive] = React.useState<boolean>(false)
-  // const [selectedCAtegory, setSelectedCategory] = React.useState('')
   const handleClick = (categorySlug: string) => {
-    // setActive(!active)
-    // setSelectedCategory(categorySlug)
     clickedCategory(categorySlug)
   }
   return (
     <>
       <div className={`${style.categoryItem} ${style.mainCategoryItem}`}>
-        <div
+        <Link href={`/categories/${slug}`}
         className={style.categoryContent}
         onClick={() => handleClick(slug)}
         >
@@ -62,10 +59,9 @@ const MainCategoryItem = ({ id, title, slug, clickedCategory }: CategoryItemType
           width={40}
           height={40}
           />
-          <p style={{ fontSize: '1.2rem'}}>{title}</p>
-        </div>
+          <p className={style.mainCategoryTitle}>{title}</p>
+        </Link>
       </div>
-      {/* {active && <CategoryComponent categorySlug={selectedCAtegory}/>} */}
     </>
   );
 }

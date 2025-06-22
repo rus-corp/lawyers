@@ -16,7 +16,6 @@ class SearchView(generics.ListAPIView):
     if categories:
       parents = categories.get_ancestors(include_self=True)
       # get_ancestors(ascending=False, include_self=False)
-      print(parents)
     return parents
 
 

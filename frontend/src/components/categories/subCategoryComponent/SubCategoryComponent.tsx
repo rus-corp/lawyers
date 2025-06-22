@@ -14,6 +14,7 @@ export default function SubCategoryComponent({
   const getCategoriesList = async (categorySlug: string) => {
     const response = await getCategoryBySlug(categorySlug)
     if (response.status === 200) {
+      console.log(response.data)
       setCategories(response.data)
     }
   }
@@ -30,6 +31,7 @@ export default function SubCategoryComponent({
         title={categoryItem.title}
         slug={categoryItem.slug}
         clickedCategory={clickedCategory}
+        beforeLevelClickedCategory=''
         />
       ))}
     </div>
@@ -54,7 +56,7 @@ const SubCategoryItem = ({ id, title, slug, clickedCategory }: CategoryItemType)
           width={40}
           height={40}
           />
-          <p style={{ fontSize: '1rem'}}>{title}</p>
+          <p className={style.subCategoryTitle}>{title}</p>
         </div>
       </div>
   );

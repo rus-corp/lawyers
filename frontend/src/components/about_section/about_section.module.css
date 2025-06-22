@@ -22,5 +22,21 @@
 }
 
 .blockDesc {
-  font-size: 19px;
+  width: 100%;
+}
+
+@media (max-width: 450px) {
+  .aboutSection {
+    display: block;
+  }
+  .blockContent {
+    width: 100%;
+  }
+  .blockHeader {
+    text-align: center;
+  }
+
+  .blockDesc {
+    text-align: justify;
+  }
 }

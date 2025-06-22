@@ -1,6 +1,7 @@
 "use client"
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import style from '../styles/mainCategory.module.css'
 
 import { getCategoryBySlug } from '@/api';
@@ -9,7 +10,7 @@ import SubCategoryComponent from '../subCategoryComponent/SubCategoryComponent';
 
 
 export default function CategoryComponent(
-  { categorySlug, clickedCategory }: CategoryComponentProps
+  { categorySlug, clickedCategory, beforeLevelClickedCategory }: CategoryComponentProps
 ) {
   const [categories, setCategories] = React.useState<CategoryItemType[]>([])
   const getCategoriesList = async (categorySlug: string) => {
@@ -31,6 +32,7 @@ export default function CategoryComponent(
         title={categoryItem.title}
         slug={categoryItem.slug}
         clickedCategory={clickedCategory}
+        beforeLevelClickedCategory={beforeLevelClickedCategory}
         />
       ))}
     </div>
@@ -39,18 +41,16 @@ export default function CategoryComponent(
 
 
 
-const CategoryItem = ({ id, title, slug, clickedCategory }: CategoryItemType) => {
-  // const [active, setActive] = React.useState<boolean>(false)
+const CategoryItem = ({ id, title, slug, clickedCategory, beforeLevelClickedCategory }: CategoryItemType) => {
   const [selectedCategory, setSelectedCategory] = React.useState<string>('')
   const handleClick = (categorySlug: string) => {
-    // setActive(!active)
     setSelectedCategory(categorySlug)
     clickedCategory(categorySlug)
   }
   return (
     <>
       <div className={`${style.categoryItem} ${style.categoryCategoryItem}`}>
-        <div
+        <Link href={`/categories/${beforeLevelClickedCategory}/${slug}`}
         className={style.categoryContent}
         onClick={() => handleClick(slug)}
         >
@@ -60,10 +60,9 @@ const CategoryItem = ({ id, title, slug, clickedCategory }: CategoryItemType) =>
           width={40}
           height={40}
           />
-          <p style={{ fontSize: '1.1rem'}}>{title}</p>
-        </div>
+          <p className={style.categoryTitle}>{title}</p>
+        </Link >
       </div>
-      {/* {active && <SubCategoryComponent categorySlug={selectedCategory}/>} */}
     </>
   );
 }

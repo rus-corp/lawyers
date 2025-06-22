@@ -1,6 +1,5 @@
 .categoriesBlock {
   display: block;
-  /* flex-direction: column; */
   padding: 0 1rem;
   width: 45%;
   height: 100%;
@@ -17,6 +16,16 @@
 
 .mainCategoryList {
   width: 100%;
+}
+
+.mainCategoryTitle {
+  font-size: 1.2rem;
+}
+.categoryTitle {
+  font-size: 1.1rem;
+}
+.subCategoryTitle {
+  font-size: 1rem;
 }
 
 .categoryItem {
@@ -61,10 +70,6 @@
   padding: .3rem 0;
 }
 
-.categoryContent > p {
-  font-size: 1rem;
-}
-
 .categoryListBlock {
   width: 50%;
   margin-top: 1rem;
@@ -77,7 +82,30 @@
 
 .subCategoryListBlock {
   width: 90%;
-  margin-left: 5%;
+  margin-left: 2%;
   margin-top: 1rem;
   padding: 1rem 0;
+}
+
+@media (max-width: 450px) {
+  .categoriesBlock {
+    width: 100%;
+  }
+  .blockContent {
+    width: 100%;
+    display: block;
+  }
+  .mainCategoryTitle {
+    font-size: 1.1rem;
+  }
+  .categoryListBlock {
+    width: 100%;
+    padding: 0 1rem;
+  }
+  .categoryTitle {
+    font-size: 1rem;
+  }
+  .subCategoryTitle {
+    font-size: .9rem;
+  }
 }

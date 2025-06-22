@@ -3,6 +3,7 @@
   min-height: 90vh;
   height: 100%;
   margin-bottom: 2rem;
+  padding: 0 2 rem;
 }
 
 .searchBlock {
@@ -60,5 +61,29 @@
   .searchBlock {
     width: 100%;
     margin-left: 0;
+  }
+}
+
+
+@media (max-width: 450px) {
+  .docsPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .searchBlock {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .blockContent {
+    width: 100%;
+    display: block;
+  }
+  .pageInfoBlock {
+    margin-top: 2rem;
   }
 }
