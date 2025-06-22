@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 
 export default function Header() {
-  const [clicked, setClicked] = React.useState(false)
+  const [clicked, setClicked] = React.useState(true)
   const handleClick = () => {
     setClicked(!clicked)
   }
