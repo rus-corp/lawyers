@@ -24,6 +24,9 @@
 .blockDesc {
   width: 100%;
 }
+.blockDesc > p {
+  font-size: 1.1rem;
+}
 
 @media (max-width: 450px) {
   .aboutSection {

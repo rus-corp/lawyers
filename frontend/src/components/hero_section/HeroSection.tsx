@@ -10,11 +10,11 @@ export default function HeroSection() {
       <div className={style.mainBlock}>
         <div className={style.mainBlockContent}>
           <div className={style.blockHeader}>
-            <h2>Готовые образцы юридических документов -</h2>
-            <h2>быстро, понятно, актуально</h2>
+            <h2>Юридические документы</h2>
+            <h2>на все случаи жизни</h2>
           </div>
           <div className={style.blockDesc}>
-            <h4>Подготовьте досудебную претензию, иск или заявление без юриста — скачайте шаблон, отредактируйте и подавайте.</h4>
+            <h4>Быстро, надёжно, без лишнего</h4>
           </div>
           <div className={style.blockBtn}>
             <MainBtn
