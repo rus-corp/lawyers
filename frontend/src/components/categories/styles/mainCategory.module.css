@@ -19,13 +19,13 @@
 }
 
 .mainCategoryTitle {
-  font-size: 1.2rem;
-}
-.categoryTitle {
   font-size: 1.1rem;
 }
-.subCategoryTitle {
+.categoryTitle {
   font-size: 1rem;
+}
+.subCategoryTitle {
+  font-size: .9rem;
 }
 
 .categoryItem {
