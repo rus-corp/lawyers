@@ -51,7 +51,7 @@ const SubCategoryItem = ({ id, title, slug, clickedCategory }: CategoryItemType)
         onClick={() => handleClick(slug)}
         >
           <Image
-          src={'/icons/note-tak.png'}
+          src={'/icons/icon_categ_1.png'}
           alt='doc'
           width={40}
           height={40}

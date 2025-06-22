@@ -30,7 +30,6 @@ export default function Footer() {
         <div className={style.dataFooter}>
           <p>© 2025 Сам Себе Юрист. Все права защищены</p>
         </div>
-
       </div>
     </footer>
   );

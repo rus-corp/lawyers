@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.news',
     'apps.backup',
     'apps.orders',
+    'apps.meta',
 ]
 
 

@@ -1,10 +1,25 @@
 "use client"
 import React from 'react';
-
+import { Metadata } from 'next';
 import style from '../news_page.module.css'
 import { Props, NewsItemType } from '../types';
 import { getNewsItem } from '@/api';
 import ArticleContent from '@/ui/article_content/ArticleContent';
+import { getPageMeta } from '@/api';
+
+
+
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  const response = await getPageMeta(`news/${params.slug}`)
+  if (!response) return {}
+  return {
+    title: response.title,
+    description: response.description,
+    keywords: response.keywords,
+  };
+}
+
+
 
 export default function NewsItemPage({ params: { slug } }: Props) {
   const [newsItemData, setNewsItemData] = React.useState<NewsItemType>()

@@ -18,7 +18,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework.routers import DefaultRouter
+from apps.meta.views import MeatTagsView
 
+router = DefaultRouter()
+
+router.register('meta', MeatTagsView)
 
 
 urlpatterns = [
@@ -27,6 +32,7 @@ urlpatterns = [
     path('api/backup/', include('apps.backup.urls', namespace='backup')),
     path('api/news/', include('apps.news.urls', namespace='news')),
     path('api/orders/', include('apps.orders.urls', namespace='orders')),
+    path('api/', include(router.urls))
 ]
 
 

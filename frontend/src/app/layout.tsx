@@ -34,10 +34,12 @@ const manrope = Manrope({
 //   weight: "100 900",
 // });
 
-export const metadata: Metadata = {
-  title: "Сам Себе Юрист",
-  description: "Найди нужный документ",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "Сам Себе Юрист",
+    description: "Найди нужный документ",
+  };
+}
 
 export default function RootLayout({
   children,

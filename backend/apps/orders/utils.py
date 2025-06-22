@@ -3,7 +3,7 @@ import uuid
 from django.core.mail import EmailMessage
 from django.conf import settings
 
-from apps.categories.models import Documents
+from apps.categories.models import Documents, Instructions
 
 Configuration.account_id = settings.YOOKASSA_SHOP_ID
 Configuration.secret_key = settings.YOOKASSA_SECRET_KEY
@@ -42,13 +42,20 @@ def send_document_to_email(document_id: str, client_email: str):
   info@сам-себе-юрист.рф
   сам-себе-юрист.рф
   """
-  document = Documents.objects.get(id=document_id)
   email = EmailMessage(
     subject="Документ",
     body=mail_body,
     from_email=settings.EMAIL_HOST_USER,
     to=[client_email]
   )
+  document = Documents.objects.get(id=document_id)
+  categories = document.category.get_ancestors()
+  for category in categories:
+    instruction = Instructions.objects.filter(category__slug=category.slug).first()
+    if instruction:
+      email.attach_file(instruction.file.path)
+    else:
+      continue
   try:
     email.attach_file(document.file.path)
     email.send(fail_silently=False)

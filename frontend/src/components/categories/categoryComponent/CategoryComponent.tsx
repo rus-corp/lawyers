@@ -55,7 +55,7 @@ const CategoryItem = ({ id, title, slug, clickedCategory, beforeLevelClickedCate
         onClick={() => handleClick(slug)}
         >
           <Image
-          src={'/icons/note-tak.png'}
+          src={'/icons/icon_categ_3.png'}
           alt='doc'
           width={40}
           height={40}
