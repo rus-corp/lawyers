@@ -1,4 +1,3 @@
-"use client"
 import React from 'react';
 import { Metadata } from 'next';
 import style from '../news_page.module.css'
@@ -21,20 +20,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 
 
-export default function NewsItemPage({ params: { slug } }: Props) {
-  const [newsItemData, setNewsItemData] = React.useState<NewsItemType>()
-  const handleGetNewItem = async (newsSlug: string) => {
-    const response = await getNewsItem(newsSlug)
-    console.log(response?.data)
-    if (response?.status === 200) {
-      
-      setNewsItemData(response.data)
-    }
-  }
+export default async function NewsItemPage({ params: { slug } }: Props) {
+  const response = await getNewsItem(slug);
+  const newsItemData = response?.data
 
-  React.useEffect(() => {
-    handleGetNewItem(slug)
-  }, [])
   return(
     <section className={style.newsItemPage}>
       <div className="container">
