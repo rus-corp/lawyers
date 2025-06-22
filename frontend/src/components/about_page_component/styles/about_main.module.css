@@ -21,6 +21,10 @@
   width: 45%;
 }
 
+.headerBlock > h1 {
+  font-size: 3.1rem;
+}
+
 .imgBlock {
   width: auto;
   height: auto;
