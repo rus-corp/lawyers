@@ -73,11 +73,13 @@
 .burger.active::before {
   top: 50%;
   transform: rotate(-45deg) translate(0, -50%);
+  background-color: #fff;
 }
 
 .burger.active::after {
   bottom: 50%;
   transform: rotate(45deg) translate(0, 50%);
+  background-color: #fff;
 }
 
 
