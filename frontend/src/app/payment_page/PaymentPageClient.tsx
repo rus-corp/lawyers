@@ -21,7 +21,10 @@ const PaymentPage = () => {
   const handleCreateOrder = async (createOrderData: CreateOrderData) => {
     const response = await createNewOrder(createOrderData);
     if (response?.status === 201) {
-      setConfirmationToken(response.data.confirmation_token);
+      const confirmationUrl = response.data.confirmation_url;
+      if (confirmationUrl) {
+        window.location.href = confirmationUrl;
+      }
     }
   }
 
