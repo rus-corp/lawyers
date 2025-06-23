@@ -16,7 +16,7 @@ class OrderSerializer(serializers.ModelSerializer):
     payment = create_payment(
       amount=validated_data['price'],
       description=validated_data['description'],
-      client_email=validated_data['email'],
+      client_email=validated_data['userEmail'],
       document_name=document.title
     )
     amount = payment['amount']['value']
