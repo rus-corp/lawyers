@@ -10,7 +10,7 @@ Configuration.secret_key = settings.YOOKASSA_SECRET_KEY
 
 
 
-def create_payment(amount: int, description: str):
+def create_payment(amount: int, client_email: str, document_name: str, description: int):
   idempotence_key = str(uuid.uuid4())
   try:
     payment = Payment.create({
@@ -18,11 +18,24 @@ def create_payment(amount: int, description: str):
         "value": str(amount),
         "currency": "RUB"
       },
-      "confirmation": {
-        "type": "embedded"
-      },
-      "capture": True,
-      "description": description
+      "receipt": {
+        "customer": {
+          "email": client_email
+        },
+        "items": [
+          {
+            "description": f"Проект {document_name}",
+            "quantity": 1.000,
+            "amount": {
+              "value": str(amount),
+              "currency": "RUB"
+            },
+            "vat_code": description,
+            "payment_mode": "full_prepayment",
+            "payment_subject": "service"
+          }
+        ]
+      }
     }, idempotence_key)
     return payment
   except Exception as e:
