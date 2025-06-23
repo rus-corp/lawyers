@@ -28,6 +28,6 @@ class OrderSerializer(serializers.ModelSerializer):
     validated_data['order_id'] = payment['id']
     validated_data['price'] = int(float(amount))
     validated_data['is_paid'] = paid
-    self._confirmation_token = payment['confirmation']['confirmation_token']
+    # self._confirmation_token = payment['confirmation']['confirmation_url']
     order = Order.objects.create(**validated_data)
-    return (order, payment['confirmation']['confirmation_token'])
+    return (order, payment['confirmation']['confirmation_url'])
