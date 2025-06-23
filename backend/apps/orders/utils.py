@@ -22,6 +22,7 @@ def create_payment(amount: int, client_email: str, document_name: str, descripti
         "type": "redirect",
         "return_url": 'https://сам-себе-юрист.рф/payment_page/success',
       },
+      "capture": True,
       "receipt": {
         "customer": {
           "email": client_email
