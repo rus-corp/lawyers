@@ -34,7 +34,7 @@ def create_payment(amount: int, client_email: str, document_name: str, descripti
               "value": str(amount),
               "currency": "RUB"
             },
-            "vat_code": description,
+            "vat_code": 1,
             "payment_mode": "full_prepayment",
             "payment_subject": "service"
           }

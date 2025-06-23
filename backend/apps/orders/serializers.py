@@ -22,7 +22,7 @@ class OrderSerializer(serializers.ModelSerializer):
       client_email=validated_data['user_email'],
       document_name=document.title
     )
-    logger.debug(payment)
+    logger.debug('payment', payment)
     amount = payment['amount']['value']
     paid = payment['paid']
     validated_data['order_id'] = payment['id']
