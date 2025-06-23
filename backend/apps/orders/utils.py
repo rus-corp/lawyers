@@ -24,7 +24,7 @@ def create_payment(amount: int, client_email: str, document_name: str, descripti
         },
         "items": [
           {
-            "description": f"Проект {document_name}",
+            "description": f"Проект документа '{document_name}'",
             "quantity": 1.000,
             "amount": {
               "value": str(amount),
