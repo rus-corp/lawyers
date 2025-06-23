@@ -8,6 +8,7 @@ import { FormDataType } from './types';
 import MainBtn from '@/ui/buttons/MainBtn';
 import { createBackUp } from '@/api';
 
+
 export default function BackUpForm() {
   const [checkBox, setCheckBox] = React.useState(false)
   const [formData, setFormData] = React.useState<FormDataType>({
@@ -17,7 +18,6 @@ export default function BackUpForm() {
     text: '',
   })
   const handleChange = (name: string, value: string) => {
-    console.log(name, value)
     setFormData((prevData) => ({
       ...prevData,
       [name]: value
@@ -26,7 +26,7 @@ export default function BackUpForm() {
   const handleSendBackup = async (data: FormDataType) => {
     const response = await createBackUp(data)
     if (response.status === 201) {
-      console.log('Backup request sent successfully')
+      return true
     }
   }
 

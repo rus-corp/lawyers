@@ -7,12 +7,8 @@ import CategoryComponent from '@/components/categories/categoryComponent/Categor
 
 export default function CategoryLayout({ children, params }: { children: React.ReactNode; params: { categorySlug: string } }) {
   const categorySlug = params.categorySlug
-  // const params = useParams() as { categorySlug: string };
-  // const { categorySlug } = params
-  console.log('categorySlug', categorySlug)
 
   const handleClick = (categorySlug: string) => {
-    console.log(categorySlug)
   }
   return(
     <>

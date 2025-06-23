@@ -23,7 +23,7 @@ export default function MainCategoryLayout({ children }: { children: React.React
   const handleSearchCategories = async (searchQuery: string) => {
     const response = await getSeacrhCategories(searchQuery)
     if (response.status === 200) {
-      // console.log(response.data)
+
       const categoryData = response.data
       if (categoryData.length === 3) {
         setClickedCategory(categoryData[categoryData.length - 2].slug)
@@ -36,7 +36,7 @@ export default function MainCategoryLayout({ children }: { children: React.React
     }
   }
   const handleClick = (category: string) => {
-    console.log(category)
+
   }
   const handleFindCategories = async (value: string) => {
     const response = await getCategories(value)

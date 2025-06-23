@@ -17,9 +17,7 @@ export default function SubCategoryLayout(
   { children, params }: { children: React.ReactNode; params: { categorySlug: string; subCategorySlug: string } }
 ) {
   const { subCategorySlug, categorySlug } = params;
-  console.log('subSlug', subCategorySlug)
   const handleClick = (categorySlug: string) => {
-    console.log(categorySlug)
   }
   
   return(
