@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Inter, Manrope } from "next/font/google";
 import Script from "next/script";
+import { getPageMeta } from "@/api";
 
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
@@ -35,9 +36,12 @@ const manrope = Manrope({
 // });
 
 export async function generateMetadata(): Promise<Metadata> {
+  const response = await getPageMeta('home')
+  if (!response) return {}
   return {
-    title: "Сам Себе Юрист",
-    description: "Найди нужный документ",
+    title: response.title,
+    description: response.description,
+    keywords: response.keywords,
   };
 }
 

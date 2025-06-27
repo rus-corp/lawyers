@@ -9,7 +9,7 @@
 
 .newsItem {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 2rem;
   background-color: #EAF0F7;
   border-radius: 12px;
@@ -26,8 +26,9 @@
 }
 
 .newsTitle {
-  text-align: center;
-  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 .newsText {
@@ -47,12 +48,17 @@
 
 .newsContent {
   padding: 1rem;
+  width: 100%;
   display: flex;
+  align-items: center;
   height: 100%;
-  flex-direction: column;
   justify-content: space-between;
 }
 
 .newsData {
   text-align: end;
+}
+
+.newsData > p {
+  font-size: 0.8rem;
 }

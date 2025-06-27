@@ -1,21 +1,29 @@
-"use client"
 import React from 'react';
-import { useParams } from 'next/navigation';
+import { Metadata } from 'next';
 import style from '../docs.module.css'
 import CategoryComponent from '@/components/categories/categoryComponent/CategoryComponent';
+import { getPageMeta } from '@/api';
 
+
+
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  const response = await getPageMeta(`news/${params.slug}`)
+  if (!response) return {}
+  return {
+    title: response.title,
+    description: response.description,
+    keywords: response.keywords,
+  };
+}
 
 export default function CategoryLayout({ children, params }: { children: React.ReactNode; params: { categorySlug: string } }) {
   const categorySlug = params.categorySlug
 
-  const handleClick = (categorySlug: string) => {
-  }
   return(
     <>
     <CategoryComponent
     categorySlug={categorySlug}
     beforeLevelClickedCategory={categorySlug}
-    clickedCategory={handleClick}
     />
     {children}
     </>

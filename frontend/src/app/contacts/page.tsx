@@ -2,6 +2,20 @@ import React from 'react';
 
 import style from './contacts.module.css'
 import BackUpForm from '@/components/form/BackUpForm';
+import { Metadata } from "next";
+import { getPageMeta } from "@/api";
+
+
+export async function generateMetadata(): Promise<Metadata> {
+  const response = await getPageMeta('contacts')
+  if (!response) return {}
+  return {
+    title: response.title,
+    description: response.description,
+    keywords: response.keywords,
+  };
+}
+
 
 
 export default function Contacts() {

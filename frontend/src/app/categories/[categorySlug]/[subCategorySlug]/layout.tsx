@@ -1,31 +1,33 @@
-"use client"
 import React from 'react';
 
-import style from '../../docs.module.css'
 import SubCategoryComponent from '@/components/categories/subCategoryComponent/SubCategoryComponent';
+import { getPageMeta } from '@/api';
 
 
-type Props = {
-  params: {
-    categorySlug: string;
-    subCategorySlug: string;
-  }
+
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  const response = await getPageMeta(`news/${params.slug}`)
+  if (!response) return {}
+  return {
+    title: response.title,
+    description: response.description,
+    keywords: response.keywords,
+  };
 }
+
+
 
 
 export default function SubCategoryLayout(
   { children, params }: { children: React.ReactNode; params: { categorySlug: string; subCategorySlug: string } }
 ) {
   const { subCategorySlug, categorySlug } = params;
-  const handleClick = (categorySlug: string) => {
-  }
   
   return(
     <>
     <SubCategoryComponent
     beforeLevelClickedCategory={subCategorySlug}
     categorySlug={subCategorySlug}
-    clickedCategory={handleClick}
     />
     {children}
     </>

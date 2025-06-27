@@ -6,11 +6,11 @@ import style from '../styles/mainCategory.module.css'
 
 import { getCategoryBySlug } from '@/api';
 import { CategoryComponentProps, CategoryItemType } from '../types/types'
-import SubCategoryComponent from '../subCategoryComponent/SubCategoryComponent';
+
 
 
 export default function CategoryComponent(
-  { categorySlug, clickedCategory, beforeLevelClickedCategory }: CategoryComponentProps
+  { categorySlug, beforeLevelClickedCategory }: CategoryComponentProps
 ) {
   const [categories, setCategories] = React.useState<CategoryItemType[]>([])
   const getCategoriesList = async (categorySlug: string) => {
@@ -19,6 +19,7 @@ export default function CategoryComponent(
       setCategories(response.data)
     }
   }
+
   React.useEffect(() => {
     if (categorySlug) {
       getCategoriesList(categorySlug)
@@ -31,7 +32,6 @@ export default function CategoryComponent(
         id={categoryItem.id}
         title={categoryItem.title}
         slug={categoryItem.slug}
-        clickedCategory={clickedCategory}
         beforeLevelClickedCategory={beforeLevelClickedCategory}
         />
       ))}
@@ -41,18 +41,12 @@ export default function CategoryComponent(
 
 
 
-const CategoryItem = ({ id, title, slug, clickedCategory, beforeLevelClickedCategory }: CategoryItemType) => {
-  const [selectedCategory, setSelectedCategory] = React.useState<string>('')
-  const handleClick = (categorySlug: string) => {
-    setSelectedCategory(categorySlug)
-    clickedCategory(categorySlug)
-  }
+const CategoryItem = ({ id, title, slug, beforeLevelClickedCategory }: CategoryItemType) => {
   return (
     <>
       <div className={`${style.categoryItem} ${style.categoryCategoryItem}`}>
         <Link href={`/categories/${beforeLevelClickedCategory}/${slug}`}
         className={style.categoryContent}
-        onClick={() => handleClick(slug)}
         >
           <Image
           src={'/icons/icon_categ_3.png'}

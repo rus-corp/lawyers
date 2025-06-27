@@ -58,11 +58,6 @@ const NewsItem = ({id, title, text, slug, img, created_at}: NewsItemType) => {
         <div className={style.newsTitle}>
           <h4>{title}</h4>
         </div>
-        <div className={style.newsText}>
-          <ArticleContent
-          htmlContent={text.slice(0,200)}
-          />
-        </div>
         <div className={style.newsData}>
           <p>{handleValidateDate(created_at)}</p>
         </div>

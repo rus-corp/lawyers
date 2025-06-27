@@ -8,7 +8,7 @@ import { CategoryItemType, MainCategoryProps } from '../types/types';
 import { getCategories, getCategoryBySlug, getCategoryByParent } from '@/api';
 
 
-export default function MainCategoryComponent({ clickedCategory }: MainCategoryProps) {
+export default function MainCategoryComponent() {
   const [mainCategories, setMainCategories] = React.useState<CategoryItemType[]>([])
   const handleGetCategories = async () => {
     const response = await getCategories()
@@ -28,7 +28,6 @@ export default function MainCategoryComponent({ clickedCategory }: MainCategoryP
             id={mainCategoryItem.id}
             title={mainCategoryItem.title}
             slug={mainCategoryItem.slug}
-            clickedCategory={clickedCategory}
             beforeLevelClickedCategory=''
             />
           ))}
@@ -42,16 +41,12 @@ export default function MainCategoryComponent({ clickedCategory }: MainCategoryP
 
 
 
-const MainCategoryItem = ({ id, title, slug, clickedCategory }: CategoryItemType) => {
-  const handleClick = (categorySlug: string) => {
-    clickedCategory(categorySlug)
-  }
+const MainCategoryItem = ({ id, title, slug }: CategoryItemType) => {
   return (
     <>
       <div className={`${style.categoryItem} ${style.mainCategoryItem}`}>
         <Link href={`/categories/${slug}`}
         className={style.categoryContent}
-        onClick={() => handleClick(slug)}
         >
           <Image
           src={'/icons/note-tak.png'}

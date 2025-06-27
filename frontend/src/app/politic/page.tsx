@@ -1,6 +1,19 @@
 import React from 'react';
-
+import type { Metadata } from "next";
 import style from './politic.module.css'
+
+import { getPageMeta } from "@/api";
+
+
+export async function generateMetadata(): Promise<Metadata> {
+  const response = await getPageMeta('politic')
+  if (!response) return {}
+  return {
+    title: response.title,
+    description: response.description,
+    keywords: response.keywords,
+  };
+}
 
 
 export default function PoliticCompoennt() {

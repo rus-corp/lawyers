@@ -1,6 +1,5 @@
 export type CategoryComponentProps = {
   categorySlug: string;
-  clickedCategory: Function;
   beforeLevelClickedCategory: string
 }
 
@@ -9,7 +8,6 @@ export type CategoryItemType = {
   id: number;
   title: string;
   slug: string;
-  clickedCategory: Function
   beforeLevelClickedCategory: string
 }
 

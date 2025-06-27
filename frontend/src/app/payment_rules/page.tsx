@@ -1,6 +1,22 @@
 import React from 'react';
+import type { Metadata } from "next";
+import { getPageMeta } from "@/api";
+
 
 import style from './payment.module.css'
+
+
+
+export async function generateMetadata(): Promise<Metadata> {
+  const response = await getPageMeta('payment_rules')
+  if (!response) return {}
+  return {
+    title: response.title,
+    description: response.description,
+    keywords: response.keywords,
+  };
+}
+
 
 
 export default function PAaymentComponent() {

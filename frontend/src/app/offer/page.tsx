@@ -1,6 +1,21 @@
 import React from 'react';
 
 import style from './offer.module.css'
+import type { Metadata } from "next";
+import { getPageMeta } from "@/api";
+
+
+
+export async function generateMetadata(): Promise<Metadata> {
+  const response = await getPageMeta('offer')
+  if (!response) return {}
+  return {
+    title: response.title,
+    description: response.description,
+    keywords: response.keywords,
+  };
+}
+
 
 
 export default function OfferComponent() {

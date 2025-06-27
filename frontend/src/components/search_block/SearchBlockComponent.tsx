@@ -1,42 +1,77 @@
+"use client"
 import React from 'react';
-
+import { useRouter } from 'next/navigation';
 import style from './searchBlock.module.css'
+
+import SearchingListComponent from './SearchingListComponent';
+import { CreateItemInput } from '@/ui/inputs/SearchInput';
+
 import { CategoryType } from './types';
+
+import { getCategories, getSeacrhCategories } from '@/api';
+
 
 type Props = {
   categoriesList: CategoryType[];
   categoryClicked: Function;
 }
 
-export default function SearchBlockComponent({ categoriesList, categoryClicked }: Props) {
-  if (!categoriesList || categoriesList.length === 0) {
-    return null
-  }
-  return(
-    <div className={style.searchBlockList}>
-      {categoriesList?.map((item) => (
-        <CategoryItem key={item.id}
-        title={item.title}
-        slug={item.slug}
-        categoryClicked={categoryClicked}
-        />
-      ))}
-    </div>
-  );
-}
+export default function SearchBlockComponent() {
+  const router = useRouter()
+  const [seacrhDoc, setSearchDoc] = React.useState<string>('')
+  const [searchedCategories, setSearchedCategories] = React.useState([])
+  
+  const handleSearchCategories = async (searchQuery: string) => {
+    const response = await getSeacrhCategories(searchQuery)
+    if (response.status === 200) {
 
-
-
-
-const CategoryItem = ({title, slug, categoryClicked}: CategoryType) => {
-  const handleClick = () => {
-    if (categoryClicked) {
-      categoryClicked(title, slug)
+      const categoryData = response.data
+      if (categoryData.length === 3) {
+        router.push(`/categories/${categoryData[categoryData.length - 2].slug}/${categoryData[categoryData.length - 3].slug}`)
+      } else if (categoryData.length === 2) {
+        router.push(`/categories/${categoryData[categoryData.length - 2].slug}`)
+      }
     }
   }
+
+  const handleFindCategories = async (value: string) => {
+    const response = await getCategories(value)
+    setSearchedCategories(response.data)
+    return response
+  }
+
+  const handleSearch = async (name: string, value: string) => {
+    setSearchDoc(value);
+    const response = await handleFindCategories(value)
+  }
+
+  const handleClickedCategory = (title: string, category: string) => {
+    setSearchDoc(title)
+    const response = handleSearchCategories(category)
+    setSearchedCategories([])
+  }
   return (
-    <div className={style.categoryItem} onClick={handleClick}>
-      <p>{title}</p>
+    <div className={style.searchBlock}>
+      <div className={style.headerSearch}>
+        <CreateItemInput
+        fieldType='text'
+        fieldName='search'
+        value={seacrhDoc}
+        changeFunc={handleSearch}
+        placeholder='Поиск по документам'
+        />
+      </div>
+      <div className={style.searchCategoriesList}>
+        <SearchingListComponent
+        categoriesList={searchedCategories}
+        categoryClicked={handleClickedCategory}
+        />
+      </div>
     </div>
   );
+
 }
+
+
+
+

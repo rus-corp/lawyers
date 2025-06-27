@@ -6,6 +6,7 @@ import { getPageMeta } from "@/api";
 
 import style from './about_page.module.css'
 
+
 export async function generateMetadata(): Promise<Metadata> {
   const response = await getPageMeta('about')
   if (!response) return {}
