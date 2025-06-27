@@ -26,12 +26,28 @@ class CategoryAdminForm(forms.ModelForm):
         choices = []
         if not self.fields['parent'].required:
             choices.append(('', self.fields['parent'].empty_label))
-        for level in range(0, 4):
-            cats = Category.objects.filter(level=level)
-            if cats.exists():
-                group = (f'Уровень {level}', [(cat.pk, cat.title) for cat in cats])
-                choices.append(group)
+        categories = Category.objects.all().order_by('tree_id', 'lft')
+
+        for category in categories:
+            INDENT = '\u00A0\u00A0\u00A0'
+            indent = f"{INDENT * 3 * category.level}{category.title}"
+            label = f"{indent} {category.title}" if indent else category.title
+            choices.append((category.pk, label))
+
         self.fields['parent'].choices = choices
+
+
+# class CategoryAdminForm(forms.ModelForm):
+#     class Meta:
+#         model = Category
+#         fields = '__all__'
+
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+
+#         # Сортируем родительские категории по уровню
+#         self.fields['parent'].queryset = Category.objects.all().order_by('tree_id', 'lft')
+
 
 
 class InstructionAdminForm(forms.ModelForm):
