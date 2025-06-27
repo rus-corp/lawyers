@@ -8,7 +8,7 @@ import { getCategoryBySlug } from '@/api';
 
 
 export default function SubCategoryComponent({
-  categorySlug, clickedCategory
+  categorySlug,
 }: CategoryComponentProps) {
   const [categories, setCategories] = React.useState<CategoryItemType[]>([])
   const getCategoriesList = async (categorySlug: string) => {
@@ -29,7 +29,6 @@ export default function SubCategoryComponent({
         id={categoryItem.id}
         title={categoryItem.title}
         slug={categoryItem.slug}
-        clickedCategory={clickedCategory}
         beforeLevelClickedCategory=''
         />
       ))}
@@ -38,7 +37,7 @@ export default function SubCategoryComponent({
 }
 
 
-const SubCategoryItem = ({ id, title, slug, clickedCategory }: CategoryItemType) => {
+const SubCategoryItem = ({ id, title, slug }: CategoryItemType) => {
   const router = useRouter()
   const handleClick = (categorySlug: string) => {
     router.push(`/docs/${categorySlug}`)
