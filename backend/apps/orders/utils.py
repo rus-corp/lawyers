@@ -1,4 +1,5 @@
 from yookassa import Payment, Configuration
+from celery import shared_task
 import uuid
 from django.core.mail import EmailMessage
 from django.conf import settings
@@ -48,7 +49,7 @@ def create_payment(amount: int, client_email: str, document_name: str, descripti
   
 
 
-
+@shared_task
 def send_document_to_email(document_id: str, client_email: str):
   mail_body = """
   Благодарим вас за оплату. Во вложении вы найдёте юридический документ, оформленный согласно вашему запросу.

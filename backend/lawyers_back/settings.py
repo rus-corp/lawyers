@@ -23,6 +23,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '5.188.115.222',
+    '0.0.0.0',
 ]
 
 
@@ -168,6 +169,10 @@ LOGGING = {
     #     }
     # }
 }
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+
 
 YOOKASSA_SHOP_ID = os.environ.get('SHOP_ID')
 YOOKASSA_SECRET_KEY = os.environ.get('SHOP_KEY')

@@ -76,3 +76,25 @@ services:
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 1 & wait $!; done;'"
     networks:
       - lawyers_network
+  
+
+  redis:
+    image: redis:8-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - lawyers_network
+
+  worker:
+    container_name: celery_worker
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    working_dir: /app
+    command: sh -c "which celery && celery --version && celery -A lawyers_back worker -l INFO"
+    depends_on:
+      - api
+      - database
+      - redis
+    networks:
+      - lawyers_network
