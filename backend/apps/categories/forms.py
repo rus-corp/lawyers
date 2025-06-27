@@ -30,7 +30,7 @@ class CategoryAdminForm(forms.ModelForm):
 
         for category in categories:
             INDENT = '\u00A0\u00A0\u00A0'
-            indent = f"{INDENT * 3 * category.level}{category.title}"
+            indent = f"{INDENT * 3 * category.level}"
             label = f"{indent} {category.title}" if indent else category.title
             choices.append((category.pk, label))
 

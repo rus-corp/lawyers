@@ -70,11 +70,12 @@ def send_document_to_email(document_id: str, client_email: str):
   document = Documents.objects.get(id=document_id)
   categories = document.category.get_ancestors(include_self=True)
   for category in categories:
-    instruction = Instructions.objects.filter(category__slug=category.slug).first()
-    if instruction:
-      email.attach_file(instruction.file.path)
-    else:
-      continue
+    instructions = Instructions.objects.filter(category__slug=category.slug)
+    for instruction in instructions:
+      if instruction.file:
+        email.attach_file(instruction.file.path)
+      else:
+        continue
   try:
     email.attach_file(document.file.path)
     email.send(fail_silently=False)
