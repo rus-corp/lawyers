@@ -31,6 +31,7 @@ services:
     volumes:
       - ./backend:/app
       - ./docker_data/static:/app/static
+      - ./backend/media:/app/media
     depends_on:
       - database
     command: gunicorn lawyers_back.wsgi:application --bind 0.0.0.0:8000
@@ -90,6 +91,9 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app
+      - ./backend/media:/app/media
     working_dir: /app
     command: sh -c "which celery && celery --version && celery -A lawyers_back worker -l INFO"
     depends_on:
