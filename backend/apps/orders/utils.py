@@ -68,7 +68,7 @@ def send_document_to_email(document_id: str, client_email: str):
     to=[client_email]
   )
   document = Documents.objects.get(id=document_id)
-  categories = document.category.get_ancestors()
+  categories = document.category.get_ancestors(include_self=True)
   for category in categories:
     instruction = Instructions.objects.filter(category__slug=category.slug).first()
     if instruction:
