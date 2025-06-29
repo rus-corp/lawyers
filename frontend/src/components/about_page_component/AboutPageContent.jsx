@@ -7,7 +7,7 @@ export default function AboutPageContent() {
     <aside className={style.aboutPageContent}>
       <div className={style.aboutSection}>
         <div className={style.sectionHeader}>
-          <h2>О нас</h2>
+          <h3>О нас</h3>
         </div>
         <div className={style.sectionContent}>
           <div className={style.sectionDesc}>

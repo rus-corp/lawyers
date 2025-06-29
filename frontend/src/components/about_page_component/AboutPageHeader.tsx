@@ -8,7 +8,7 @@ export default function AboutPageHeader() {
     <aside className={style.aboutHeader}>
       <div className={style.mainHeader}>
         <div className={style.headerBlock}>
-          <h1>Делаем право доступным каждому</h1>
+          <h2>Делаем право доступным каждому</h2>
         </div>
         <div className={style.imgBlock}>
           <Image

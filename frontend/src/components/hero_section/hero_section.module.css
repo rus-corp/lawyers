@@ -16,7 +16,7 @@
 
 .mainBlockImg {
   width: 50%;
-  flex: 1 1 0%;
+  /* flex: 1 1 0%; */
 }
 
 .blockHeader {
@@ -40,13 +40,21 @@
 
 
 @media (max-width: 450px) {
+  .mainBlock {
+    display: flex;
+    flex-direction: column-reverse;
+    width: 100%;
+  }
+  .mainBlockImg {
+    width: 100%;
+  }
   .heroSection {
     height: auto;
   }
-  .mainBlockImg {
-    display: none;
-  }
   .mainBlockContent {
     width: 100%;
+  }
+  .blockHeader, .blockDesc, .blockBtn {
+    padding: 0 2rem;
   }
 }
