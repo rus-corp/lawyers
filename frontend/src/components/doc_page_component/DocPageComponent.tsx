@@ -68,7 +68,16 @@ export default function DocPageComponent({ initialData }: Props) {
           <div className={style.contentData}>
             <div className={style.contentItem}>
               <div className={style.contentDataTitle}>
-                <h5>Вы получите:</h5>
+                <h5>После нажатия на кнопку "Оплатить документ":</h5>
+              </div>
+              <div className={style.contentDataList}>
+                <p>- Внесите корректный адрес электронной почты;</p>
+                <p>- На эту почту придет письмо с документами;</p>
+              </div>
+            </div>
+            <div className={style.contentItem}>
+              <div className={style.contentDataTitle}>
+                <h5>В письме Вы получите:</h5>
               </div>
               <div className={style.contentDataList}>
                 <p>- Готовый шаблон документа;</p>
