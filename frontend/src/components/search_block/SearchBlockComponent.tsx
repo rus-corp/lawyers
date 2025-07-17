@@ -6,28 +6,24 @@ import style from './searchBlock.module.css'
 import SearchingListComponent from './SearchingListComponent';
 import { CreateItemInput } from '@/ui/inputs/SearchInput';
 
-import { CategoryType } from './types';
-
 import { getCategories, getSeacrhCategories } from '@/api';
+import { useCategorySearch } from '@/context/CategorySearchContext';
 
 
-type Props = {
-  categoriesList: CategoryType[];
-  categoryClicked: Function;
-}
+
 
 export default function SearchBlockComponent() {
   const router = useRouter()
+  const { setFindCategory } = useCategorySearch()
   const [seacrhDoc, setSearchDoc] = React.useState<string>('')
   const [searchedCategories, setSearchedCategories] = React.useState([])
   
   const handleSearchCategories = async (searchQuery: string) => {
     const response = await getSeacrhCategories(searchQuery)
     if (response.status === 200) {
-
       const categoryData = response.data
       if (categoryData.length === 3) {
-        router.push(`/categories/${categoryData[categoryData.length - 2].slug}/${categoryData[categoryData.length - 3].slug}`)
+        router.push(`/categories/${categoryData[categoryData.length - 3].slug}/${categoryData[categoryData.length - 2].slug}`)
       } else if (categoryData.length === 2) {
         router.push(`/categories/${categoryData[categoryData.length - 2].slug}`)
       }
@@ -47,6 +43,7 @@ export default function SearchBlockComponent() {
 
   const handleClickedCategory = (title: string, category: string) => {
     setSearchDoc(title)
+    setFindCategory(category)
     const response = handleSearchCategories(category)
     setSearchedCategories([])
   }
@@ -69,7 +66,6 @@ export default function SearchBlockComponent() {
       </div>
     </div>
   );
-
 }
 
 

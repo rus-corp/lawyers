@@ -7,7 +7,7 @@ import { getPageMeta } from '@/api';
 
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const response = await getPageMeta(`news/${params.slug}`)
+  const response = await getPageMeta(`categories/${params.slug}`)
   if (!response) return {}
   return {
     title: response.title,
@@ -16,9 +16,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default function CategoryLayout({ children, params }: { children: React.ReactNode; params: { categorySlug: string } }) {
+export default function CategoryLayout({
+   children, params }: { children: React.ReactNode; params: { categorySlug: string } 
+}) {
   const categorySlug = params.categorySlug
-
   return(
     <>
     <CategoryComponent

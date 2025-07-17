@@ -109,3 +109,9 @@
     font-size: .9rem;
   }
 }
+
+
+.clicked {
+  background-color: #2D9CDB;
+  color: white;
+}

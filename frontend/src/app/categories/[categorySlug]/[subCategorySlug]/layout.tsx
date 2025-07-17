@@ -5,8 +5,12 @@ import { getPageMeta } from '@/api';
 
 
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const response = await getPageMeta(`news/${params.slug}`)
+export async function generateMetadata({
+  params,
+} : {
+  params : { mainCategorySlug: string; categorySlug: string }
+}) {
+  const response = await getPageMeta(`categories/${params.mainCategorySlug}/${params.categorySlug}`)
   if (!response) return {}
   return {
     title: response.title,
@@ -26,8 +30,8 @@ export default function SubCategoryLayout(
   return(
     <>
     <SubCategoryComponent
-    beforeLevelClickedCategory={subCategorySlug}
     categorySlug={subCategorySlug}
+    beforeLevelClickedCategory={subCategorySlug}
     />
     {children}
     </>

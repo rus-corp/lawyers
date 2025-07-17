@@ -4,3 +4,4 @@ export type CategoryType = {
   slug: string;
   categoryClicked?: Function;
 }
+

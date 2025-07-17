@@ -3,12 +3,21 @@ import React, { act } from 'react';
 import Image from 'next/image';
 import style from '../styles/mainCategory.module.css'
 import Link from 'next/link';
+import { usePathname } from 'next/navigation'
 
 import { CategoryItemType, MainCategoryProps } from '../types/types';
 import { getCategories, getCategoryBySlug, getCategoryByParent } from '@/api';
 
-
 export default function MainCategoryComponent() {
+  const pathname = usePathname()
+  const activeSlug = React.useMemo(() => {
+    const parts = pathname.split('/').filter(Boolean);
+    const categoriesIndex = parts.indexOf('categories');
+    if (parts.length === 3) {
+      return parts[categoriesIndex + 1] || '';
+    }
+    return parts[categoriesIndex + 1] || '';
+  }, [pathname])
   const [mainCategories, setMainCategories] = React.useState<CategoryItemType[]>([])
   const handleGetCategories = async () => {
     const response = await getCategories()
@@ -29,6 +38,7 @@ export default function MainCategoryComponent() {
             title={mainCategoryItem.title}
             slug={mainCategoryItem.slug}
             beforeLevelClickedCategory=''
+            isActive={mainCategoryItem.slug === activeSlug}
             />
           ))}
         </div>
@@ -41,10 +51,12 @@ export default function MainCategoryComponent() {
 
 
 
-const MainCategoryItem = ({ id, title, slug }: CategoryItemType) => {
+const MainCategoryItem = ({ id, title, slug, isActive }: CategoryItemType) => {
   return (
     <>
-      <div className={`${style.categoryItem} ${style.mainCategoryItem}`}>
+      <div
+      className={isActive ? `${style.categoryItem} ${style.mainCategoryItem} ${style.clicked}` : `${style.categoryItem} ${style.mainCategoryItem}`}
+      >
         <Link href={`/categories/${slug}`}
         className={style.categoryContent}
         >

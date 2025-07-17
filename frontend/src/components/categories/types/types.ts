@@ -9,6 +9,8 @@ export type CategoryItemType = {
   title: string;
   slug: string;
   beforeLevelClickedCategory: string
+  isActive: boolean
+  isFind?: boolean | null
 }
 
 export type CategoryListType = {

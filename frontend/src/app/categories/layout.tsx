@@ -6,7 +6,7 @@ import style from './docs.module.css'
 import BackUpForm from '@/components/form/BackUpForm';
 import SearchBlockComponent from '@/components/search_block/SearchBlockComponent';
 import MainCategoryComponent from '@/components/categories/mainCategoryComponent/MainCategoryComponent';
-
+import { CategorySearchProvider } from '@/context/CategorySearchContext';
 
 import { getPageMeta } from '@/api';
 
@@ -24,10 +24,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 
 export default function MainCategoryLayout({ children }: { children: React.ReactNode}) {
-  
   return(
+    <CategorySearchProvider>
       <section className={style.docsPage}>
-        <SearchBlockComponent />
+        <SearchBlockComponent/>
         <div className={style.blockContent}>
           <MainCategoryComponent
           />
@@ -42,5 +42,6 @@ export default function MainCategoryLayout({ children }: { children: React.React
         </div>
         <BackUpForm />
       </section>
+    </CategorySearchProvider>
   );
 }
