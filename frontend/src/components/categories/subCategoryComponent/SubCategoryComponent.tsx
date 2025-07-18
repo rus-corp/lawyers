@@ -14,7 +14,7 @@ export default function SubCategoryComponent({
 }: CategoryComponentProps) {
   const [categories, setCategories] = React.useState<CategoryItemType[]>([])
   const pathname = usePathname()
-  const { findCategory, setFindCategory } = useCategorySearch()
+  const { findCategory } = useCategorySearch()
   // const activeSlug = React.useMemo(() => {
   //     const parts = pathname.split('/').filter(Boolean);
   //     const categoriesIndex = parts.indexOf('categories');
@@ -31,12 +31,6 @@ export default function SubCategoryComponent({
   React.useEffect(() => {
     if (categorySlug) {
       getCategoriesList(categorySlug)
-    }
-    if (findCategory) {
-      const timer = setTimeout(() => {
-        setFindCategory('')
-      }, 1000)
-      return () => clearTimeout(timer)
     }
   }, [categorySlug])
   return(

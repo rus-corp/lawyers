@@ -36,13 +36,7 @@ export default function CategoryComponent(
     if (categorySlug) {
       getCategoriesList(categorySlug)
     }
-    if (findCategory) {
-      const timer = setTimeout(() => {
-        setFindCategory('')
-      }, 1000)
-      return () => clearTimeout(timer)
-    }
-  }, [categorySlug, findCategory])
+  }, [categorySlug])
   return(
     <div className={style.categoryListBlock}>
       {categories.map((categoryItem) => (
