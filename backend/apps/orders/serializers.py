@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from decimal import Decimal
 from .models import Order
 from apps.categories.models import Documents
 from .utils import create_payment
@@ -45,8 +45,13 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class AmountSerializer(serializers.Serializer):
-  value = serializers.DecimalField(max_digits=10, decimal_places=2, coerce_to_decimal=True)
+  value = serializers.DecimalField(max_digits=10, decimal_places=2)
   currency = serializers.CharField()
+
+  def validate_value(self, value):
+    if isinstance(value, str):
+      value = Decimal(value)
+    return value
 
 
 class PaymentStatusSerializer(serializers.Serializer):
