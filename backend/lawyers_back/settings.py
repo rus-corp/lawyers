@@ -84,6 +84,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'lawyers_back.wsgi.application'
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'xn-----6kcftbw0a5bcdgn8n.xn--p1ai',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -150,24 +151,31 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+log_dir = os.path.join(BASE_DIR, 'docker_data', 'logs')
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
+
 LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        'console' : {'class': 'logging.StreamHandler' }
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(log_dir, 'django_error.log'),
+        },
     },
-    "loggers": {
-      "": {
-        "handlers": ["console"],
-        "level": "DEBUG",
-      }
-    }
-    # 'loggers': {
-    #     'django.db.backends': {
-    #         'handlers': ['console'],
-    #         'level': 'DEBUG'
-    #     }
-    # }
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',  # Меняйте на 'INFO' или 'ERROR' в зависимости от нужд
+            'propagate': True,
+        },
+    },
 }
 
 CELERY_BROKER_URL = 'redis://redis:6379/0'

@@ -4,6 +4,9 @@ import uuid
 from django.core.mail import EmailMessage
 from django.conf import settings
 
+import logging
+logger = logging.getLogger(__name__)
+
 from apps.categories.models import Documents, Instructions
 
 Configuration.account_id = settings.YOOKASSA_SHOP_ID
@@ -79,5 +82,6 @@ def send_document_to_email(document_id: str, client_email: str):
   try:
     email.attach_file(document.file.path)
     email.send(fail_silently=False)
+    logger.info(f'Клиенту {client_email} отправлены документы')
   except  Exception as e:
-    print(f"Error sending email: {e}")
+    logger.error(f'Документы клиенту {client_email} не отправлены')

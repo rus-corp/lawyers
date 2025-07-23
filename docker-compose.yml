@@ -29,12 +29,13 @@ services:
     ports:
       - "8000:8000"
     volumes:
+      - ./docker_data:/app/docker_data
       - ./backend:/app
       - ./docker_data/static:/app/static
       - ./backend/media:/app/media
     depends_on:
       - database
-    command: gunicorn lawyers_back.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120
+    command: gunicorn --access-logfile /app/docker_data/logs/access.log --error-logfile /app/docker_data/logs/error.log lawyers_back.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120
     networks:
       - lawyers_network
   web:
