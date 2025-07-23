@@ -35,8 +35,9 @@ class PaymentStatusView(generics.CreateAPIView):
   def post(self, request, *args, **kwargs):
     serializer = self.serializer_class(data=request.data)
     if serializer.is_valid():
-      payment_id = serializer.data.get('id')
-      payment_status = serializer.data.get('status')
+      payment_data = serializer.validated_data
+      payment_id = payment_data.get('id')
+      payment_status = payment_data.get('status')
       if payment_status == 'succeeded':
         try:
           order = Order.objects.get(order_id=payment_id)
