@@ -52,7 +52,7 @@ def create_payment(amount: int, client_email: str, document_name: str, descripti
   
 
 
-@shared_task
+
 def send_document_to_email(document_id: str, client_email: str):
   mail_body = """
   Благодарим вас за оплату. Во вложении вы найдёте юридический документ, оформленный согласно вашему запросу.
@@ -81,7 +81,7 @@ def send_document_to_email(document_id: str, client_email: str):
         continue
   try:
     email.attach_file(document.file.path)
-    email.send(fail_silently=False)
+    email.send()
     logger.info(f'Клиенту {client_email} отправлены документы')
   except  Exception as e:
     logger.error(f'Документы клиенту {client_email} не отправлены')

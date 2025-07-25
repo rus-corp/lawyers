@@ -155,6 +155,7 @@ log_dir = os.path.join(BASE_DIR, 'docker_data', 'logs')
 if not os.path.exists(log_dir):
     os.makedirs(log_dir)
 
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -162,18 +163,30 @@ LOGGING = {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
+            'formatter': 'verbose',  # Указываем формат для консоли
         },
         'file': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
             'filename': os.path.join(log_dir, 'django_error.log'),
+            'formatter': 'verbose',  # Указываем формат для файла
         },
     },
     'loggers': {
         'django': {
             'handlers': ['file'],
-            'level': 'DEBUG',  # Меняйте на 'INFO' или 'ERROR' в зависимости от нужд
+            'level': 'DEBUG',
             'propagate': True,
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
         },
     },
 }
@@ -192,5 +205,5 @@ EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 465
-EMAIL_USE_TLS = True
-# EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True

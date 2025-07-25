@@ -54,7 +54,12 @@ class AmountSerializer(serializers.Serializer):
     return value
 
 
-class PaymentStatusSerializer(serializers.Serializer):
+class ObjectSerializer(serializers.Serializer):
   id = serializers.UUIDField()
   status = serializers.CharField()
+  paid = serializers.BooleanField()
   amount = AmountSerializer()
+  
+
+class PaymentStatusSerializer(serializers.Serializer):
+  object = ObjectSerializer()
