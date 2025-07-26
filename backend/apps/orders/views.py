@@ -42,7 +42,7 @@ class PaymentStatusView(generics.CreateAPIView):
         try:
           order = Order.objects.get(order_id=payment_id)
           order.is_paid = True
-          send_document_to_email(
+          send_document_to_email.delay(
           document_id=order.description,
           client_email=order.user_email
         )
