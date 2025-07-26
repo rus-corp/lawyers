@@ -33,6 +33,7 @@ services:
       - ./backend:/app
       - ./docker_data/static:/app/static
       - ./backend/media:/app/media
+      - ./docker_data/logs:/app/docker_data/logs
     depends_on:
       - database
     command: sh -c "mkdir -p /app/docker_data/logs && gunicorn --access-logfile /app/docker_data/logs/access.log --error-logfile /app/docker_data/logs/error.log lawyers_back.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 240"

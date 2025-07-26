@@ -5,7 +5,7 @@ from django.core.mail import EmailMessage
 from django.conf import settings
 
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('django')
 
 from apps.categories.models import Documents, Instructions
 
