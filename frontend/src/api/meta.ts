@@ -1,3 +1,4 @@
+import axios from "axios";
 import { backendUrl } from "./_variables";
 
 
@@ -18,11 +19,20 @@ type MetaDataResponse = {
 
 export async function getPageMeta(pageUrl: string): Promise<MetaDataResponse | null> {
   try {
-    const res = await fetch(`http://127.0.0.1:8000/api/meta/${pageUrl}`, { cache: 'no-store' });
-    if (!res.ok) return null;
-    return await res.json();
+    const res = await backendUrl.get(
+      `meta/${pageUrl}`,
+      {
+        headers: {'Cache-Control': 'no-store'}
+      }
+    );
+    if (res.status === 200) {
+      return res.data;
+    } else {
+      console.error(`Error: Received status ${res.status}`);
+      return null;
+    }
   } catch (error) {
-    console.error(error);
+    console.error('Request failed:', error);
     return null;
   }
 }

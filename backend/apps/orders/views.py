@@ -40,11 +40,8 @@ class PaymentStatusView(generics.CreateAPIView):
       payment_status = payment_data.get('status')
       if payment_status == 'succeeded':
         try:
-          print('before order get')
           order = Order.objects.get(order_id=payment_id)
-          print('order get')
           order.is_paid = True
-          print('order paid')
           send_document_to_email.delay(
           document_id=order.description,
           client_email=order.user_email
