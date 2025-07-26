@@ -32,7 +32,7 @@ services:
       - ./docker_data:/app/docker_data
       - ./backend:/app
       - ./docker_data/static:/app/static
-      - ./backend/media:/app/media
+      - ./docker_data/media:/app/media
       - ./docker_data/logs:/app/docker_data/logs
     depends_on:
       - database
