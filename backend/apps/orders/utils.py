@@ -76,12 +76,16 @@ def send_document_to_email(document_id: str, client_email: str):
     instructions = Instructions.objects.filter(category__slug=category.slug)
     for instruction in instructions:
       if instruction.file:
-        email.attach_file(instruction.file.path)
-      else:
-        continue
+        try:
+          email.attach_file(instruction.file.path)
+        except Exception as e:
+          print(f'file errror {e}')
+      #   email.attach_file(instruction.file.path)
+      # else:
+      #   continue
   try:
     email.attach_file(document.file.path)
     email.send()
     logger.info(f'Клиенту {client_email} отправлены документы')
-  except  Exception as e:
+  except Exception as e:
     logger.error(f'Документы клиенту {client_email} не отправлены {e}')
