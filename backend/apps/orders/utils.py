@@ -84,4 +84,4 @@ def send_document_to_email(document_id: str, client_email: str):
     email.send()
     logger.info(f'Клиенту {client_email} отправлены документы')
   except  Exception as e:
-    logger.error(f'Документы клиенту {client_email} не отправлены')
+    logger.error(f'Документы клиенту {client_email} не отправлены {e}')

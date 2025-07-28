@@ -46,7 +46,6 @@ class PaymentStatusView(generics.CreateAPIView):
           document_id=order.description,
           client_email=order.user_email
         )
-          print('email send')
           order.is_completed = True
           order.save()
           logger.info(f'Документы отправлены, заказ {payment_id} исполнен')
