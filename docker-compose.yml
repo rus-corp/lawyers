@@ -94,8 +94,8 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     volumes:
-      - ./backend:/app
-      - ./backend/media:/app/media
+      - ./docker_data:/app/docker_data
+      - ./docker_data/media:/app/media
     working_dir: /app
     command: sh -c "which celery && celery --version && celery -A lawyers_back worker -l INFO"
     depends_on:
