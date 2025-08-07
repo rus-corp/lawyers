@@ -28,7 +28,7 @@ export default function Header() {
           <Link href='/categories' onClick={handleClick}>Документы</Link>
           <Link href='/about' onClick={handleClick}>О нас</Link>
           <Link href='/news' onClick={handleClick}>Статьи</Link>
-          <span>info@сам-себе-юрист.рф</span>
+          <span>info@pravo-dok.ru</span>
         </div>
         <div
         className={clicked ? `${style.burger}` : `${style.burger} ${style.active}`}

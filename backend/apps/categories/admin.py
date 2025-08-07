@@ -4,8 +4,8 @@ from .forms import DocumentForm, CategoryAdminForm, InstructionAdminForm
 
 from .models import Category, Documents, Instructions
 
-admin.site.site_header = 'Управление проектом Сам Себе Юрист'
-admin.site.site_title = 'Сам Себе Юрист Admin'
+admin.site.site_header = 'Управление проектом Правовые документы'
+admin.site.site_title = 'Правовые документы Admin'
 admin.site.index_title = 'Админ панель'
 
 @admin.register(Category)

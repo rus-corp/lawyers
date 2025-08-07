@@ -10,10 +10,10 @@ export default function Footer() {
         <div className={style.mainFooterBlock}>
           <div className={style.companyBlock}>
             <div className={style.companyName}>
-              <h4>САМ СЕБЕ ЮРИСТ</h4>
+              <h4>Правовые документы</h4>
             </div>
             <div className={style.companyContacts}>
-              <p>info@сам-себе-юрист.рф</p>
+              <p>info@pravo-dok.ru</p>
             </div>
           </div>
           <div className={style.aboutBlock}>
@@ -28,7 +28,7 @@ export default function Footer() {
           </div>
         </div>
         <div className={style.dataFooter}>
-          <p>© 2025 Сам Себе Юрист. Все права защищены</p>
+          <p>© 2025 Правовые документы. Все права защищены</p>
         </div>
       </div>
     </footer>

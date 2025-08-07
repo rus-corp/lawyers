@@ -12,7 +12,7 @@ export default function AboutPageContent() {
         <div className={style.sectionContent}>
           <div className={style.sectionDesc}>
             <p>
-              «Сам себе юрист» — это современный онлайн-сервис, созданный для тех,
+              «Правовые документы» — это современный онлайн-сервис, созданный для тех,
               кто стремится грамотно и самостоятельно решать юридические вопросы.
             </p>
             <p>

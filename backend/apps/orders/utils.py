@@ -24,7 +24,7 @@ def create_payment(amount: int, client_email: str, document_name: str, descripti
       },
       "confirmation": {
         "type": "redirect",
-        "return_url": 'https://сам-себе-юрист.рф/payment_page/success',
+        "return_url": 'https://pravo-dok.ru/payment_page/success',
       },
       "capture": True,
       "receipt": {
@@ -60,9 +60,10 @@ def send_document_to_email(document_id: str, client_email: str):
   Если у вас возникнут вопросы по содержанию или потребуется дополнительная информация, не стесняйтесь обращаться к нам в ответ на это письмо.
 
   С уважением,
-  Сам Себе Юрист
-  info@сам-себе-юрист.рф
-  сам-себе-юрист.рф
+  Правовые
+  Документы
+  info@pravo-dok.ru
+  pravo-dok.ru
   """
   email = EmailMessage(
     subject="Документ",
@@ -70,7 +71,16 @@ def send_document_to_email(document_id: str, client_email: str):
     from_email=settings.EMAIL_HOST_USER,
     to=[client_email]
   )
-  document = Documents.objects.get(id=document_id)
+  document = Documents.objects.filter(id=document_id).first()
+  if not document:
+    admin_mail = EmailMessage(
+      subject="Документ",
+      body=f"Не найден документ с id:{document_id}! Отправьте на почту клиенту {client_email}",
+      from_email=settings.EMAIL_HOST_USER,
+      to=['info@pravo-dok.ru']
+    )
+    admin_mail.send()
+    return
   categories = document.category.get_ancestors(include_self=True)
   for category in categories:
     instructions = Instructions.objects.filter(category__slug=category.slug)
@@ -89,3 +99,9 @@ def send_document_to_email(document_id: str, client_email: str):
     logger.info(f'Клиенту {client_email} отправлены документы')
   except Exception as e:
     logger.error(f'Документы клиенту {client_email} не отправлены {e}')
+    EmailMessage(
+      subject="Документ",
+      body=f"Не смог отправить письмо клиенту {client_email}",
+      from_email=settings.EMAIL_HOST_USER,
+      to='info@pravo-dok.ru'
+    ).send()

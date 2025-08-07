@@ -18,8 +18,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = [
-    'xn-----6kcftbw0a5bcdgn8n.xn--p1ai',
-    'сам-себе-юрист.рф',
+    'pravo-dok.ru',
+    'www.pravo-dok.ru'
     'localhost',
     '127.0.0.1',
     '5.188.115.222',
@@ -82,14 +82,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'lawyers_back.wsgi.application'
+
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
-    'xn-----6kcftbw0a5bcdgn8n.xn--p1ai',
+    'pravo-dok.ru',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://xn-----6kcftbw0a5bcdgn8n.xn--p1ai',
-    'https://сам-себе-юрист.рф'
+    'https://pravo-dok.ru',
+    'https://www.pravo-dok.ru'
 ]
 
 # Database
