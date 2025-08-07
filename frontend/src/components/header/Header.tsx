@@ -15,7 +15,7 @@ export default function Header() {
     <header className={style.header}>
       <Link href={'/'}>
         <div className={style.companyLogo}>
-          <Image src="/images/logo.png"
+          <Image src="/images/logo_last.png"
           priority={true}
           width={150}
           height={150}
