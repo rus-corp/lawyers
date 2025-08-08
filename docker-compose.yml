@@ -82,9 +82,19 @@ services:
   
 
   redis:
-    image: redis:8-alpine
+    image: redis:7-alpine
+    container_name: redis
+    restart: unless-stopped
+    volumes:
+      - ./docker_data/redis:/data
     ports:
       - "6379:6379"
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     networks:
       - lawyers_network
 
@@ -99,8 +109,12 @@ services:
     working_dir: /app
     command: sh -c "which celery && celery --version && celery -A lawyers_back worker -l INFO"
     depends_on:
-      - api
-      - database
-      - redis
+      api:
+        condition: service_started
+      database:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
     networks:
       - lawyers_network
