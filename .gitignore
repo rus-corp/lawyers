@@ -5,6 +5,8 @@ __pycache__/
 .vscode
 req.http
 docker_data/
+*media/
+*static/
 
 # dependencies
 frontend/node_modules
