@@ -3,6 +3,12 @@ export type CategoryComponentProps = {
   beforeLevelClickedCategory: string
 }
 
+export type CategoryItemResponse = {
+  id: number;
+  title: string;
+  slug: string;
+  documents_count?: number;
+}
 
 export type CategoryItemType = {
   id: number;
@@ -11,6 +17,7 @@ export type CategoryItemType = {
   beforeLevelClickedCategory: string
   isActive: boolean
   isFind?: boolean | null
+  docCount?: number
 }
 
 export type CategoryListType = {

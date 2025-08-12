@@ -4,10 +4,11 @@ from .models import Category, Documents
 
 
 class CategorySerializer(serializers.ModelSerializer):
+  documents_count = serializers.IntegerField(read_only=True)
   
   class Meta:
     model = Category
-    fields = ('id', 'title', 'slug')
+    fields = ('id', 'title', 'slug', 'documents_count')
 
 
 

@@ -64,6 +64,7 @@ services:
       - ./docker_data/certbot:/var/www/certbot
       - ./docker_data/letsencrypt:/etc/letsencrypt
       - ./docker_data/static:/app/static
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - api
       - web
@@ -104,7 +105,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     env_file:
-      - .env
+      - ./backend/.env
     volumes:
       - ./docker_data:/app/docker_data
       - ./docker_data/media:/app/media

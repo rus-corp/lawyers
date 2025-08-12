@@ -5,7 +5,7 @@ import style from '../styles/mainCategory.module.css'
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'
 
-import { CategoryItemType, MainCategoryProps } from '../types/types';
+import { CategoryItemType, CategoryItemResponse } from '../types/types';
 import { getCategories, getCategoryBySlug, getCategoryByParent } from '@/api';
 
 export default function MainCategoryComponent() {
@@ -18,7 +18,7 @@ export default function MainCategoryComponent() {
     }
     return parts[categoriesIndex + 1] || '';
   }, [pathname])
-  const [mainCategories, setMainCategories] = React.useState<CategoryItemType[]>([])
+  const [mainCategories, setMainCategories] = React.useState<CategoryItemResponse[]>([])
   const handleGetCategories = async () => {
     const response = await getCategories()
     setMainCategories(response.data)
@@ -39,6 +39,7 @@ export default function MainCategoryComponent() {
             slug={mainCategoryItem.slug}
             beforeLevelClickedCategory=''
             isActive={mainCategoryItem.slug === activeSlug}
+            docCount={mainCategoryItem.documents_count ?? 0}
             />
           ))}
         </div>
@@ -51,7 +52,7 @@ export default function MainCategoryComponent() {
 
 
 
-const MainCategoryItem = ({ id, title, slug, isActive }: CategoryItemType) => {
+const MainCategoryItem = ({ id, title, slug, isActive, docCount }: CategoryItemType) => {
   return (
     <>
       <div
@@ -66,7 +67,7 @@ const MainCategoryItem = ({ id, title, slug, isActive }: CategoryItemType) => {
           width={40}
           height={40}
           />
-          <p className={style.mainCategoryTitle}>{title}</p>
+          <p className={style.mainCategoryTitle}>{title} ({docCount})</p>
         </Link>
       </div>
     </>

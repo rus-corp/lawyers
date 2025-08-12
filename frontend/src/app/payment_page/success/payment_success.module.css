@@ -20,5 +20,15 @@
 }
 
 .blockContent > p {
-  margin: 2rem;
+  margin: 1rem;
+}
+
+.tgLink {
+  color: black;
+  margin-bottom: 2rem; 
+}
+
+.tgLink > p {
+  font-size: .9rem;
+  text-transform: lowercase;
 }

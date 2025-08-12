@@ -6,7 +6,7 @@ import style from '../styles/mainCategory.module.css'
 import { usePathname } from 'next/navigation'
 
 import { getCategoryBySlug } from '@/api';
-import { CategoryComponentProps, CategoryItemType } from '../types/types'
+import { CategoryComponentProps, CategoryItemType, CategoryItemResponse } from '../types/types'
 import { useCategorySearch } from '@/context/CategorySearchContext';
 
 
@@ -24,7 +24,7 @@ export default function CategoryComponent(
       return parts[parts.length - 1] || '';
     }
   }, [pathname])
-  const [categories, setCategories] = React.useState<CategoryItemType[]>([])
+  const [categories, setCategories] = React.useState<CategoryItemResponse[]>([])
   const getCategoriesList = async (categorySlug: string) => {
     const response = await getCategoryBySlug(categorySlug)
     if (response.status === 200) {
@@ -47,6 +47,7 @@ export default function CategoryComponent(
         beforeLevelClickedCategory={beforeLevelClickedCategory}
         isActive={categoryItem.slug === activeSlug}
         isFind={categoryItem.slug === findCategory}
+        docCount={categoryItem.documents_count}
         />
       ))}
     </div>
@@ -55,7 +56,7 @@ export default function CategoryComponent(
 
 
 
-const CategoryItem = ({ id, title, slug, beforeLevelClickedCategory, isActive, isFind }: CategoryItemType) => {
+const CategoryItem = ({ id, title, slug, beforeLevelClickedCategory, isActive, isFind, docCount }: CategoryItemType) => {
   return (
     <>
       <div
@@ -71,7 +72,7 @@ const CategoryItem = ({ id, title, slug, beforeLevelClickedCategory, isActive, i
           width={40}
           height={40}
           />
-          <p className={style.categoryTitle}>{title}</p>
+          <p className={style.categoryTitle}>{title} ({docCount})</p>
         </Link >
       </div>
     </>

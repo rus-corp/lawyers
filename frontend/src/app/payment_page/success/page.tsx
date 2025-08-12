@@ -19,6 +19,8 @@ export default function PaymentSuccessPage() {
           <div className={style.blockContent}>
             <h2>УСПЕШНО</h2>
             <p>Спасибо! Оплата прошла успешно. Документ будет отправлен на Ваш Email в течении пары минут</p>
+            <p style={{ color: 'red' }}>Проверьте папку «Спам» — письмо могло попасть туда.</p>
+            <a className={style.tgLink} href="https://t.me/Vadimdavi"><p style={{ color: 'red' }}>Если не получили документ, напишите нам в Telegram (ссылка) и мы пришлем Вам его в ближайшее время</p></a>
             <MainBtn
             btnTitle='Вернуться на главную'
             handleRoute='/'

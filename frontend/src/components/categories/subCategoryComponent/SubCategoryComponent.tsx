@@ -3,7 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import style from '../styles/mainCategory.module.css'
-import { CategoryComponentProps, CategoryItemType } from '../types/types';
+import { CategoryComponentProps, CategoryItemType, CategoryItemResponse } from '../types/types';
 import { getCategoryBySlug } from '@/api';
 import { usePathname } from 'next/navigation'
 import { useCategorySearch } from '@/context/CategorySearchContext';
@@ -12,7 +12,7 @@ import { useCategorySearch } from '@/context/CategorySearchContext';
 export default function SubCategoryComponent({
   categorySlug,
 }: CategoryComponentProps) {
-  const [categories, setCategories] = React.useState<CategoryItemType[]>([])
+  const [categories, setCategories] = React.useState<CategoryItemResponse[]>([])
   const pathname = usePathname()
   const { findCategory } = useCategorySearch()
   // const activeSlug = React.useMemo(() => {
@@ -42,6 +42,7 @@ export default function SubCategoryComponent({
         slug={categoryItem.slug}
         beforeLevelClickedCategory=''
         isActive={categoryItem.slug === findCategory}
+        docCount={categoryItem.documents_count}
         />
       ))}
     </div>
@@ -49,7 +50,7 @@ export default function SubCategoryComponent({
 }
 
 
-const SubCategoryItem = ({ id, title, slug, isActive }: CategoryItemType) => {
+const SubCategoryItem = ({ id, title, slug, isActive, docCount }: CategoryItemType) => {
   const router = useRouter()
   const handleClick = (categorySlug: string) => {
     router.push(`/docs/${categorySlug}`)
