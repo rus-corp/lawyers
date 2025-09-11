@@ -38,3 +38,12 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+from django.conf.urls import handler404
+from django.shortcuts import render
+
+def custom_page_not_found(request, exception):
+    return render(request, "404.html", status=404)
+
+handler404 = custom_page_not_found
