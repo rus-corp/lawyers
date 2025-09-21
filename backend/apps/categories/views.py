@@ -41,7 +41,24 @@ class CategoryView(generics.ListAPIView):
         ).annotate(
           best=Greatest('rank', 'similarity')
         )
-        threshold = min(0.3, max(0.05, 0.02 * len(title)))
+        query_len = len(title)
+        # threshold = min(0.3, max(0.05, 0.02 * len(title)))
+        if query_len <= 3:
+          threshold = 0.05
+        elif query_len <= 5:
+          threshold = 0.08
+        elif query_len <= 9:
+          threshold = 0.01
+        elif query_len <= 15:
+          threshold = 0.02
+        elif query_len <= 25:
+          threshold = 0.04
+        elif query_len <= 40:
+          threshold = 0.08
+        elif query_len <= 65:
+          threshold = 0.1
+        else:
+          threshold = 0.2
         return qs.filter(best__gt=threshold).order_by('-best')
       except Exception as e:
         import traceback
