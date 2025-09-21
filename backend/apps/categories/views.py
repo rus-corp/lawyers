@@ -5,9 +5,10 @@ from django.shortcuts import get_object_or_404
 
 from .models import Category, Documents
 from .serializers import CategorySerializer, DocumentsSerializer
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
-from django.contrib.postgres.search import TrigramSimilarity
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
 from django.db.models.functions import Greatest
+from django.db.models import Q, Value, IntegerField
+from django.db.models.expressions import Case, When
 
 
 
@@ -38,8 +39,13 @@ class CategoryView(generics.ListAPIView):
         qs = Category.objects.annotate(
           rank=SearchRank(vector, search_query),
           similarity=TrigramSimilarity('title', title),
+          contains=Case(
+            When(title__icontains=title, then=Value(1)),
+            default=Value(0),
+            output_field=IntegerField()
+          )
         ).annotate(
-          best=Greatest('rank', 'similarity')
+          best=Greatest('rank', 'similarity', 'contains')
         )
         query_len = len(title)
         # threshold = min(0.3, max(0.05, 0.02 * len(title)))
@@ -59,7 +65,7 @@ class CategoryView(generics.ListAPIView):
           threshold = 0.1
         else:
           threshold = 0.2
-        return qs.filter(best__gt=threshold).order_by('-best')
+        return qs.filter(best__gt=threshold).order_by('-best', '-rank', '-similarity')
       except Exception as e:
         import traceback
         traceback.print_exc()
