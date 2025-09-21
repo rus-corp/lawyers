@@ -35,21 +35,18 @@ class CategoryView(generics.ListAPIView):
         print(title)
         vector = SearchVector('title')
         search_query = SearchQuery(title)
-        # result = Category.objects.annotate(
-        #     similarity=TrigramSimilarity('title', title),
-        # ).order_by('-similarity')
-        # for r in result:
-        #   print(f'Категория: {r.title}, Схожесть: {r.similarity}')
-        return Category.objects.annotate(
-            rank=SearchRank(vector, search_query),
-            similarity=TrigramSimilarity('title', title),
+        qs = Category.objects.annotate(
+          rank=SearchRank(vector, search_query),
+          similarity=TrigramSimilarity('title', title),
         ).annotate(
-            best=Greatest('rank', 'similarity')
-        ).filter(best__gt=0.05).order_by('-best')
+          best=Greatest('rank', 'similarity')
+        )
+        threshold = min(0.3, max(0.05, 0.02 * len(title)))
+        return qs.filter(best__gt=threshold).order_by('-best')
       except Exception as e:
         import traceback
         traceback.print_exc()
-        raise e
+        raise
       # return Category.objects.filter(title__icontains=title)
     qs = Category.objects.filter(level=0)
     qs = Category.objects.add_related_count(
@@ -59,19 +56,6 @@ class CategoryView(generics.ListAPIView):
         Category.objects.all(), Documents, 'category', 'documents_count', cumulative=False
     )
     return qs.prefetch_related(Prefetch('children', queryset=children_qs))
-  
-
-    # return Category.objects.all()
-  
-  # def list(self, request, *args, **kwargs):
-  #   queryset = self.filter_queryset(self.get_queryset())
-  #   for category in queryset:
-  #     documenst = category.documents.all()
-  #     category.documents_count = documenst.count()
-  #     print(f'Категория: {category.title}, Количество документов: {category.documents_count}')
-  #   serializer = self.get_serializer(queryset, many=True)
-  #   return Response(serializer.data)
-  #   # return super().list(request, *args, **kwargs)
 
 
 
