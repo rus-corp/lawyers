@@ -5,6 +5,10 @@ from django.shortcuts import get_object_or_404
 
 from .models import Category, Documents
 from .serializers import CategorySerializer, DocumentsSerializer
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.contrib.postgres.search import TrigramSimilarity
+from django.db.models.functions import Greatest
+
 
 
 class SearchView(generics.ListAPIView):
@@ -27,7 +31,26 @@ class CategoryView(generics.ListAPIView):
   def get_queryset(self):
     title = self.request.query_params.get('title')
     if title:
-      return Category.objects.filter(title__icontains=title)
+      try:
+        print(title)
+        vector = SearchVector('title')
+        search_query = SearchQuery(title)
+        # result = Category.objects.annotate(
+        #     similarity=TrigramSimilarity('title', title),
+        # ).order_by('-similarity')
+        # for r in result:
+        #   print(f'Категория: {r.title}, Схожесть: {r.similarity}')
+        return Category.objects.annotate(
+            rank=SearchRank(vector, search_query),
+            similarity=TrigramSimilarity('title', title),
+        ).annotate(
+            best=Greatest('rank', 'similarity')
+        ).filter(best__gt=0.05).order_by('-best')
+      except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise e
+      # return Category.objects.filter(title__icontains=title)
     qs = Category.objects.filter(level=0)
     qs = Category.objects.add_related_count(
         qs, Documents, 'category', 'documents_count', cumulative=True
