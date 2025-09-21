@@ -7,7 +7,7 @@ from .models import Category, Documents
 from .serializers import CategorySerializer, DocumentsSerializer
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
 from django.db.models.functions import Greatest
-from django.db.models import Q, Value, IntegerField
+from django.db.models import Value, FloatField, Case, When
 from django.db.models.expressions import Case, When
 
 
@@ -40,9 +40,9 @@ class CategoryView(generics.ListAPIView):
           rank=SearchRank(vector, search_query),
           similarity=TrigramSimilarity('title', title),
           contains=Case(
-            When(title__icontains=title, then=Value(1)),
-            default=Value(0),
-            output_field=IntegerField()
+            When(title__icontains=title, then=Value(1.0)),
+            default=Value(0.0),
+            output_field=FloatField()
           )
         ).annotate(
           best=Greatest('rank', 'similarity', 'contains')
