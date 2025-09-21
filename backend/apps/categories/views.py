@@ -48,7 +48,7 @@ class CategoryView(generics.ListAPIView):
           best=Greatest('rank', 'similarity', 'contains')
         )
         query_len = len(title)
-        threshold = min(0.03, max(0.05, 0.02 * len(title)))
+        threshold = max(0.05, min(0.4, 0.02 * len(title)))
         # if query_len <= 3:
         #   threshold = 0.05
         # elif query_len <= 5:
@@ -65,7 +65,7 @@ class CategoryView(generics.ListAPIView):
         #   threshold = 0.1
         # else:
         #   threshold = 0.2
-        return qs.filter(Q(best__gt=threshold) & (Q(rank__gt=0.0) | Q(similarity__gt=0.1)))
+        return qs.filter(Q(best__gt=threshold) & (Q(rank__gt=0.0) | Q(similarity__gt=0.1))).order_by('-best', '-rank', '-similarity')[:30]
         # return qs.filter(best__gt=threshold).order_by('-best', '-rank', '-similarity')
       except Exception as e:
         import traceback
