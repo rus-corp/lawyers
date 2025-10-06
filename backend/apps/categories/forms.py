@@ -37,17 +37,6 @@ class CategoryAdminForm(forms.ModelForm):
         self.fields['parent'].choices = choices
 
 
-# class CategoryAdminForm(forms.ModelForm):
-#     class Meta:
-#         model = Category
-#         fields = '__all__'
-
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-
-#         # Сортируем родительские категории по уровню
-#         self.fields['parent'].queryset = Category.objects.all().order_by('tree_id', 'lft')
-
 
 
 class InstructionAdminForm(forms.ModelForm):
@@ -55,12 +44,15 @@ class InstructionAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
+        
         choices = []
-        for level in range(0, 4):
-            cats = Category.objects.filter(level=level)
-            if cats.exists():
-                group = (f'Уровень {level}', [(cat.pk, cat.title) for cat in cats])
-                choices.append(group)
+        categories = Category.objects.all().order_by('tree_id', 'lft')
+
+        for categ in categories:
+            INDENT = '\u00A0\u00A0\u00A0'
+            indent = f"{INDENT * 3 * categ.level}"
+            label = f"{indent} {categ.title}" if indent else categ.title
+            choices.append((categ.pk, label))
+
         self.fields['category'].choices = choices
         

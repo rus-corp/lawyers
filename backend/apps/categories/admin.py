@@ -8,6 +8,8 @@ admin.site.site_header = 'Управление проектом Правовые
 admin.site.site_title = 'Правовые документы Admin'
 admin.site.index_title = 'Админ панель'
 
+
+
 @admin.register(Category)
 class CategoryAdmin(MPTTModelAdmin):
     mptt_indented_field = 'title'
