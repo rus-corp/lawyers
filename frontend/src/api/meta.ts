@@ -19,8 +19,9 @@ type MetaDataResponse = {
 
 export async function getPageMeta(pageUrl: string): Promise<MetaDataResponse | null> {
   try {
+    console.log('Sending request to:', backendUrl.defaults.baseURL + `meta/${pageUrl}/`)
     const res = await backendUrl.get(
-      `meta/${pageUrl}`,
+      `meta/${pageUrl}/`,
       {
         headers: {'Cache-Control': 'no-store'}
       }
