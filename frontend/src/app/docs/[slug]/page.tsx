@@ -6,6 +6,7 @@ import DocPageComponent from '@/components/doc_page_component/DocPageComponent';
 
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
+  if (!params.slug) return {}
   const response = await getPageMeta(`news/${params.slug}`)
   if (!response) return {}
   return {

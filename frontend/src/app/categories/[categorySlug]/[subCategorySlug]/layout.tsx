@@ -11,6 +11,7 @@ export async function generateMetadata({
   params : { mainCategorySlug: string; categorySlug: string }
 }) {
   const response = await getPageMeta(`categories/${params.mainCategorySlug}/${params.categorySlug}`)
+  if (!params.mainCategorySlug || !params.categorySlug) return {}
   if (!response) return {}
   return {
     title: response.title,

@@ -9,6 +9,7 @@ import { getPageMeta } from '@/api';
 
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
+  if (!params.slug) return {}
   const response = await getPageMeta(`news/${params.slug}`)
   if (!response) return {}
   return {
