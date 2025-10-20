@@ -6,7 +6,9 @@ import { getPageMeta } from '@/api';
 
 
 export async function generateMetadata(): Promise<Metadata> {
+  console.log('news meta')
   const response = await getPageMeta('news')
+  console.log(response)
   if (!response) return {}
   return {
     title: response.title,

@@ -8,7 +8,9 @@ import style from './about_page.module.css'
 
 
 export async function generateMetadata(): Promise<Metadata> {
+  console.log('abount meta')
   const response = await getPageMeta('about')
+  console.log(response)
   if (!response) return {}
   return {
     title: response.title,
