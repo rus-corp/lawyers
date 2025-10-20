@@ -25,7 +25,9 @@ export async function getPageMeta(pageUrl: string): Promise<MetaDataResponse | n
         headers: {'Cache-Control': 'no-store'}
       }
     );
+    console.log(res.status)
     if (res.status === 200) {
+      
       return res.data;
     } else {
       console.error(`Error: Received status ${res.status}`);

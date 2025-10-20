@@ -36,7 +36,9 @@ const manrope = Manrope({
 // });
 
 export async function generateMetadata(): Promise<Metadata> {
+  console.log('gen meta')
   const response = await getPageMeta('home')
+  console.log('meta res', response)
   if (!response) return {}
   return {
     title: response.title,
