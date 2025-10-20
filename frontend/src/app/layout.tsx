@@ -36,17 +36,23 @@ const manrope = Manrope({
 //   weight: "100 900",
 // });
 
-export async function generateMetadata(): Promise<Metadata> {
-  console.log('gen meta')
-  const response = await getPageMeta('home')
-  console.log('meta res', response)
-  if (!response) return {}
-  return {
-    title: response.title,
-    description: response.description,
-    keywords: response.keywords,
-  };
+// export async function generateMetadata(): Promise<Metadata> {
+//   console.log('gen meta')
+//   const response = await getPageMeta('home')
+//   console.log('meta res', response)
+//   if (!response) return {}
+//   return {
+//     title: response.title,
+//     description: response.description,
+//     keywords: response.keywords,
+//   };
+// }
+
+export const metadata: Metadata = {
+  title: 'Онлайн-сервис "ПРАВОДОК".',
+  description: "'ПРАВОДОК' – помощь в составлении исковых заявлений, досудебных претензий, ходатайств и договоров."
 }
+
 
 export default function RootLayout({
   children,

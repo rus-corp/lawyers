@@ -5,20 +5,20 @@ import { getPageMeta } from '@/api';
 
 
 
-export async function generateMetadata({
-  params,
-} : {
-  params : { mainCategorySlug: string; categorySlug: string }
-}) {
-  const response = await getPageMeta(`categories/${params.mainCategorySlug}/${params.categorySlug}`)
-  if (!params.mainCategorySlug || !params.categorySlug) return {}
-  if (!response) return {}
-  return {
-    title: response.title,
-    description: response.description,
-    keywords: response.keywords,
-  };
-}
+// export async function generateMetadata({
+//   params,
+// } : {
+//   params : { mainCategorySlug: string; categorySlug: string }
+// }) {
+//   const response = await getPageMeta(`categories/${params.mainCategorySlug}/${params.categorySlug}`)
+//   if (!params.mainCategorySlug || !params.categorySlug) return {}
+//   if (!response) return {}
+//   return {
+//     title: response.title,
+//     description: response.description,
+//     keywords: response.keywords,
+//   };
+// }
 
 
 

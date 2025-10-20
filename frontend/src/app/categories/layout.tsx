@@ -1,5 +1,5 @@
 import React from 'react';
-import { Metadata } from "next";
+
 
 import style from './docs.module.css'
 
@@ -12,17 +12,17 @@ import { getPageMeta } from '@/api';
 
 
 
-export async function generateMetadata(): Promise<Metadata> {
-  console.log('categ meta')
-  const response = await getPageMeta('categories')
-  console.log(response)
-  if (!response) return {}
-  return {
-    title: response.title,
-    description: response.description,
-    keywords: response.keywords,
-  };
-}
+// export async function generateMetadata(): Promise<Metadata> {
+//   console.log('categ meta')
+//   const response = await getPageMeta('categories')
+//   console.log(response)
+//   if (!response) return {}
+//   return {
+//     title: response.title,
+//     description: response.description,
+//     keywords: response.keywords,
+//   };
+// }
 
 
 export default function MainCategoryLayout({ children }: { children: React.ReactNode}) {
