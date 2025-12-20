@@ -24,10 +24,6 @@ from apps.meta.views import MeatTagsView
 from django.conf.urls import handler404
 from django.shortcuts import render
 
-# from wagtail.admin import urls as wagtailadmin_urls
-# from wagtail import urls as wagtail_urls
-# from wagtail.documents import urls as wagtaildocs_urls
-
 
 
 
@@ -43,10 +39,6 @@ urlpatterns = [
     path('api/news/', include('apps.news.urls', namespace='news')),
     path('api/orders/', include('apps.orders.urls', namespace='orders')),
     path('api/', include(router.urls)),
-    
-    # path('cms/', include(wagtailadmin_urls)),
-
-    # path('api/wag/', include('apps.wag.urls')),
 ]
 
 
