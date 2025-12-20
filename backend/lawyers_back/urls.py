@@ -21,9 +21,12 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 from apps.meta.views import MeatTagsView
 
-from wagtail.admin import urls as wagtailadmin_urls
-from wagtail import urls as wagtail_urls
-from wagtail.documents import urls as wagtaildocs_urls
+from django.conf.urls import handler404
+from django.shortcuts import render
+
+# from wagtail.admin import urls as wagtailadmin_urls
+# from wagtail import urls as wagtail_urls
+# from wagtail.documents import urls as wagtaildocs_urls
 
 
 
@@ -41,9 +44,9 @@ urlpatterns = [
     path('api/orders/', include('apps.orders.urls', namespace='orders')),
     path('api/', include(router.urls)),
     
-    path('cms/', include(wagtailadmin_urls)),
+    # path('cms/', include(wagtailadmin_urls)),
 
-    path('api/wag/', include('apps.wag.urls')),
+    # path('api/wag/', include('apps.wag.urls')),
 ]
 
 
@@ -51,8 +54,7 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-from django.conf.urls import handler404
-from django.shortcuts import render
+
 
 def custom_page_not_found(request, exception):
     return render(request, "404.html", status=404)

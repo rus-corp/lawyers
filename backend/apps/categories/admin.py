@@ -56,7 +56,7 @@ class CategoryAdmin(MPTTModelAdmin):
 class DocumentAdmin(admin.ModelAdmin):
     list_display = ('id', 'category', 'title', 'price')
     prepopulated_fields = {'slug': ('title',)}
-    list_display_links = ('id', 'title',)
+    list_display_links = ('id', 'title', 'category')
     search_fields = ('title',)
     list_filter = ('title',)
     form = DocumentForm

@@ -46,27 +46,6 @@ INSTALLED_APPS = [
     'apps.backup',
     'apps.orders',
     'apps.meta',
-
-    'apps.wag',
-    'apps.site_settings',
-    'apps.blocks',
-
-    'wagtail.contrib.forms',
-    'wagtail.contrib.redirects',
-    'wagtail.embeds',
-    'wagtail.sites',
-    'wagtail.users',
-    'wagtail.snippets',
-    'wagtail.documents',
-    'wagtail.images',
-    'wagtail.search',
-    'wagtail.admin',
-    'wagtail',
-    'wagtail.api.v2',
-    'wagtail.contrib.settings',
-
-    'modelcluster',
-    'taggit',
 ]
 
 
@@ -79,7 +58,6 @@ REST_FRAMEWORK = {
 
 
 MIDDLEWARE = [
-    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
