@@ -46,6 +46,27 @@ INSTALLED_APPS = [
     'apps.backup',
     'apps.orders',
     'apps.meta',
+
+    'apps.wag',
+    'apps.site_settings',
+    'apps.blocks',
+
+    'wagtail.contrib.forms',
+    'wagtail.contrib.redirects',
+    'wagtail.embeds',
+    'wagtail.sites',
+    'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.documents',
+    'wagtail.images',
+    'wagtail.search',
+    'wagtail.admin',
+    'wagtail',
+    'wagtail.api.v2',
+    'wagtail.contrib.settings',
+
+    'modelcluster',
+    'taggit',
 ]
 
 
@@ -58,6 +79,7 @@ REST_FRAMEWORK = {
 
 
 MIDDLEWARE = [
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -148,10 +170,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [
-    BASE_DIR / "static",   # тут лежат css, js, icons и т.д.
+    BASE_DIR / "static_dev",   # где ты держишь исходную статику
 ]
 # STATIC_ROOT = os.path.join(BASE_DIR, "static")
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 MEDIA_URL = '/media/'
@@ -219,3 +241,9 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 465
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
+
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10_000
+WAGTAIL_SITE_NAME = 'Pravo Dok'
+WAGTAILADMIN_BASE_URL = 'http://example.com'
+WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'txt', 'xlsx', 'zip']

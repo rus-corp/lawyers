@@ -21,6 +21,13 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 from apps.meta.views import MeatTagsView
 
+from wagtail.admin import urls as wagtailadmin_urls
+from wagtail import urls as wagtail_urls
+from wagtail.documents import urls as wagtaildocs_urls
+
+
+
+
 router = DefaultRouter()
 
 router.register('meta', MeatTagsView)
@@ -32,7 +39,11 @@ urlpatterns = [
     path('api/backup/', include('apps.backup.urls', namespace='backup')),
     path('api/news/', include('apps.news.urls', namespace='news')),
     path('api/orders/', include('apps.orders.urls', namespace='orders')),
-    path('api/', include(router.urls))
+    path('api/', include(router.urls)),
+    
+    path('cms/', include(wagtailadmin_urls)),
+
+    path('api/wag/', include('apps.wag.urls')),
 ]
 
 

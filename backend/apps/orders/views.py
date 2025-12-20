@@ -53,11 +53,15 @@ class PaymentStatusView(generics.CreateAPIView):
             {'message': 'Payment succeeded'},
             status=status.HTTP_200_OK
           )
-        except:
-          logger.error('При обработке ответа от юкассы данных платежа произошла ошибка')
+        except Exception as e:
+          logger.error(
+            'При обработке ответа от юкассы данных платежа произошла ошибка',
+            str(e),
+            exc_info=True
+          )
           return Response(
               {'error': 'Order processing failed'},
-              status=status.HTTP_500_INTERNAL_SERVER_ERROR
+              status=status.HTTP_403_FORBIDDEN
           )
       else:
         logger.info(f'Статус платежа {payment_id} не succeeded')
