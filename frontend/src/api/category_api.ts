@@ -4,9 +4,9 @@ import { backendUrl } from "./_variables";
 export const getCategories = async (title?: string) => {
   let url;
   if (title) {
-    url = `/categories/?title=${title}`
+    url = `categories/?title=${encodeURIComponent(title)}`
   } else {
-    url = "/categories/"
+    url = "categories/"
   }
   try {
     const response = await backendUrl.get(url);
@@ -20,7 +20,7 @@ export const getCategories = async (title?: string) => {
 
 export const getCategoryBySlug = async (categorySlug: string) => {
   try {
-    const response = await backendUrl.get(`/categories/${categorySlug}/`);
+    const response = await backendUrl.get(`categories/${categorySlug}/`);
     return response;
   } catch (error) {
     console.error("Error fetching category by slug:", error);
@@ -32,7 +32,7 @@ export const getCategoryBySlug = async (categorySlug: string) => {
 
 export const getCategoryByParent = async (categorySlug: string) => {
   try {
-    const response = await backendUrl.get(`/categories/parent/${categorySlug}/`);
+    const response = await backendUrl.get(`categories/parent/${categorySlug}/`);
     return response;
   } catch (error) {
     console.error("Error fetching category by slug:", error);
@@ -43,7 +43,7 @@ export const getCategoryByParent = async (categorySlug: string) => {
 
 export const getSeacrhCategories = async (searchQuery: string) => {
   try {
-    const response = await backendUrl.get(`/categories/search/${searchQuery}/`);
+    const response = await backendUrl.get(`categories/search/${encodeURIComponent(searchQuery)}/`);
     return response;
   } catch (error) {
     console.error("Error fetching search categories:", error);
