@@ -33,6 +33,8 @@ services:
     volumes:
       - ./docker_data:/app/docker_data
       - ./backend:/app
+      - ./docker_data/static:/app/static
+      - ./docker_data/media:/app/media
     depends_on:
       - database
     command: sh -c "mkdir -p /app/docker_data/logs && gunicorn --access-logfile /app/docker_data/logs/access.log --error-logfile /app/docker_data/logs/error.log lawyers_back.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 240"
@@ -63,6 +65,7 @@ services:
       - ./docker_data/certbot:/var/www/certbot
       - ./docker_data/letsencrypt:/etc/letsencrypt
       - ./docker_data/static:/app/static
+      - ./docker_data/media:/app/media
     depends_on:
       - api
       - web
