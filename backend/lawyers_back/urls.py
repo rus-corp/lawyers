@@ -35,6 +35,7 @@ router.register('meta', MeatTagsView)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/categories/', include('apps.categories.urls', namespace='categories')),
+    path('api/static-components/', include('apps.static_components.urls', namespace='static_components')),
     path('api/backup/', include('apps.backup.urls', namespace='backup')),
     path('api/news/', include('apps.news.urls', namespace='news')),
     path('api/orders/', include('apps.orders.urls', namespace='orders')),

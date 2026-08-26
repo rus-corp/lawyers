@@ -23,7 +23,7 @@ ALLOWED_HOSTS = [
     'www.pravo-dok.ru'
     'localhost',
     '127.0.0.1',
-    '5.188.115.222',
+    '89.111.168.212',
     '0.0.0.0',
 ]
 
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'apps.backup',
     'apps.orders',
     'apps.meta',
+    'apps.static_components',
 ]
 
 

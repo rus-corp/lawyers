@@ -1,13 +1,53 @@
 "use client"
 import React from 'react';
+import DOMPurify from 'dompurify';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import style from './docComponent.module.css'
 
 import { DocumentType } from '@/app/docs/types';
+import { getDocumentInstruction, getDocumentSidebar } from '@/api/static';
+import { documentSidebarFallback } from './documentSidebarFallback';
 
 import EmailModal from '@/ui/modal/EmailModal';
 import MainBtn from '@/ui/buttons/MainBtn';
+
+type DocumentSidebarItemType = {
+  id: number;
+  text: string;
+  sort_order: number;
+}
+
+type DocumentSidebarSectionType = {
+  id: number;
+  title: string;
+  section_type: string;
+  sort_order: number;
+  items: DocumentSidebarItemType[];
+}
+
+type DocumentSidebarType = {
+  id: number;
+  document: {
+    id: number;
+    title: string;
+    slug: string;
+    price: number;
+  };
+  sections: DocumentSidebarSectionType[];
+}
+
+type DocumentInstructionType = {
+  id: number;
+  document: {
+    id: number;
+    title: string;
+    slug: string;
+    price: number;
+  };
+  title: string;
+  description: string;
+}
 
 type Props = {
   initialData: DocumentType
@@ -17,6 +57,8 @@ type Props = {
 export default function DocPageComponent({ initialData }: Props) {
   const router = useRouter();
   const [documentData, setDocument] = React.useState<DocumentType>();
+  const [documentSidebar, setDocumentSidebar] = React.useState<DocumentSidebarType | null>(null);
+  const [documentInstruction, setDocumentInstruction] = React.useState<DocumentInstructionType | null>(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [userEmail, setUserEmail] = React.useState('');
   const [handleRoute, setHandleRoute] = React.useState('')
@@ -34,6 +76,39 @@ export default function DocPageComponent({ initialData }: Props) {
   // React.useEffect(() => {
   //   handleGetDocument();
   // }, [slug]);
+
+  const handleGetDocumentSidebar = async () => {
+    try {
+      const response = await getDocumentSidebar(initialData.slug);
+      setDocumentSidebar(response.data ?? null);
+    } catch {
+      setDocumentSidebar(null);
+    }
+  };
+
+  const handleGetDocumentInstruction = async () => {
+    try {
+      const response = await getDocumentInstruction(initialData.slug);
+      setDocumentInstruction(response.data ?? null);
+    } catch {
+      setDocumentInstruction(null);
+    }
+  };
+
+  React.useEffect(() => {
+    if (!initialData?.slug) return;
+
+    handleGetDocumentSidebar();
+    handleGetDocumentInstruction();
+  }, [initialData?.slug]);
+
+  const createSanitizedMarkup = (html: string) => ({
+    __html: DOMPurify.sanitize(html),
+  });
+
+  const sidebarSections: DocumentSidebarSectionType[] = documentSidebar?.sections?.length
+    ? documentSidebar.sections
+    : documentSidebarFallback;
 
   return(
     <section className={style.docPage}>
@@ -66,46 +141,20 @@ export default function DocPageComponent({ initialData }: Props) {
       <div className="container">
         <div className={style.pageContent}>
           <div className={style.contentData}>
-            <div className={style.contentItem}>
-              <div className={style.contentDataTitle}>
-                <h5>После нажатия на кнопку "Оплатить документ":</h5>
+            {sidebarSections.map((section) => (
+              <div key={section.id} className={style.contentItem}>
+                <div className={style.contentDataTitle}>
+                  <h5>{section.title}</h5>
+                </div>
+                {section.items.map((item) => (
+                  <div
+                    key={item.id}
+                    className={style.contentDataList}
+                    dangerouslySetInnerHTML={createSanitizedMarkup(item.text)}
+                  />
+                ))}
               </div>
-              <div className={style.contentDataList}>
-                <p>- Внесите корректный адрес электронной почты;</p>
-                <p>- На эту почту придет письмо с документами;</p>
-              </div>
-            </div>
-            <div className={style.contentItem}>
-              <div className={style.contentDataTitle}>
-                <h5>В письме Вы получите:</h5>
-              </div>
-              <div className={style.contentDataList}>
-                <p>- Готовый шаблон документа;</p>
-                <p>- Подробную инструкцию по заполнению;</p>
-                <p>- Пример, как правильно оформить документ;</p>
-                <p>- Советы по подаче в суд или адресанту.</p>
-              </div>
-            </div>
-            <div className={style.contentItem}>
-              <div className={style.contentDataTitle}>
-                <h5>Кому подойдёт данный документ:</h5>
-              </div>
-              <div className={style.contentDataList}>
-                <p>- Вам отказали в возврате денег;</p>
-                <p>- Работодатель нарушил ваши права;</p>
-                <p>- Вам нужно подать заявление в суд без юриста.</p>
-              </div>
-            </div>
-            <div className={style.contentItem}>
-              <div className={style.contentDataTitle}>
-                <h5>Как будет выглядеть документ:</h5>
-              </div>
-              <div className={style.contentDataList}>
-                <p>- Формат: .docx (Word)</p>
-                <p>- Адаптирован под гражданский/арбитражный процесс</p>
-                <p>- Можно редактировать под вашу ситуацию</p>
-              </div>
-            </div>
+            ))}
           </div>
           <div className={style.contentDoc}>
             <div className={style.documentSkeleton}>
@@ -136,6 +185,12 @@ export default function DocPageComponent({ initialData }: Props) {
             </div>
           </div>
         </div>
+        {documentInstruction ? (
+              <div>
+                <h3>{documentInstruction.title}</h3>
+                <div dangerouslySetInnerHTML={createSanitizedMarkup(documentInstruction.description)} />
+              </div>
+            ) : null}
       </div>
     </section>
   );

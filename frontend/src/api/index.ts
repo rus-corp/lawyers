@@ -4,11 +4,12 @@ import { createBackUp } from "./form_api";
 import { getPageMeta } from "./meta";
 import { getNews, getNewsItem } from "./news_api";
 import { createNewOrder } from "./orders";
+import { getDocumentInstruction, getDocumentSidebar } from "./static";
 
 export {
   getCategories, getCategoryBySlug,
   getCategoryByParent, getDocument,
   getNews, getNewsItem, createBackUp,
   getSeacrhCategories, createNewOrder,
-  getPageMeta
+  getPageMeta, getDocumentSidebar, getDocumentInstruction
 }
