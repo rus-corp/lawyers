@@ -10,6 +10,7 @@ export type DocumentType = {
   title: string;
   slug: string;
   price: number;
+  url: string;
   category: {
     id: number;
     title: string;

@@ -34,7 +34,8 @@ export default function MainCategoryComponent() {
         <div className={style.mainCategoryList}>
           {mainCategories.map((mainCategoryItem) => (
             <MainCategoryItem key={mainCategoryItem.id}
-            id={mainCategoryItem.id}
+            url={mainCategoryItem.url}
+        id={mainCategoryItem.id}
             title={mainCategoryItem.title}
             slug={mainCategoryItem.slug}
             beforeLevelClickedCategory=''
@@ -52,13 +53,13 @@ export default function MainCategoryComponent() {
 
 
 
-const MainCategoryItem = ({ id, title, slug, isActive, docCount }: CategoryItemType) => {
+const MainCategoryItem = ({ url, id, title, slug, isActive, docCount }: CategoryItemType) => {
   return (
     <>
       <div
       className={isActive ? `${style.categoryItem} ${style.mainCategoryItem} ${style.clicked}` : `${style.categoryItem} ${style.mainCategoryItem}`}
       >
-        <Link href={`/categories/${slug}`}
+        <Link href={url}
         className={style.categoryContent}
         >
           <Image

@@ -9,3 +9,4 @@ class MeatTagsView(viewsets.ReadOnlyModelViewSet):
   queryset = MetaTags.objects.all()
   serializer_class = MetaTagsSerializer
   lookup_field = 'slug'
+  lookup_value_regex = '.+'  # Metadata keys include nested page paths.

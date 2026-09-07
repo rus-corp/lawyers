@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import CategoryView, SubCategoryView, DocumentsView, ParentCategoryView, SearchView
+from .views import CategoryView, SubCategoryView, DocumentsView, ParentCategoryView, SearchView, CategoryPathView, CategorySitemapView
 
 
 app_name = 'categories'
@@ -8,6 +8,8 @@ app_name = 'categories'
 
 
 urlpatterns = [
+    path('sitemap/', CategorySitemapView.as_view(), name='sitemap'),
+    path('path/<path:category_path>/', CategoryPathView.as_view(), name='category_path'),
     path('', CategoryView.as_view(), name='category'),
     path('documents/<str:slug>/', DocumentsView.as_view(), name='documents'),
     path('parent/<str:slug>/', ParentCategoryView.as_view(), name='parent_category'),

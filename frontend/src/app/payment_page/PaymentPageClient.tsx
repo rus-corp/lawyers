@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from 'next/navigation';
 import style from './payment_page.module.css'
 
-import { createNewOrder } from "@/api";
+import { createNewOrder, getPaymentConfig } from "@/api/orders";
 import { CreateOrderData } from "./types";
 
 
@@ -15,11 +15,17 @@ const PaymentPage = () => {
   const documentId = searchParams.get('documentId');
   const userEmail = searchParams.get('userEmail')
   const [confirmationToken, setConfirmationToken] = useState<string | null>(null);
+  const [message, setMessage] = useState('Загрузка формы оплаты...');
   const returnUrl = 'https://pravo-dok.ru/payment_page/success';
 
 
   const handleCreateOrder = async (createOrderData: CreateOrderData) => {
+    if (!await getPaymentConfig()) {
+      setMessage('Документы доступны бесплатно. Откройте страницу документа и нажмите «Отправить на почту».');
+      return;
+    }
     const response = await createNewOrder(createOrderData);
+    if (response.status === 202) setMessage(response.data.message);
     if (response?.status === 201) {
       const confirmationUrl = response.data.confirmation_token;
       if (confirmationUrl) {
@@ -37,8 +43,10 @@ const PaymentPage = () => {
         description: String(documentId),
         user_email: String(userEmail)
       }
-      handleCreateOrder(data)
+      handleCreateOrder(data).catch(() => setMessage('Не удалось выполнить запрос. Попробуйте ещё раз.'))
       hasSentRef.current = true;
+    } else {
+      setMessage('Откройте страницу документа, чтобы запросить его на почту.');
     }
   }, [])
 
@@ -52,7 +60,7 @@ const PaymentPage = () => {
           </>
 
         ) : (
-          <p>Загрузка формы оплаты...</p>
+          <p role="status">{message}</p>
         )}
       </div>
     </section>

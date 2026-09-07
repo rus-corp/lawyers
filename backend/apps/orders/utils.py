@@ -53,9 +53,10 @@ def create_payment(amount: int, client_email: str, document_name: str, descripti
 
 
 @shared_task
-def send_document_to_email(document_id: str, client_email: str):
-  mail_body = """
-  Благодарим вас за оплату. Во вложении вы найдёте юридический документ, оформленный согласно вашему запросу.
+def send_document_to_email(document_id: str, client_email: str, paid: bool = True):
+  greeting = "Благодарим вас за оплату." if paid else "Благодарим вас за обращение."
+  mail_body = f"""
+  {greeting} Во вложении вы найдёте юридический документ, оформленный согласно вашему запросу.
 
   Если у вас возникнут вопросы по содержанию или потребуется дополнительная информация, не стесняйтесь обращаться к нам в ответ на это письмо.
 
@@ -81,7 +82,7 @@ def send_document_to_email(document_id: str, client_email: str):
     )
     admin_mail.send()
     return
-  categories = document.category.get_ancestors(include_self=True)
+  categories = document.category.get_ancestors(include_self=True) if document.category else []
   for category in categories:
     instructions = Instructions.objects.filter(category__slug=category.slug)
     for instruction in instructions:
@@ -103,5 +104,5 @@ def send_document_to_email(document_id: str, client_email: str):
       subject="Документ",
       body=f"Не смог отправить письмо клиенту {client_email}",
       from_email=settings.EMAIL_HOST_USER,
-      to='info@pravo-dok.ru'
+      to=['info@pravo-dok.ru']
     ).send()

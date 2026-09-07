@@ -11,6 +11,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 2rem;
+}
+
+.pageHeader > .headerContent {
+  flex: 1;
+  min-width: 0;
 }
 
 .headerTitle {
@@ -26,6 +32,7 @@
   display: flex;
   align-items: center;
   gap: .5rem;
+  flex-wrap: wrap;
 }
 
 .links > a {
@@ -39,7 +46,38 @@
 }
 
 .payBtn {
-  width: 30%;
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.payBtn > button {
+  white-space: nowrap;
+}
+
+.deliveryStatus {
+  padding: 1rem 3rem 0;
+}
+
+.deliveryStatus:empty {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .payBtn {
+    margin-left: 0;
+    align-self: flex-end;
+  }
+
+  .deliveryStatus {
+    padding: 1rem 1.5rem 0;
+  }
 }
 
 .pageContent {

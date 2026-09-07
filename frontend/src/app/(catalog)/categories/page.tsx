@@ -8,11 +8,12 @@ export async function generateMetadata(): Promise<Metadata> {
   console.log('categ meta')
   const response = await getPageMeta('categories')
   console.log(response)
-  if (!response) return {}
+
   return {
-    title: response.title,
-    description: response.description,
-    keywords: response.keywords,
+    alternates: {canonical: 'https://pravo-dok.ru/categories'},
+    title: response?.title || "Документы",
+    description: response?.description,
+    keywords: response?.keywords,
   };
 }
 

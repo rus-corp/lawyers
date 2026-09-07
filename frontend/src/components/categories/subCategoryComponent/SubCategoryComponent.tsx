@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import style from '../styles/mainCategory.module.css'
 import { CategoryComponentProps, CategoryItemType, CategoryItemResponse } from '../types/types';
 import { getCategoryBySlug } from '@/api';
@@ -37,6 +37,7 @@ export default function SubCategoryComponent({
     <div className={style.subCategoryListBlock}>
       {categories.map((categoryItem) => (
         <SubCategoryItem key={categoryItem.id}
+        url={categoryItem.url}
         id={categoryItem.id}
         title={categoryItem.title}
         slug={categoryItem.slug}
@@ -50,17 +51,13 @@ export default function SubCategoryComponent({
 }
 
 
-const SubCategoryItem = ({ id, title, slug, isActive, docCount }: CategoryItemType) => {
-  const router = useRouter()
-  const handleClick = (categorySlug: string) => {
-    router.push(`/docs/${categorySlug}`)
-  }
+const SubCategoryItem = ({ url, id, title, slug, isActive, docCount }: CategoryItemType) => {
   return (
       <div
       className={isActive ? `${style.categoryItem} ${style.subCategoryItem} ${style.clicked}` : `${style.categoryItem} ${style.subCategoryItem}`}>
-        <div
+        <Link
         className={style.categoryContent}
-        onClick={() => handleClick(slug)}
+        href={url}
         >
           <Image
           src={'/icons/icon_categ_1.png'}
@@ -69,7 +66,7 @@ const SubCategoryItem = ({ id, title, slug, isActive, docCount }: CategoryItemTy
           height={40}
           />
           <p className={style.subCategoryTitle}>{title}</p>
-        </div>
+        </Link>
       </div>
   );
 }

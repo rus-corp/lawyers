@@ -41,6 +41,7 @@ export default function CategoryComponent(
     <div className={style.categoryListBlock}>
       {categories.map((categoryItem) => (
         <CategoryItem key={categoryItem.id}
+        url={categoryItem.url}
         id={categoryItem.id}
         title={categoryItem.title}
         slug={categoryItem.slug}
@@ -56,14 +57,14 @@ export default function CategoryComponent(
 
 
 
-const CategoryItem = ({ id, title, slug, beforeLevelClickedCategory, isActive, isFind, docCount }: CategoryItemType) => {
+const CategoryItem = ({ url, id, title, slug, beforeLevelClickedCategory, isActive, isFind, docCount }: CategoryItemType) => {
   return (
     <>
       <div
       className={isActive || isFind
         ?`${style.categoryItem} ${style.categoryCategoryItem} ${style.clicked}` 
         : `${style.categoryItem} ${style.categoryCategoryItem}`}>
-        <Link href={`/categories/${beforeLevelClickedCategory}/${slug}`}
+        <Link href={url}
         className={style.categoryContent}
         >
           <Image

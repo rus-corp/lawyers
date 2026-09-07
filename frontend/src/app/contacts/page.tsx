@@ -32,7 +32,7 @@ export default function Contacts() {
           <div className={style.infoHeader}>
             <h5>Наши реквизиты:</h5>
           </div>
-          <div className={style.infoContent}>
+          {/* <div className={style.infoContent}>
             <p>Название: Индивидуальный предприниматель Давыдов Вадим Анатольевич</p>
             <p>ИНН: 771886673828</p>
             <p>Расчётный счёт:	40802810838000228773</p>
@@ -41,7 +41,7 @@ export default function Contacts() {
             <p>ОГРН 	322774600149529</p>
             <p>БИК	044525225</p>
             <p>Адрес: Москва ул Жебрунова 6 с1 офис 330</p>
-          </div>
+          </div> */}
         </div>
         <div className={style.formContainer}>
           <BackUpForm />

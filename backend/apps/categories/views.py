@@ -2,6 +2,8 @@ from rest_framework import generics
 from rest_framework.response import Response
 from django.db.models import Count, Prefetch
 from django.shortcuts import get_object_or_404
+from django.http import Http404
+from rest_framework.views import APIView
 
 from .models import Category, Documents
 from .serializers import CategorySerializer, DocumentsSerializer
@@ -19,9 +21,8 @@ class SearchView(generics.ListAPIView):
 
   def get_queryset(self):
     slug = self.kwargs['slug']
-    categories = Category.objects.filter(slug=slug)
-    if categories:
-      parents = categories.get_ancestors(include_self=True)
+    category = get_object_or_404(Category, slug=slug)
+    parents = category.get_ancestors(include_self=True)
       # get_ancestors(ascending=False, include_self=False)
     return parents
 
@@ -119,4 +120,29 @@ class DocumentsView(generics.RetrieveAPIView):
 
   def get_object(self):
     category = self.kwargs['slug']
-    return Documents.objects.get(category__slug=category)
+    return get_object_or_404(Documents, category__slug=category)
+
+class CategoryPathView(APIView):
+  def get(self, request, category_path):
+    parts = category_path.split('/')
+    category = get_object_or_404(Category, slug=parts[-1])
+    if category.get_url() != '/categories/' + category_path:
+      raise Http404
+    data = CategorySerializer(category).data
+    if len(parts) == 3:
+      document = get_object_or_404(Documents, category=category)
+      return Response({'category': data, 'document': DocumentsSerializer(document).data})
+    if len(parts) > 3:
+      raise Http404
+    return Response({'category': data, 'document': None})
+
+
+class CategorySitemapView(APIView):
+  def get(self, request):
+    categories = Category.objects.filter(level__lte=2).order_by('tree_id', 'lft')
+    document_categories = set(Documents.objects.values_list('category_id', flat=True))
+    return Response([
+      {'url': category.get_url()}
+      for category in categories
+      if category.level < 2 or category.pk in document_categories
+    ])

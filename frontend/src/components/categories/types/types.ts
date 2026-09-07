@@ -4,6 +4,7 @@ export type CategoryComponentProps = {
 }
 
 export type CategoryItemResponse = {
+  url: string;
   id: number;
   title: string;
   slug: string;
@@ -11,6 +12,7 @@ export type CategoryItemResponse = {
 }
 
 export type CategoryItemType = {
+  url: string;
   id: number;
   title: string;
   slug: string;

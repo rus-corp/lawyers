@@ -63,3 +63,12 @@ class ObjectSerializer(serializers.Serializer):
 
 class PaymentStatusSerializer(serializers.Serializer):
   object = ObjectSerializer()
+
+class DocumentEmailSerializer(serializers.Serializer):
+  user_email = serializers.EmailField()
+  description = serializers.PrimaryKeyRelatedField(queryset=Documents.objects.all())
+
+  def validate_description(self, document):
+    if not document.file or not document.file.storage.exists(document.file.name):
+      raise serializers.ValidationError('Файл документа недоступен.')
+    return document

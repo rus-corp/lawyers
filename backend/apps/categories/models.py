@@ -8,6 +8,16 @@ class Category(MPTTModel):
   slug = models.SlugField(max_length=255, unique=True, verbose_name='URL')
   parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children', verbose_name='Родительская категория')
 
+  def get_url(self):
+    return '/categories/' + '/'.join(self.get_ancestors(include_self=True).values_list('slug', flat=True))
+
+  def get_breadcrumbs(self):
+    ancestors = list(self.get_ancestors(include_self=True))
+    return [
+      {'title': category.title, 'url': '/categories/' + '/'.join(item.slug for item in ancestors[:index + 1])}
+      for index, category in enumerate(ancestors)
+    ]
+
   class MPTTMeta:
     order_insertion_by = ['title']
   

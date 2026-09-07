@@ -1,33 +1,17 @@
-import React from 'react';
-
+import { notFound, permanentRedirect } from 'next/navigation';
+import { isAxiosError } from 'axios';
+import { backendUrl } from '@/api/_variables';
 import { DocProps } from '../types';
-import { getDocument, getPageMeta } from '@/api';
-import DocPageComponent from '@/components/doc_page_component/DocPageComponent';
 
-
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  if (!params.slug) return {}
-  const response = await getPageMeta(`news/${params.slug}`)
-  if (!response) return {}
-  return {
-    title: response.title,
-    description: response.description,
-    keywords: response.keywords,
-  };
-}
-
-
-
-export default async function DocItem({ params: { slug } }: DocProps) {
-  const document = await getDocument(slug);
-  const documentData = document?.data
-
-
-  return(
-    <>
-      <DocPageComponent
-      initialData={documentData}
-      />
-    </>
-  );
+export default async function LegacyDocumentPage({params: {slug}}: DocProps) {
+  let url: string;
+  try {
+    const response = await backendUrl.get(`categories/documents/${encodeURIComponent(slug)}/`);
+    url = response.data.url;
+  } catch (error) {
+    if (isAxiosError(error) && error.response?.status === 404) notFound();
+    throw error;
+  }
+  if (!url) notFound();
+  permanentRedirect(url);
 }

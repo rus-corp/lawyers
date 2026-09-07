@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.conf import settings
+from rest_framework.views import APIView
 from rest_framework import generics, status
 from rest_framework.response import Response
 
@@ -6,7 +8,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from .models import Order
-from .serializers import OrderSerializer, PaymentStatusSerializer
+from .serializers import OrderSerializer, PaymentStatusSerializer, DocumentEmailSerializer
 from .utils import send_document_to_email
 
 
@@ -16,6 +18,21 @@ class CreateNewOrderView(generics.CreateAPIView):
   serializer_class = OrderSerializer
 
   def create(self, request, *args, **kwargs):
+    if not settings.PAYMENTS_ENABLED:
+      serializer = DocumentEmailSerializer(data=request.data)
+      serializer.is_valid(raise_exception=True)
+      try:
+        send_document_to_email.delay(
+          document_id=str(serializer.validated_data['description'].pk),
+          client_email=serializer.validated_data['user_email'],
+          paid=False,
+        )
+      except Exception:
+        logger.exception('Не удалось поставить отправку документа в очередь')
+        return Response({'message': 'Не удалось отправить запрос. Попробуйте ещё раз.'},
+                        status=status.HTTP_503_SERVICE_UNAVAILABLE)
+      return Response({'message': 'Документ будет отправлен на указанную почту в течение нескольких минут.'},
+                      status=status.HTTP_202_ACCEPTED)
     serializer = self.get_serializer(data=request.data)
     if not serializer.is_valid():
       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -73,3 +90,10 @@ class PaymentStatusView(generics.CreateAPIView):
       logger.error('Данные от юкассы не получилось сериализовать')
       return Response({'error': 'Payment data not provided'}, status=status.HTTP_400_BAD_REQUEST)
 
+
+
+class PaymentConfigView(APIView):
+  def get(self, request):
+    response = Response({'payments_enabled': settings.PAYMENTS_ENABLED})
+    response['Cache-Control'] = 'no-store'
+    return response

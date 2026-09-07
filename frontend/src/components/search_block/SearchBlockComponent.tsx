@@ -22,11 +22,8 @@ export default function SearchBlockComponent() {
     const response = await getSeacrhCategories(searchQuery)
     if (response.status === 200) {
       const categoryData = response.data
-      if (categoryData.length === 3) {
-        router.push(`/categories/${categoryData[categoryData.length - 3].slug}/${categoryData[categoryData.length - 2].slug}`)
-      } else if (categoryData.length === 2) {
-        router.push(`/categories/${categoryData[categoryData.length - 2].slug}`)
-      }
+      const selectedCategory = categoryData[categoryData.length - 1];
+      if (selectedCategory?.url) router.push(selectedCategory.url);
     }
   }
 

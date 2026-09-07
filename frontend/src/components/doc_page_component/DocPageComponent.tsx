@@ -10,6 +10,7 @@ import { getDocumentInstruction, getDocumentSidebar } from '@/api/static';
 import { documentSidebarFallback } from './documentSidebarFallback';
 
 import EmailModal from '@/ui/modal/EmailModal';
+import { createNewOrder, getPaymentConfig } from '@/api/orders';
 import MainBtn from '@/ui/buttons/MainBtn';
 
 type DocumentSidebarItemType = {
@@ -60,12 +61,21 @@ export default function DocPageComponent({ initialData }: Props) {
   const [documentSidebar, setDocumentSidebar] = React.useState<DocumentSidebarType | null>(null);
   const [documentInstruction, setDocumentInstruction] = React.useState<DocumentInstructionType | null>(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [userEmail, setUserEmail] = React.useState('');
-  const [handleRoute, setHandleRoute] = React.useState('')
-  const handleEmailSubmit = (email: string) => {
-    setUserEmail(email);
-    setIsModalOpen(false)
-    router.push(`/payment_page/?amount=${initialData?.price}&documentId=${initialData?.id}&userEmail=${email}`)
+  const [paymentsEnabled, setPaymentsEnabled] = React.useState(false);
+  const [message, setMessage] = React.useState('');
+  React.useEffect(() => {
+    getPaymentConfig().then(setPaymentsEnabled).catch(() => setPaymentsEnabled(false));
+  }, []);
+  const handleEmailSubmit = async (email: string) => {
+    const enabled = await getPaymentConfig();
+    setPaymentsEnabled(enabled);
+    if (enabled) {
+      router.push(`/payment_page/?${new URLSearchParams({amount: String(initialData.price), documentId: String(initialData.id), userEmail: email})}`);
+      return;
+    }
+    const response = await createNewOrder({description: String(initialData.id), user_email: email});
+    if (response.status !== 202) throw new Error('Unexpected response');
+    setMessage(response.data.message);
   };
 
   // const handleGetDocument = async () => {
@@ -106,38 +116,45 @@ export default function DocPageComponent({ initialData }: Props) {
     __html: DOMPurify.sanitize(html),
   });
 
-  const sidebarSections: DocumentSidebarSectionType[] = documentSidebar?.sections?.length
+  const originalSidebarSections: DocumentSidebarSectionType[] = documentSidebar?.sections?.length
     ? documentSidebar.sections
     : documentSidebarFallback;
+
+  const sidebarSections = paymentsEnabled ? originalSidebarSections : originalSidebarSections.map(section => ({
+    ...section,
+    title: section.title.replace(/Оплатить документ/g, 'Отправить на почту'),
+    items: section.items.map(item => ({...item, text: item.text.replace(/Оплатить документ/g, 'Отправить на почту')})),
+  }));
 
   return(
     <section className={style.docPage}>
       <div className={style.pageHeader}>
         <div className={style.headerContent}>
           <div className={style.headerTitle}>
-            <h4>Документ будет доступен после подтверждения платежа</h4>
+            <h4>{paymentsEnabled ? 'Документ будет доступен после подтверждения платежа' : 'Получите документ на электронную почту'}</h4>
           </div>
           <div className={style.headerContent}>
-            <p>Оплачивая документ Вы безоговорочно выражаете свое согласие с содержанием</p>
+            <p>{paymentsEnabled ? 'Оплачивая документ Вы безоговорочно выражаете свое согласие с содержанием' : 'Отправляя запрос, Вы выражаете согласие с содержанием'}</p>
               <div className={style.links}>
                 <Link href={'/offer'}>оферты</Link>  
-                <Link href={'/politic'}>Политикой конфиденциальности</Link>и
-                <Link href={'/payment_rules'}>условиями оплаты</Link>
+                <Link href={'/politic'}>Политикой конфиденциальности</Link>
+                {paymentsEnabled && <Link href={'/payment_rules'}>условиями оплаты</Link>}
               </div>
           </div>
         </div>
         <div className={style.payBtn}>
           <MainBtn
-          btnTitle={`Оплатить документ ${initialData?.price} ₽`}
+          btnTitle={paymentsEnabled ? `Оплатить документ ${initialData?.price} ₽` : 'Отправить на почту'}
           paymentBtn={setIsModalOpen}
           />
         </div>
-        <EmailModal
+      </div>
+      <p className={style.deliveryStatus} role="status">{message}</p>
+      <EmailModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleEmailSubmit}
-        />
-      </div>
+      />
       <div className="container">
         <div className={style.pageContent}>
           <div className={style.contentData}>
