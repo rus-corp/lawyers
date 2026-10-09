@@ -52,6 +52,19 @@ class CategoryURLTests(TestCase):
     urls = [item['url'] for item in self.client.get('/api/categories/sitemap/').data]
     self.assertEqual(urls, ['/categories/family', '/categories/family/alimony', self.url])
 
+  def test_sitemap_dates_follow_the_latest_change_below(self):
+    other = Category.objects.create(title='Раздел имущества', slug='property', parent=self.root)
+    before = {item['url']: item['lastmod'] for item in self.client.get('/api/categories/sitemap/').data}
+    self.document.title = 'Документ, новая редакция'
+    self.document.save()
+    after = {item['url']: item['lastmod'] for item in self.client.get('/api/categories/sitemap/').data}
+    for url in ('/categories/family', '/categories/family/alimony', self.url):
+      self.assertGreater(after[url], before[url])
+      self.assertEqual(after[url], self.document.updated_at.isoformat())
+    self.assertEqual(after[other.get_url()], before[other.get_url()])
+    with self.assertNumQueries(2):
+      self.client.get('/api/categories/sitemap/')
+
   def test_nested_metadata_key_resolves(self):
     MetaTags.objects.create(slug=self.url.lstrip('/'), title='SEO title')
     response = self.client.get('/api/meta/categories/family/alimony/claim/')

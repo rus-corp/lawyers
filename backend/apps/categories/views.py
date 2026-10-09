@@ -166,10 +166,17 @@ class CategoryDocumentsView(APIView):
 
 class CategorySitemapView(APIView):
   def get(self, request):
-    categories = Category.objects.filter(level__lte=2).order_by('tree_id', 'lft')
-    document_categories = set(Documents.objects.values_list('category_id', flat=True))
-    return Response([
-      {'url': category.get_url()}
-      for category in categories
-      if category.level < 2 or category.pk in document_categories
-    ])
+    # Tree order puts every parent before its children.
+    categories = list(Category.objects.filter(level__lte=2).order_by('tree_id', 'lft'))
+    documents = dict(Documents.objects.values_list('category_id', 'updated_at'))
+    urls = {}
+    changed = {}
+    for category in categories:
+      urls[category.pk] = '/categories/' + category.slug if category.parent_id is None else urls[category.parent_id] + '/' + category.slug
+      changed[category.pk] = max(category.updated_at, documents.get(category.pk, category.updated_at))
+    listed = [category for category in categories if category.level < 2 or category.pk in documents]
+    # A category or subsection page changes whenever one of its documents does.
+    for category in reversed(listed):
+      if category.parent_id is not None:
+        changed[category.parent_id] = max(changed[category.parent_id], changed[category.pk])
+    return Response([{'url': urls[category.pk], 'lastmod': changed[category.pk].isoformat()} for category in listed])
