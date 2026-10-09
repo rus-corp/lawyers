@@ -1,6 +1,6 @@
 import BreadcrumbsJsonLd from '@/components/BreadcrumbsJsonLd';
 import CategoryDetailView from '@/views/CategoryDetailView';
-import { pageMetadata } from '@/lib/metadata';
+import { pageMetadata, seoTitle, withNames } from '@/lib/metadata';
 import {
   getCategoryDocuments,
   getCategoryPath,
@@ -8,7 +8,7 @@ import {
   getPaymentsEnabled,
   getRootCategories,
 } from '@/lib/server-api';
-import { pad2 } from '@/lib/text';
+import { TEMPLATES, pad2, withCount } from '@/lib/text';
 
 type Props = { params: Promise<{ categorySlug: string }> };
 
@@ -17,7 +17,20 @@ const ACCENTS = ['#C62828', '#1B4FD8'];
 export async function generateMetadata({ params }: Props) {
   const { categorySlug } = await params;
   const { category } = await getCategoryPath(categorySlug);
-  return pageMetadata(category.url.slice(1), category.url, { title: category.title, description: category.description });
+  const [sections, documents] = await Promise.all([getChildren(category.slug), getCategoryDocuments(category.slug)]);
+  return pageMetadata(category.url.slice(1), category.url, {
+    title: seoTitle(category.title, 'шаблоны документов'),
+    description:
+      category.description ||
+      withNames(
+        documents.length > 0
+          ? `${category.title}: ${withCount(documents.length, TEMPLATES)} документов — `
+          : `${category.title}: шаблоны документов — `,
+        sections.map(section => section.title),
+        3,
+        '. Формат DOCX, инструкция по заполнению, отправка на электронную почту.',
+      ),
+  });
 }
 
 export default async function CategoryPage({ params }: Props) {

@@ -6,7 +6,7 @@ import PageTransition from '@/components/PageTransition';
 import SiteFooter from '@/components/SiteFooter';
 import SiteHeader from '@/components/SiteHeader';
 import YandexMetrika from '@/components/YandexMetrika';
-import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_URL } from '@/lib/site';
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SHARE_IMAGE, SITE_NAME, SITE_URL } from '@/lib/site';
 
 // Every page reads from the API at request time; nothing is prerendered at build.
 export const dynamic = 'force-dynamic';
@@ -28,6 +28,16 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: DEFAULT_TITLE,
   description: DEFAULT_DESCRIPTION,
+  applicationName: SITE_NAME,
+  openGraph: {
+    type: 'website',
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    siteName: SITE_NAME,
+    locale: 'ru_RU',
+    images: [SHARE_IMAGE],
+  },
+  twitter: { card: 'summary_large_image', title: DEFAULT_TITLE, description: DEFAULT_DESCRIPTION, images: [SHARE_IMAGE.url] },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
