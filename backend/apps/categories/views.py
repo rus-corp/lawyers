@@ -6,7 +6,7 @@ from django.http import Http404
 from rest_framework.views import APIView
 
 from .models import Category, Documents
-from .serializers import CategorySerializer, DocumentsSerializer
+from .serializers import CategorySerializer, DocumentsSerializer, DocumentListSerializer
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
 from django.db.models.functions import Greatest
 from django.db.models import Value, FloatField, Case, When
@@ -135,6 +135,33 @@ class CategoryPathView(APIView):
     if len(parts) > 3:
       raise Http404
     return Response({'category': data, 'document': None})
+
+
+class CategoryDocumentsView(APIView):
+  """All documents of a category or subsection in one response."""
+
+  def get(self, request, slug):
+    category = get_object_or_404(Category, slug=slug)
+    urls = {}
+    sections = {}
+    for ancestor in category.get_ancestors():
+      urls[ancestor.pk] = '/categories/' + ancestor.slug if ancestor.parent_id is None else urls[ancestor.parent_id] + '/' + ancestor.slug
+      if ancestor.level == 1:
+        sections[ancestor.pk] = {'title': ancestor.title, 'url': urls[ancestor.pk]}
+    # Tree order puts every parent before its children.
+    for node in category.get_descendants(include_self=True):
+      urls[node.pk] = '/categories/' + node.slug if node.parent_id is None else urls[node.parent_id] + '/' + node.slug
+      if node.level == 1:
+        sections[node.pk] = {'title': node.title, 'url': urls[node.pk]}
+      elif node.parent_id in sections:
+        sections[node.pk] = sections[node.parent_id]
+    # Only third-level categories have a document page of their own.
+    documents = (Documents.objects
+      .filter(category__tree_id=category.tree_id, category__lft__gte=category.lft, category__rght__lte=category.rght, category__level=2)
+      .select_related('category').prefetch_related('tags')
+      .order_by('category__lft'))
+    serializer = DocumentListSerializer(documents, many=True, context={'urls': urls, 'sections': sections})
+    return Response(serializer.data)
 
 
 class CategorySitemapView(APIView):

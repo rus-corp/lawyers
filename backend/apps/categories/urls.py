@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import CategoryView, SubCategoryView, DocumentsView, ParentCategoryView, SearchView, CategoryPathView, CategorySitemapView
+from .views import CategoryView, SubCategoryView, DocumentsView, ParentCategoryView, SearchView, CategoryPathView, CategorySitemapView, CategoryDocumentsView
 
 
 app_name = 'categories'
@@ -15,4 +15,5 @@ urlpatterns = [
     path('parent/<str:slug>/', ParentCategoryView.as_view(), name='parent_category'),
     path('<str:slug>/', SubCategoryView.as_view()),
     path('search/<str:slug>/', SearchView.as_view()),
+    path('<str:slug>/documents/', CategoryDocumentsView.as_view(), name='category_documents'),
 ]

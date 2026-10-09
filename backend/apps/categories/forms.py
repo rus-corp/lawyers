@@ -5,11 +5,15 @@ from .models import Category, Documents, Instructions
 class DocumentForm(forms.ModelForm):
     class Meta:
         model = Documents
-        fields = ['title', 'slug', 'category', 'price', 'file']
+        fields = ['title', 'slug', 'category', 'price', 'file', 'description', 'pages', 'tags']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['category'].queryset = Category.objects.filter(level=2, documents__isnull=True)
+        free_categories = Category.objects.filter(level=2, documents__isnull=True)
+        # A document being edited keeps its own category in the list, otherwise it could not be saved.
+        if self.instance.pk and self.instance.category_id:
+            free_categories = free_categories | Category.objects.filter(pk=self.instance.category_id)
+        self.fields['category'].queryset = free_categories.distinct()
 
 
 

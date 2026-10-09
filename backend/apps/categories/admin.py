@@ -2,7 +2,7 @@ from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
 from .forms import DocumentForm, CategoryAdminForm, InstructionAdminForm
 
-from .models import Category, Documents, Instructions
+from .models import Category, Documents, Instructions, Tag
 
 admin.site.site_header = 'Управление проектом Правовые документы'
 admin.site.site_title = 'Правовые документы Admin'
@@ -54,11 +54,12 @@ class CategoryAdmin(MPTTModelAdmin):
 
 @admin.register(Documents)
 class DocumentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'category', 'title', 'price')
+    list_display = ('id', 'category', 'title', 'price', 'pages')
     prepopulated_fields = {'slug': ('title',)}
     list_display_links = ('id', 'title', 'category')
     search_fields = ('title',)
     list_filter = ('title',)
+    autocomplete_fields = ('tags',)
     form = DocumentForm
 
     # def form_field_for_foreignkey(self, db_field, request, **kwargs):
@@ -69,6 +70,14 @@ class DocumentAdmin(admin.ModelAdmin):
     # def get_queryset(self, request):
     #     categories = Category.objects.filter(documents__isnull=False)
     #     return categories
+
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'slug')
+    list_display_links = ('id', 'title')
+    prepopulated_fields = {'slug': ('title',)}
+    search_fields = ('title',)
 
 
 @admin.register(Instructions)

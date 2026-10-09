@@ -1,17 +1,10 @@
 import { notFound, permanentRedirect } from 'next/navigation';
-import { isAxiosError } from 'axios';
-import { backendUrl } from '@/api/_variables';
-import { DocProps } from '../types';
+import { getDocumentBySlug } from '@/lib/server-api';
 
-export default async function LegacyDocumentPage({params: {slug}}: DocProps) {
-  let url: string;
-  try {
-    const response = await backendUrl.get(`categories/documents/${encodeURIComponent(slug)}/`);
-    url = response.data.url;
-  } catch (error) {
-    if (isAxiosError(error) && error.response?.status === 404) notFound();
-    throw error;
-  }
-  if (!url) notFound();
-  permanentRedirect(url);
+// Old document addresses redirect to the document's place in the catalog.
+export default async function LegacyDocumentPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const document = await getDocumentBySlug(slug);
+  if (!document?.url) notFound();
+  permanentRedirect(document.url);
 }

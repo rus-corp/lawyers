@@ -7,6 +7,7 @@ class Category(MPTTModel):
   title = models.CharField(max_length=255, verbose_name='Название')
   slug = models.SlugField(max_length=255, unique=True, verbose_name='URL')
   parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children', verbose_name='Родительская категория')
+  description = models.TextField(blank=True, default='', verbose_name='Описание', help_text='Одно-два предложения под заголовком категории или подраздела')
 
   def get_url(self):
     return '/categories/' + '/'.join(self.get_ancestors(include_self=True).values_list('slug', flat=True))
@@ -31,11 +32,28 @@ class Category(MPTTModel):
 
 
 
+class Tag(models.Model):
+  title = models.CharField(max_length=50, unique=True, verbose_name='Название')
+  slug = models.SlugField(max_length=60, unique=True, verbose_name='URL')
+
+  class Meta:
+    verbose_name = 'Тег'
+    verbose_name_plural = 'Теги'
+    ordering = ['title']
+
+  def __str__(self):
+    return self.title
+
+
+
 class Documents(models.Model):
   title = models.CharField(max_length=255, verbose_name='Название документа')
   file = models.FileField(verbose_name='Файл')
   slug = models.SlugField(max_length=255, unique=True, verbose_name='URL')
   price = models.IntegerField(verbose_name='Цена', default=0)
+  description = models.TextField(blank=True, default='', verbose_name='Краткое описание', help_text='Одно-два предложения: показывается в карточке и под заголовком документа')
+  pages = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='Число страниц')
+  tags = models.ManyToManyField(Tag, blank=True, related_name='documents', verbose_name='Теги')
   
   category = models.ForeignKey(
     Category,

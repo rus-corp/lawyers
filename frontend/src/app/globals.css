@@ -1,198 +1,133 @@
+@import 'tailwindcss';
 
-*, *::before, *::after {
-  margin: 0;
-  padding: 0;
-  border: none;
-  box-sizing: border-box;
-  font-size: 16px;
+@theme inline {
+  --color-ivory:       white;
+  --color-graphite:    #1C1915;
+  --color-muted:       #8C8880;
+  --color-red:         #C62828;
+  --color-red-light:   #E53935;
+  --color-cobalt:      #1B4FD8;
+  --color-cobalt-dark: #1438B0;
+  --color-tab-home:    #2B6BEA;
+  --color-tab-docs:    #C62828;
+  --color-tab-about:   #D97706;
+  --color-tab-articles:#15803D;
+  --color-border:      #E8E4DE;
+  --font-display:      var(--font-inter-tight), system-ui, sans-serif;
+  --font-body:         var(--font-manrope), system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  max-width: 1900px;
-  width: 100%;
-  margin: 0 auto;
+  background-color: white;
+  color: #1C1915;
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-.container {
-  width: 85%;
-  margin: 0 auto;
-  /* padding: 0 4rem; */
+::-webkit-scrollbar { width: 0; }
+
+/* Custom scrollbar on hover */
+:hover::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #C62828; border-radius: 99px; }
+
+/* The native cursor is hidden only once the custom one is mounted. */
+@media (hover: hover) and (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor *,
+  html.has-custom-cursor *::before,
+  html.has-custom-cursor *::after {
+    cursor: none !important;
+  }
 }
 
-a, a:visited {
-  text-decoration: none;
-  font-family: inherit;
-  transition: color .3s;
-  text-transform: uppercase;
+@media (pointer: coarse), (hover: none) {
+  .custom-cursor {
+    display: none !important;
+  }
 }
 
-
-a:hover {
-  color: #7B1E1E;
+@keyframes click-ripple {
+  0%   { transform: translate(-50%,-50%) scale(0); opacity: 0.8; }
+  100% { transform: translate(-50%,-50%) scale(3); opacity: 0; }
 }
 
-a:focus, a:active {
-  outline: none;
+/* Ends on `transform: none` so fixed and sticky descendants keep the viewport as their reference. */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: none; }
 }
 
-h1 {
-  font-size: 3.5rem;
-  color: #4A90E2;
+.page-enter {
+  animation: page-in 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-h2 {
-  font-size: 2.7rem;
-  color: #4A90E2;
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
 }
 
-h3 {
-  font-size: 2rem;
-  color: #4A90E2;
+.spinner {
+  animation: spin-slow 0.9s linear infinite;
 }
 
-h4 {
-  font-size: 1.4rem;
-  color: #4A90E2;
+.selection-none { user-select: none; }
+
+/* Sanitized HTML coming from the admin panel: articles and document instructions. */
+.rich-text {
+  font-size: 16px;
+  line-height: 2;
+  color: #4A4642;
+  overflow-wrap: anywhere;
 }
-
-h5 {
-  font-size: 1.2rem;
-  color: #4A90E2;
+.rich-text > * + * { margin-top: 1.5rem; }
+.rich-text h1,
+.rich-text h2,
+.rich-text h3,
+.rich-text h4 {
+  font-family: var(--font-inter-tight), system-ui, sans-serif;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #1C1915;
+  margin-top: 2.5rem;
 }
-
-
-p {
-  font-family: inherit;
-  color: #3B3937;
-  font-size: 1rem;
+.rich-text h1, .rich-text h2 { font-size: 28px; }
+.rich-text h3 { font-size: 22px; }
+.rich-text h4 { font-size: 18px; }
+.rich-text ul { list-style: disc; padding-left: 1.4rem; }
+.rich-text ol { list-style: decimal; padding-left: 1.4rem; }
+.rich-text li + li { margin-top: 0.4rem; }
+.rich-text li::marker { color: #1B4FD8; }
+.rich-text a { color: #1B4FD8; text-decoration: underline; text-underline-offset: 4px; }
+.rich-text a:hover { color: #C62828; }
+.rich-text strong, .rich-text b { color: #1C1915; font-weight: 700; }
+.rich-text blockquote {
+  border-left: 2px solid #1B4FD8;
+  padding-left: 1.5rem;
+  color: #6A6662;
 }
+.rich-text img { max-width: 100%; height: auto; }
+.rich-text table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.rich-text th, .rich-text td { border: 1px solid #E8E4DE; padding: 0.5rem 0.75rem; text-align: left; }
 
-span {
-  font-family: inherit;
-  color: #4A90E2;
-}
+/* Short HTML fragments inside list items. */
+.rich-inline p { display: inline; }
+.rich-inline a { color: #1B4FD8; text-decoration: underline; text-underline-offset: 3px; }
 
-ul {
-  list-style: none;
-}
-
-
-img, svg, video {
-  display: inline-block;
-  vertical-align: top;
-  max-width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
-/* Form */
-input, textarea, button, select {
-  font-family: "Exo 2", sans-serif;
-  font-size: inherit;
-  color: black;
-}
-
-button, input[type="submit"] {
-  display: inline-block;
-  box-shadow: none;
-  background-color: transparent;
-  cursor: pointer;
-  transition: background-color .5s ease;
-  padding: 0.2rem;
-  /* border: solid black 1px; */
-  border-radius: 10px;
-  transition: .4s;
-  transform: all .4s ease;
-}
-
-button:hover {
-  background-color: #dbe0e7 ;
-  border: none;
-}
-
-button:active {
-  transform: scale(0.9);
-}
-
-button::-moz-focus-inner {
-  padding: 0;
-  border: none;
-}
-
-label {
-  cursor: pointer;
-}
-
-legend {
-  display: block;
-}
-
-footer {
-  color: #fff;
-}
-
-strong {
-  font-weight: bold;
-}
-
-i {
-  transform: skew(-15deg)
-}
-
-
-@media (max-width: 820px) {
-  .container {
-    width: 90%;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 
-  h1 {
-    font-size: 2rem;
-  }
-
-  h2 {
-    font-size: 2rem;
-  }
-
-  h3 {
-    font-size: 1.5rem;
-  }
-
-  h4 {
-    font-size: 1.2rem;
-  }
-
-  h5 {
-    font-size: 1rem;
-  }
-  
-}
-
-@media (max-width: 450px) {
-  .container {
-    width: 95%;
-  }
-
-  h1 {
-    font-size: 1.6rem;
-  }
-
-  h2 {
-    font-size: 1.5rem;
-  }
-
-  h3 {
-    font-size: 1.3rem;
-  }
-
-  h4 {
-    font-size: 1.1rem;
-  }
-
-  h5 {
-    font-size: 1rem;
-  }
-  
-  p {
-    font-size: .8rem;
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
