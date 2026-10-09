@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ПРАВОДОК — фронтенд
 
-## Getting Started
+Next.js 16 (App Router) + React 19 + Tailwind CSS 4 + framer-motion.
+Дизайн перенесён из экспорта Figma Make; данные приходят из Django API (`backend/`).
 
-First, run the development server:
+## Запуск
+
+Нужен Node.js 20.9 или новее.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run build && npm start   # http://localhost:3000
+npm run dev                  # режим разработки
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Адрес API задаётся переменной `NEXT_PUBLIC_DEV_URL` (локально — в `.env`, в Docker — аргументом сборки):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+NEXT_PUBLIC_DEV_URL=http://127.0.0.1:8000/api
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Значение вшивается в клиентский код при сборке, поэтому после его смены нужна пересборка.
 
-## Learn More
+## Как устроено
 
-To learn more about Next.js, take a look at the following resources:
+- `src/app` — маршруты. Все страницы рендерятся на сервере при каждом запросе (`dynamic = 'force-dynamic'`
+  в корневом шаблоне), поэтому сборке API не нужен.
+- `src/views` — экраны из макета; получают готовые данные через пропсы.
+- `src/components` — общие части: шапка, подвал, курсор, карточка-папка, поиск, формы.
+- `src/lib/server-api.ts` — чтение API на сервере. Ответы хранятся в памяти 60 секунд,
+  так что правки из админки появляются на сайте с такой задержкой.
+- `src/lib/api.ts` — запросы из браузера: режим оплаты, создание заказа, форма заявки.
+- `src/data/legal.ts` — тексты оферты, политики конфиденциальности и условий оплаты.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Маршруты
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Адрес | Что показывает |
+| --- | --- |
+| `/` | главная |
+| `/categories` | каталог: категории верхнего уровня |
+| `/categories/[категория]` | подразделы и все документы категории |
+| `/categories/[категория]/[подраздел]` | документы подраздела |
+| `/categories/[категория]/[подраздел]/[документ]` | страница документа и заказ |
+| `/docs/[slug]` | редирект со старых адресов документов |
+| `/news`, `/news/[slug]` | статьи |
+| `/about`, `/contacts` | о сервисе, контакты и форма заявки |
+| `/offer`, `/politic`, `/payment_rules` | правовые страницы |
+| `/payment_page`, `/payment_page/success` | переход к оплате ЮKassa и её результат |
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Заголовки и описания страниц берутся из записей «Мета Теги» в админке, если они заведены.

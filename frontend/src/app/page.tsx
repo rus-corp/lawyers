@@ -1,32 +1,25 @@
-import type { Metadata } from "next";
+import HomeView from '@/views/HomeView';
+import { pageMetadata } from '@/lib/metadata';
+import { buildSearchIndex, getCatalog } from '@/lib/server-api';
+import type { CatalogCategory } from '@/lib/types';
 
-import style from "./page.module.css";
+export const generateMetadata = () => pageMetadata('home', '/');
 
-import HeroSection from "@/components/hero_section/HeroSection";
-import AboutSection from "@/components/about_section/AboutSection";
-import Advantages from "@/components/advantages/Advantages";
-
-import { getPageMeta } from "@/api";
-
-export const generateMetadata = async(): Promise<Metadata> => {
-  console.log('gen meta')
-  const response = await getPageMeta('home')
-  if (!response) return {}
-  return {
-    title: response.title,
-    description: response.description
+export default async function Home() {
+  // The landing page still renders when the catalog is unavailable.
+  let catalog: CatalogCategory[] = [];
+  try {
+    catalog = await getCatalog();
+  } catch (error) {
+    console.error('Catalog is unavailable', error);
   }
-}
+  const totalDocs = catalog.reduce((sum, category) => sum + category.documentsCount, 0);
 
-
-
-
-export default function Home() {
   return (
-    <div className="container">
-      <HeroSection />
-      <AboutSection />
-      <Advantages />
-    </div>
+    <HomeView
+      categories={catalog.slice(0, 4).map(({ id, title, url, documentsCount }) => ({ id, title, url, count: documentsCount }))}
+      totalDocs={totalDocs || null}
+      searchIndex={buildSearchIndex(catalog)}
+    />
   );
 }

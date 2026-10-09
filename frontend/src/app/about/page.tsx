@@ -1,32 +1,18 @@
+import AboutView from '@/views/AboutView';
+import { pageMetadata } from '@/lib/metadata';
+import { getCatalog } from '@/lib/server-api';
+import type { CatalogCategory } from '@/lib/types';
 
-import AboutPageHeader from "@/components/about_page_component/AboutPageHeader";
-import AboutPageContent from '@/components/about_page_component/AboutPageContent'
-import { Metadata } from "next";
-import { getPageMeta } from "@/api";
+export const generateMetadata = () => pageMetadata('about', '/about', { title: 'О нас — ПРАВОДОК' });
 
-import style from './about_page.module.css'
-
-
-export async function generateMetadata(): Promise<Metadata> {
-  console.log('abount meta')
-  const response = await getPageMeta('about')
-  console.log(response)
-  if (!response) return {}
-  return {
-    title: response.title,
-    description: response.description,
-    keywords: response.keywords,
-  };
-}
-
-
-export default function About() {
-  return(
-    <div className="container">
-      <section className={style.aboutPage}>
-        <AboutPageHeader />
-        <AboutPageContent />
-      </section>
-    </div>
-  );
+export default async function AboutPage() {
+  let catalog: CatalogCategory[] = [];
+  try {
+    catalog = await getCatalog();
+  } catch (error) {
+    console.error('Catalog is unavailable', error);
+  }
+  const totalDocs = catalog.reduce((sum, category) => sum + category.documentsCount, 0);
+  const sectionsCount = catalog.reduce((sum, category) => sum + category.sections.length, 0);
+  return <AboutView totalDocs={totalDocs || null} sectionsCount={sectionsCount || null} />;
 }

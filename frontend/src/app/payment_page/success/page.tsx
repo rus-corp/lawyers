@@ -1,34 +1,8 @@
-import React from 'react';
-import Image from 'next/image';
-import style from './payment_success.module.css'
-import MainBtn from '@/ui/buttons/MainBtn';
+import type { Metadata } from 'next';
+import PaymentResultView from '@/views/PaymentResultView';
+
+export const metadata: Metadata = { title: 'Оплата прошла успешно — ПРАВОДОК', robots: { index: false, follow: false } };
 
 export default function PaymentSuccessPage() {
-  return(
-    <section className={style.paymentSuccess}>
-      <div className="container">
-        <div className={style.sectionBlock}>
-          <div className={style.imageBlock}>
-            <Image
-            src={'/icons/vector.png'}
-            width={150}
-            height={150}
-            alt='success'
-            />
-          </div>
-          <div className={style.blockContent}>
-            <h2>УСПЕШНО</h2>
-            <p>Спасибо! Оплата прошла успешно. Документ будет отправлен на Ваш Email в течении пары минут</p>
-            <p style={{ color: 'red' }}>Проверьте папку «Спам» — письмо могло попасть туда.</p>
-            <a className={style.tgLink} href="https://t.me/Vadimdavi"><p style={{ color: 'red' }}>Если не получили документ, напишите нам в Telegram (ссылка) и мы пришлем Вам его в ближайшее время</p></a>
-            <MainBtn
-            btnTitle='Вернуться на главную'
-            handleRoute='/'
-            />
-          </div>
-        </div>
-
-      </div>
-    </section>
-  );
+  return <PaymentResultView type="success" />;
 }

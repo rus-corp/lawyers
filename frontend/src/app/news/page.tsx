@@ -1,32 +1,21 @@
-import React from 'react';
-import { Metadata } from 'next';
-import style from './news_page.module.css'
-import NewsListComponent from "@/components/news_component/NewsListComponent";
-import { getPageMeta } from '@/api';
+import ArticlesView from '@/views/ArticlesView';
+import { excerpt, readTime } from '@/lib/html';
+import { pageMetadata } from '@/lib/metadata';
+import { getNews } from '@/lib/server-api';
+import { formatDate } from '@/lib/text';
 
+export const generateMetadata = () => pageMetadata('news', '/news', { title: 'Статьи — ПРАВОДОК' });
 
-export async function generateMetadata(): Promise<Metadata> {
-  console.log('news meta')
-  const response = await getPageMeta('news')
-  console.log(response)
-  if (!response) return {}
-  return {
-    title: response.title,
-    description: response.description,
-    keywords: response.keywords,
-  };
-}
-
-
-export default function NewsPage() {
-  return(
-    <div className="container">
-      <section className={style.newsPage}>
-        <div className={style.pageHeader}>
-          <h3>Статьи</h3>
-        </div>
-        <NewsListComponent />
-      </section>
-    </div>
-  );
+export default async function NewsPage() {
+  const news = await getNews();
+  const articles = [...news]
+    .sort((a, b) => b.created_at.localeCompare(a.created_at) || b.id - a.id)
+    .map(item => ({
+      slug: item.slug,
+      title: item.title,
+      excerpt: excerpt(item.text),
+      date: formatDate(item.created_at),
+      readTime: readTime(item.text),
+    }));
+  return <ArticlesView articles={articles} />;
 }
