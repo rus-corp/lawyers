@@ -8,6 +8,7 @@ export interface Category {
   title: string;
   slug: string;
   url: string;
+  description?: string;
   breadcrumbs: Breadcrumb[];
   documents_count?: number | null;
 }
@@ -18,7 +19,23 @@ export interface DocumentItem {
   slug: string;
   price: number;
   url: string;
+  description: string;
+  pages: number | null;
+  tags: string[];
   category: Category;
+}
+
+// An item of GET categories/<slug>/documents/
+export interface CategoryDocument {
+  id: number;
+  title: string;
+  slug: string;
+  price: number;
+  url: string;
+  description: string;
+  pages: number | null;
+  tags: string[];
+  section: Breadcrumb | null;
 }
 
 export interface CategoryPathData {
@@ -72,12 +89,14 @@ export interface SearchItem {
   url: string;
   kind: SearchKind;
   context: string;
+  tags?: string[];
 }
 
 export interface CatalogDocument {
   id: number;
   title: string;
   url: string;
+  tags: string[];
 }
 
 export interface CatalogSection {

@@ -11,6 +11,7 @@ export const TEMPLATES: [string, string, string] = ['шаблон', 'шабло�
 export const DOCUMENTS: [string, string, string] = ['документ', 'документа', 'документов'];
 export const CATEGORIES: [string, string, string] = ['категория', 'категории', 'категорий'];
 export const ARTICLES: [string, string, string] = ['статья', 'статьи', 'статей'];
+export const PAGES: [string, string, string] = ['страница', 'страницы', 'страниц'];
 
 export const withCount = (count: number, forms: [string, string, string]) => `${count} ${plural(count, forms)}`;
 

@@ -9,17 +9,21 @@ interface Doc {
   id: number;
   title: string;
   url: string;
+  description: string;
+  pages: number | null;
+  // null while documents are delivered without payment
   price: number | null;
 }
 
 interface Props {
   title: string;
+  description?: string;
   categoryTitle: string;
   categoryUrl: string;
   documents: Doc[];
 }
 
-export default function SectionDetailView({ title, categoryTitle, categoryUrl, documents }: Props) {
+export default function SectionDetailView({ title, description, categoryTitle, categoryUrl, documents }: Props) {
   return (
     <main className="min-h-screen bg-white">
       <PageBar variant="flat" backHref={categoryUrl} backLabel={categoryTitle} right={withCount(documents.length, DOCUMENTS)} />
@@ -35,6 +39,7 @@ export default function SectionDetailView({ title, categoryTitle, categoryUrl, d
             {title}
           </h1>
           <p className="text-[16px] leading-relaxed text-[#8C8880]">
+            {description && `${description.trim().replace(/\.$/, '')}. `}
             Выберите подходящий вариант — каждый шаблон можно отредактировать под вашу ситуацию.
           </p>
         </motion.div>
@@ -54,12 +59,13 @@ export default function SectionDetailView({ title, categoryTitle, categoryUrl, d
               >
                 <div className="mb-8 flex items-center justify-between text-[10px] uppercase tracking-[0.15em] text-[#8C8880]">
                   <span>{pad2(index + 1)}</span>
-                  <span>DOCX</span>
+                  <span>{document.pages ? `${document.pages} стр.` : 'DOCX'}</span>
                 </div>
-                <h2 className="font-display mb-8 text-[22px] font-bold leading-tight text-[#1C1915]">{document.title}</h2>
+                <h2 className={`font-display text-[22px] font-bold leading-tight text-[#1C1915] ${document.description ? 'mb-3' : 'mb-8'}`}>{document.title}</h2>
+                {document.description && <p className="mb-8 text-[12px] leading-relaxed text-[#8C8880]">{document.description}</p>}
                 <div className="mt-auto flex items-end justify-between gap-3 border-t border-[#E8E4DE] pt-5">
                   <span className="font-display text-[18px] font-black text-[#1B4FD8]">
-                    {document.price ? formatPrice(document.price) : 'Отправить на почту'}
+                    {document.price !== null ? formatPrice(document.price) : 'Отправить на почту'}
                   </span>
                   <span className="shrink-0 text-[12px] text-[#C62828] transition-transform group-hover:translate-x-1">Открыть →</span>
                 </div>

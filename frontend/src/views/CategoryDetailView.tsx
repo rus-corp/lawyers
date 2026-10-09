@@ -4,12 +4,13 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import PageBar from '@/components/PageBar';
-import { DOCUMENTS, TEMPLATES, normalize, pad2, withCount } from '@/lib/text';
+import { DOCUMENTS, TEMPLATES, formatPrice, normalize, pad2, withCount } from '@/lib/text';
 
 interface Section {
   id: number;
   title: string;
   url: string;
+  description: string;
   count: number;
 }
 
@@ -18,7 +19,16 @@ interface Doc {
   title: string;
   url: string;
   sectionTitle: string;
+  description: string;
+  tags: string[];
+  pages: number | null;
+  // null while documents are delivered without payment
+  price: number | null;
 }
+
+// Tags when the document has them, otherwise the subsection it belongs to.
+const labels = (doc: Doc) => (doc.tags.length > 0 ? doc.tags.slice(0, 2) : [doc.sectionTitle].filter(Boolean));
+const volume = (doc: Doc) => (doc.pages ? `${doc.pages} стр.` : 'DOCX');
 
 interface Props {
   title: string;
@@ -38,7 +48,7 @@ export default function CategoryDetailView({ title, number, accent, description,
   const filtered = useMemo(() => {
     const query = normalize(search);
     return documents
-      .filter(d => normalize(d.title).includes(query) || normalize(d.sectionTitle).includes(query))
+      .filter(d => [d.title, d.sectionTitle, ...d.tags].some(text => normalize(text).includes(query)))
       .sort((a, b) => a.title.localeCompare(b.title, 'ru'));
   }, [documents, search]);
 
@@ -113,6 +123,7 @@ export default function CategoryDetailView({ title, number, accent, description,
                     <span>{withCount(section.count, DOCUMENTS)}</span>
                   </div>
                   <h3 className="font-display mb-2 text-[18px] font-bold text-[#1C1915]">{section.title}</h3>
+                  {section.description && <p className="text-[11px] leading-relaxed text-[#8C8880]">{section.description}</p>}
                   <span className="mt-auto pt-4 text-[11px] text-[#C62828] transition-transform group-hover:translate-x-1">Смотреть →</span>
                 </Link>
               ))}
@@ -247,19 +258,40 @@ export default function CategoryDetailView({ title, number, accent, description,
                           {doc.title}
                         </div>
                         <div className="font-body text-[11px] text-[#8C8880] truncate">
-                          {doc.sectionTitle}
+                          {doc.description || doc.sectionTitle}
                         </div>
                       </div>
 
-                      <motion.div
-                        animate={{ opacity: isHov ? 1 : 0, x: isHov ? 0 : -4 }}
-                        className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
-                        style={{ background: accent }}
-                      >
-                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden="true">
-                          <path d="M1.5 4h5M4.5 1.5L7 4l-2.5 2.5" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </motion.div>
+                      {doc.tags.length > 0 && (
+                        <div className="hidden md:flex flex-wrap gap-1 shrink-0">
+                          {doc.tags.slice(0, 2).map(tag => (
+                            <span key={tag} className="font-display px-2 py-0.5 rounded text-[10px]"
+                              style={{ background: `${accent}0D`, color: accent }}>
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      <div className="flex items-center gap-4 shrink-0">
+                        <span className="font-display hidden text-[11px] text-[#B8B4AE] sm:inline">
+                          {volume(doc)}
+                        </span>
+                        {doc.price !== null && (
+                          <span className="font-display text-[13px] font-black" style={{ color: '#1B4FD8' }}>
+                            {formatPrice(doc.price)}
+                          </span>
+                        )}
+                        <motion.div
+                          animate={{ opacity: isHov ? 1 : 0, x: isHov ? 0 : -4 }}
+                          className="w-6 h-6 rounded-full flex items-center justify-center"
+                          style={{ background: accent }}
+                        >
+                          <svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden="true">
+                            <path d="M1.5 4h5M4.5 1.5L7 4l-2.5 2.5" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </motion.div>
+                      </div>
                     </motion.div>
                   </Link>
                 </motion.div>
@@ -321,18 +353,35 @@ export default function CategoryDetailView({ title, number, accent, description,
                               transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                               style={{ background: 'white', border: '1px solid #ECEAE6' }}
                             >
-                              <h3 className="font-display font-semibold text-[#1C1915] leading-snug flex-1"
-                                style={{ fontSize: 14, letterSpacing: '-0.01em' }}>
-                                {doc.title}
-                              </h3>
+                              <div className="flex items-start justify-between gap-3">
+                                <h3 className="font-display font-semibold text-[#1C1915] leading-snug flex-1"
+                                  style={{ fontSize: 14, letterSpacing: '-0.01em' }}>
+                                  {doc.title}
+                                </h3>
+                                {doc.price !== null && (
+                                  <span className="font-display text-[12px] font-black shrink-0" style={{ color: '#1B4FD8' }}>
+                                    {formatPrice(doc.price)}
+                                  </span>
+                                )}
+                              </div>
 
-                              <div className="flex items-center justify-between gap-3 pt-2" style={{ borderTop: '1px solid #F5F3EF' }}>
-                                <span className="font-display min-w-0 truncate px-1.5 py-0.5 rounded text-[9px] tracking-wide"
-                                  style={{ background: `${accent}0D`, color: accent }}>
-                                  {doc.sectionTitle}
-                                </span>
+                              {doc.description && (
+                                <p className="font-body text-[11px] text-[#8C8880] leading-relaxed line-clamp-2">
+                                  {doc.description}
+                                </p>
+                              )}
+
+                              <div className="mt-auto flex items-center justify-between gap-3 pt-2" style={{ borderTop: '1px solid #F5F3EF' }}>
+                                <div className="flex min-w-0 flex-wrap gap-1">
+                                  {labels(doc).map(label => (
+                                    <span key={label} className="font-display max-w-full truncate px-1.5 py-0.5 rounded text-[9px] tracking-wide"
+                                      style={{ background: `${accent}0D`, color: accent }}>
+                                      {label}
+                                    </span>
+                                  ))}
+                                </div>
                                 <span className="font-display shrink-0 text-[10px] text-[#C8C4BE]">
-                                  DOCX
+                                  {volume(doc)}
                                 </span>
                               </div>
 

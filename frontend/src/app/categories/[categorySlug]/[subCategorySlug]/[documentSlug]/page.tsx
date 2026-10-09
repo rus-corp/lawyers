@@ -71,7 +71,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { document } = await getCategoryPath(categorySlug, subCategorySlug, documentSlug);
   if (!document) notFound();
   const meta = (await getPageMeta(document.url.slice(1))) ?? (await getPageMeta(`docs/${documentSlug}`));
-  return buildMetadata(meta, document.url, { title: document.title, description: describe(document.title) });
+  return buildMetadata(meta, document.url, {
+    title: document.title,
+    description: document.description || describe(document.title),
+  });
 }
 
 export default async function DocumentPage({ params }: Props) {
@@ -89,9 +92,15 @@ export default async function DocumentPage({ params }: Props) {
     <>
       <BreadcrumbsJsonLd items={category.breadcrumbs} />
       <DocumentDetailView
-        document={{ id: document.id, title: document.title, price: document.price }}
+        document={{
+          id: document.id,
+          title: document.title,
+          price: document.price,
+          pages: document.pages,
+          tags: document.tags ?? [],
+        }}
         breadcrumbs={category.breadcrumbs}
-        description={describe(document.title)}
+        description={document.description || describe(document.title)}
         infoBlocks={sidebar?.sections?.length ? sidebarBlocks(sidebar.sections) : defaultBlocks(document.title)}
         instruction={instruction ? { title: instruction.title, html: sanitize(instruction.description) } : null}
         initialPaymentsEnabled={paymentsEnabled}

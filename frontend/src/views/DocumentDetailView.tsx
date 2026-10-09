@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import EmailModal from '@/components/EmailModal';
 import Logo from '@/components/Logo';
 import { createOrder, fetchPaymentsEnabled } from '@/lib/api';
-import { formatPrice, pad2 } from '@/lib/text';
+import { PAGES, formatPrice, pad2, withCount } from '@/lib/text';
 import type { Breadcrumb } from '@/lib/types';
 
 export interface InfoBlock {
@@ -17,7 +17,7 @@ export interface InfoBlock {
 }
 
 interface Props {
-  document: { id: number; title: string; price: number };
+  document: { id: number; title: string; price: number; pages: number | null; tags: string[] };
   breadcrumbs: Breadcrumb[];
   description: string;
   infoBlocks: InfoBlock[];
@@ -69,6 +69,7 @@ export default function DocumentDetailView({ document: doc, breadcrumbs, descrip
   const meta = [
     { label: 'Категория', value: parents[0]?.title },
     { label: 'Раздел', value: parents[1]?.title },
+    { label: 'Объём', value: doc.pages ? withCount(doc.pages, PAGES) : undefined },
     { label: 'Формат', value: 'DOCX (Word)' },
   ].filter((row): row is { label: string; value: string } => Boolean(row.value));
 
@@ -96,7 +97,7 @@ export default function DocumentDetailView({ document: doc, breadcrumbs, descrip
         </Link>
         <Logo className="text-[13px] text-[#1C1915]" />
         <div className="flex items-center gap-4">
-          <span className="font-display hidden text-[11px] text-[#8C8880] sm:inline">DOCX</span>
+          <span className="font-display hidden text-[11px] text-[#8C8880] sm:inline">{doc.pages ? `${doc.pages} стр.` : 'DOCX'}</span>
           {price && (
             <>
               <div className="hidden w-[1px] h-4 bg-[#E8E4DE] sm:block" />
@@ -149,10 +150,29 @@ export default function DocumentDetailView({ document: doc, breadcrumbs, descrip
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.5 }}
-              className="font-body text-[18px] text-[#8C8880] mb-16 leading-relaxed max-w-xl"
+              className={`font-body text-[18px] text-[#8C8880] leading-relaxed max-w-xl ${doc.tags.length > 0 ? 'mb-12' : 'mb-16'}`}
             >
               {description}
             </motion.p>
+
+            {/* Tags */}
+            {doc.tags.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                className="flex flex-wrap gap-2 mb-16"
+              >
+                {doc.tags.map(tag => (
+                  <span
+                    key={tag}
+                    className="font-display px-4 py-1.5 border border-[#E8E4DE] text-[11px] tracking-[0.15em] uppercase text-[#8C8880]"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </motion.div>
+            )}
 
             {/* Document content — reading mode */}
             <motion.div
@@ -304,6 +324,7 @@ export default function DocumentDetailView({ document: doc, breadcrumbs, descrip
         {emailOpen && (
           <EmailModal
             documentTitle={doc.title}
+            pages={doc.pages}
             paymentsEnabled={paymentsEnabled}
             onClose={closeModal}
             onSubmit={handleEmailSubmit}

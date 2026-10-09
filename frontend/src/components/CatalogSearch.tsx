@@ -22,9 +22,9 @@ function search(items: SearchItem[], query: string): SearchItem[] {
   return items
     .map(item => {
       const title = normalize(item.title);
-      const haystack = `${title} ${normalize(item.context)}`;
+      const haystack = `${title} ${normalize(item.context)} ${normalize((item.tags ?? []).join(' '))}`;
       if (!tokens.every(token => haystack.includes(token))) return null;
-      // Matches in the title rank above matches that only hit the parent section.
+      // Matches in the title rank above matches that only hit a tag or the parent section.
       const inTitle = tokens.every(token => title.includes(token));
       const rank = (title.startsWith(tokens[0]) ? 0 : inTitle ? 1 : 2) * 10 + KIND_ORDER.indexOf(item.kind);
       return { item, rank };

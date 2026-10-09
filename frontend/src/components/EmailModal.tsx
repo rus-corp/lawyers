@@ -4,17 +4,18 @@ import { FormEvent, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { EMAIL_PATTERN } from '@/lib/text';
+import { EMAIL_PATTERN, PAGES, withCount } from '@/lib/text';
 
 interface Props {
   documentTitle: string;
+  pages?: number | null;
   paymentsEnabled: boolean;
   onClose: () => void;
   // Resolves with a confirmation message when the document was sent right away.
   onSubmit: (email: string) => Promise<string | void>;
 }
 
-export default function EmailModal({ documentTitle, paymentsEnabled, onClose, onSubmit }: Props) {
+export default function EmailModal({ documentTitle, pages, paymentsEnabled, onClose, onSubmit }: Props) {
   const [email, setEmail] = useState('');
   const [emailConfirm, setEmailConfirm] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -170,7 +171,9 @@ export default function EmailModal({ documentTitle, paymentsEnabled, onClose, on
                 <div className="w-9 h-11 bg-white border border-[#E8E4DE] shrink-0 flex items-center justify-center text-[#C62828] text-[10px] font-bold">DOCX</div>
                 <div className="min-w-0">
                   <div className="font-display text-[12px] font-semibold text-[#1C1915] truncate">{documentTitle}</div>
-                  <div className="text-[11px] text-[#8C8880] mt-1">Файл придёт вложением в письме</div>
+                  <div className="text-[11px] text-[#8C8880] mt-1">
+                    {pages ? `${withCount(pages, PAGES)} · файл придёт вложением в письме` : 'Файл придёт вложением в письме'}
+                  </div>
                 </div>
               </div>
 

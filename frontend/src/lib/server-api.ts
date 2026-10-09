@@ -4,6 +4,7 @@ import { ApiError, apiGet } from './api';
 import type {
   CatalogCategory,
   Category,
+  CategoryDocument,
   CategoryPathData,
   DocumentInstruction,
   DocumentItem,
@@ -69,8 +70,10 @@ export async function getChildren(slug: string): Promise<Category[]> {
   return (await cachedGet<Category[]>(`categories/${encodeURIComponent(slug)}/`)) ?? [];
 }
 
-// A third-level category without a document has no page of its own.
-export const hasDocument = (category: Category) => category.documents_count !== 0;
+// Every document of a category or subsection, with price, section and details, in one request.
+export async function getCategoryDocuments(slug: string): Promise<CategoryDocument[]> {
+  return (await cachedGet<CategoryDocument[]>(`categories/${encodeURIComponent(slug)}/documents/`)) ?? [];
+}
 
 export const getCategoryPath = cache(async (...segments: string[]): Promise<CategoryPathData> => {
   try {
@@ -159,29 +162,27 @@ export async function getSitemapPaths(): Promise<string[]> {
 
 export const getCatalog = cache(async (): Promise<CatalogCategory[]> => {
   const roots = await getRootCategories();
-  const sectionLists = await mapLimit(roots, CONCURRENCY, root => getChildren(root.slug));
-  const sections = sectionLists.flat();
-  const documentLists = await mapLimit(sections, CONCURRENCY, section => getChildren(section.slug));
-  const documentsBySection = new Map(sections.map((section, index) => [section.id, documentLists[index]]));
+  const branches = await mapLimit(roots, CONCURRENCY, root =>
+    Promise.all([getChildren(root.slug), getCategoryDocuments(root.slug)]),
+  );
 
   return roots.map((root, index) => {
-    const catalogSections = sectionLists[index].map(section => ({
-      id: section.id,
-      title: section.title,
-      slug: section.slug,
-      url: section.url,
-      documents: (documentsBySection.get(section.id) ?? [])
-        .filter(hasDocument)
-        .map(item => ({ id: item.id, title: item.title, url: item.url })),
-    }));
+    const [sections, documents] = branches[index];
     return {
       id: root.id,
       title: root.title,
       slug: root.slug,
       url: root.url,
-      documentsCount:
-        root.documents_count ?? catalogSections.reduce((sum, section) => sum + section.documents.length, 0),
-      sections: catalogSections,
+      documentsCount: documents.length,
+      sections: sections.map(section => ({
+        id: section.id,
+        title: section.title,
+        slug: section.slug,
+        url: section.url,
+        documents: documents
+          .filter(document => document.section?.url === section.url)
+          .map(({ id, title, url, tags }) => ({ id, title, url, tags })),
+      })),
     };
   });
 });
@@ -196,17 +197,8 @@ export function buildSearchIndex(catalog: CatalogCategory[]): SearchItem[] {
         url: document.url,
         kind: 'document' as const,
         context: `${category.title} · ${section.title}`,
+        tags: document.tags,
       })),
     ]),
   ]);
-}
-
-export async function getDocumentPrices(urls: string[]): Promise<Map<string, number>> {
-  const prices = new Map<string, number>();
-  await mapLimit(urls, CONCURRENCY, async url => {
-    const segments = url.replace(/^\/categories\//, '').split('/');
-    const data = await optional<CategoryPathData>(`categories/path/${encodePath(segments)}/`);
-    if (data?.document) prices.set(url, data.document.price);
-  });
-  return prices;
 }
