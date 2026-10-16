@@ -210,6 +210,11 @@ CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
+# A stuck task is stopped instead of occupying a worker process for good,
+# and a busy worker does not hold back tasks that another process could run.
+CELERY_TASK_SOFT_TIME_LIMIT = 240
+CELERY_TASK_TIME_LIMIT = 300
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1
 
 YOOKASSA_SHOP_ID = os.environ.get('SHOP_ID')
 YOOKASSA_SECRET_KEY = os.environ.get('SHOP_KEY')
@@ -221,6 +226,8 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 465
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
+# Without a timeout a mail server that stops answering blocks the worker forever.
+EMAIL_TIMEOUT = 60
 
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10_000
