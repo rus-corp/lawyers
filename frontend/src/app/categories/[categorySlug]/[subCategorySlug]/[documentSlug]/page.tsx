@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import BreadcrumbsJsonLd from '@/components/BreadcrumbsJsonLd';
 import DocumentDetailView, { type InfoBlock } from '@/views/DocumentDetailView';
 import { sanitize } from '@/lib/html';
-import { buildMetadata } from '@/lib/metadata';
+import { buildMetadata, seoTitle } from '@/lib/metadata';
 import {
   getCategoryPath,
   getDocumentInstruction,
@@ -72,8 +72,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!document) notFound();
   const meta = (await getPageMeta(document.url.slice(1))) ?? (await getPageMeta(`docs/${documentSlug}`));
   return buildMetadata(meta, document.url, {
-    title: document.title,
-    description: document.description || describe(document.title),
+    title: seoTitle(document.title, 'образец в DOCX'),
+    description:
+      document.description ||
+      `Шаблон документа «${document.title}» в формате DOCX: инструкция по заполнению и пример оформления. Отправим на электронную почту.`,
   });
 }
 

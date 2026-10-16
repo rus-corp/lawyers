@@ -155,9 +155,9 @@ export async function getPaymentsEnabled(): Promise<boolean> {
   return Boolean(data?.payments_enabled);
 }
 
-export async function getSitemapPaths(): Promise<string[]> {
-  const items = await optional<{ url: string }[]>('categories/sitemap/');
-  return (items ?? []).map(item => item.url);
+// `lastmod` is present once the backend tracks modification dates.
+export async function getSitemapEntries(): Promise<{ url: string; lastmod?: string }[]> {
+  return (await optional<{ url: string; lastmod?: string }[]>('categories/sitemap/')) ?? [];
 }
 
 export const getCatalog = cache(async (): Promise<CatalogCategory[]> => {
