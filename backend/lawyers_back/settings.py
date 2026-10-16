@@ -227,7 +227,8 @@ EMAIL_PORT = 465
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 # Without a timeout a mail server that stops answering blocks the worker forever.
-EMAIL_TIMEOUT = 60
+# The first connection after a pause sometimes stalls, so it is given up quickly and retried.
+EMAIL_TIMEOUT = 20
 
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10_000
