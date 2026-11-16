@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Category, Documents
+from .models import Category, DocumentContent, DocumentFAQ, Documents, Lawyer
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -14,14 +14,43 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 
+class LawyerSerializer(serializers.ModelSerializer):
+
+  class Meta:
+    model = Lawyer
+    fields = ('name', 'position', 'experience', 'photo')
+
+
+class DocumentContentSerializer(serializers.ModelSerializer):
+  reviewed_by = LawyerSerializer(read_only=True)
+
+  class Meta:
+    model = DocumentContent
+    fields = ('seo_title', 'seo_description', 'h1', 'lead', 'when_needed', 'whats_inside', 'legal_basis',
+              'filing', 'attachments', 'preview', 'reviewed_by', 'reviewed_at')
+
+
+class DocumentFAQSerializer(serializers.ModelSerializer):
+
+  class Meta:
+    model = DocumentFAQ
+    fields = ('question', 'answer')
+
+
 class DocumentsSerializer(serializers.ModelSerializer):
   category = CategorySerializer(read_only=True)
   url = serializers.CharField(source='category.get_url', read_only=True)
   tags = serializers.SlugRelatedField(many=True, read_only=True, slug_field='title')
+  content = serializers.SerializerMethodField()
+  faq = DocumentFAQSerializer(many=True, read_only=True)
   
   class Meta:
     model = Documents
-    fields = ('id', 'title', 'slug', 'category', 'price', 'url', 'description', 'pages', 'tags')
+    fields = ('id', 'title', 'slug', 'category', 'price', 'url', 'description', 'pages', 'tags', 'content', 'faq')
+
+  def get_content(self, document):
+    content = getattr(document, 'content', None)
+    return DocumentContentSerializer(content).data if content else None
 
 
 

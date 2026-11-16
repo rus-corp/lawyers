@@ -1,8 +1,6 @@
-'use client';
-
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import Logo from './Logo';
+import { enter } from '@/lib/enter';
 
 interface Props {
   backHref: string;
@@ -33,12 +31,7 @@ export default function PageBar({ backHref, backLabel, right, variant = 'glass',
   }
 
   return (
-    <motion.header
-      initial={{ opacity: 0, y: -16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="relative z-20"
-    >
+    <header className="enter relative z-20" style={enter({ y: -16, duration: 0.5 })}>
       <div
         className="mx-4 mt-4 flex items-center justify-between gap-4 rounded-2xl px-6 py-3.5 md:mx-8 md:px-8"
         style={{
@@ -62,6 +55,6 @@ export default function PageBar({ backHref, backLabel, right, variant = 'glass',
         <Logo className="text-[15px] text-[#1C1915]" />
         <span className="font-display hidden text-[12px] text-[#8C8880] sm:inline">{right}</span>
       </div>
-    </motion.header>
+    </header>
   );
 }

@@ -2,7 +2,7 @@ from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
 from .forms import DocumentForm, CategoryAdminForm, InstructionAdminForm
 
-from .models import Category, Documents, Instructions, Tag
+from .models import Category, DocumentContent, DocumentFAQ, Documents, Instructions, Lawyer, Tag
 
 admin.site.site_header = 'Управление проектом Правовые документы'
 admin.site.site_title = 'Правовые документы Admin'
@@ -52,6 +52,34 @@ class CategoryAdmin(MPTTModelAdmin):
 
 
 
+class DocumentContentInline(admin.StackedInline):
+    model = DocumentContent
+    can_delete = False
+    max_num = 1
+    fieldsets = (
+        ('Для поисковиков', {'fields': ('seo_title', 'seo_description', 'h1')}),
+        ('Текст страницы', {
+            'fields': ('lead', 'when_needed', 'whats_inside', 'legal_basis', 'filing', 'attachments', 'preview'),
+            'description': 'Пустые разделы на сайте не показываются.',
+        }),
+        ('Проверка юристом', {'fields': ('reviewed_by', 'reviewed_at')}),
+    )
+
+
+class DocumentFAQInline(admin.StackedInline):
+    model = DocumentFAQ
+    extra = 1
+    fields = ('question', 'answer', 'order')
+
+
+@admin.register(Lawyer)
+class LawyerAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'position')
+    list_display_links = ('id', 'name')
+    prepopulated_fields = {'slug': ('name',)}
+    search_fields = ('name',)
+
+
 @admin.register(Documents)
 class DocumentAdmin(admin.ModelAdmin):
     list_display = ('id', 'category', 'title', 'price', 'pages')
@@ -61,6 +89,7 @@ class DocumentAdmin(admin.ModelAdmin):
     list_filter = ('title',)
     autocomplete_fields = ('tags',)
     form = DocumentForm
+    inlines = (DocumentContentInline, DocumentFAQInline)
 
     # def form_field_for_foreignkey(self, db_field, request, **kwargs):
     #     if db_field.name == "category":

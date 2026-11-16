@@ -25,6 +25,13 @@ export function formatDate(value: string): string {
   return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 }
 
+// Cuts at a word boundary and marks the cut.
+export function truncate(text: string, length: number): string {
+  if (text.length <= length) return text;
+  const cut = text.slice(0, length);
+  return `${cut.slice(0, Math.max(cut.lastIndexOf(' '), length - 40)).replace(/[\s.,;:—-]+$/, '')}…`;
+}
+
 export const formatPrice = (price: number) => `${price.toLocaleString('ru-RU')} ₽`;
 
 export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

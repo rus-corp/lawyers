@@ -68,6 +68,18 @@ body {
   animation: page-in 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* Entrance of first-screen elements. It starts with the first paint instead of waiting for
+   JavaScript, so headings and texts show up as soon as the page is drawn. Each element sets its
+   start state through `enter()` from lib/enter.ts. */
+@keyframes enter {
+  from { opacity: var(--enter-opacity, 0); transform: var(--enter-transform, none); }
+  to   { opacity: var(--enter-to, 1); transform: none; }
+}
+
+.enter {
+  animation: enter var(--enter-duration, 0.6s) var(--enter-ease, cubic-bezier(0.25, 0.1, 0.35, 1)) var(--enter-delay, 0s) both;
+}
+
 @keyframes spin-slow {
   to { transform: rotate(360deg); }
 }
@@ -127,6 +139,7 @@ body {
 
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }

@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import FolderCard from '@/components/FolderCard';
 import CatalogSearch from '@/components/CatalogSearch';
 import PageBar from '@/components/PageBar';
 import FeedbackForm from '@/components/FeedbackForm';
 import { CATEGORIES, TEMPLATES, pad2, plural, withCount } from '@/lib/text';
 import type { SearchItem } from '@/lib/types';
+import { enter } from '@/lib/enter';
 
 interface CategoryCard {
   id: number;
@@ -35,12 +35,7 @@ export default function CategoriesView({ categories, searchIndex }: Props) {
       <div className="flex-1 flex flex-col pt-10 pb-10 px-4 md:px-8 lg:px-12 max-w-[1600px] mx-auto w-full">
 
         {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="flex items-end justify-between mb-8"
-        >
+        <div className="enter flex items-end justify-between mb-8" style={enter({ y: 12 })}>
           <div>
             <div className="flex items-center gap-3 mb-3">
               <div className="w-3 h-[1px] bg-[#C62828]" />
@@ -66,7 +61,7 @@ export default function CategoriesView({ categories, searchIndex }: Props) {
               {total}<span className="text-[#8C8880] font-normal"> {plural(total, TEMPLATES)}</span>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Search */}
         <div className="relative z-30 mb-8">

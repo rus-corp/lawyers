@@ -1,7 +1,7 @@
 import Script from 'next/script';
-import { YANDEX_METRIKA_ID } from '@/lib/site';
 
-export default function YandexMetrika() {
+// `id` is the counter number, checked to be digits only before it reaches the script.
+export default function YandexMetrika({ id }: { id: string }) {
   return (
     <>
       <Script
@@ -19,7 +19,7 @@ export default function YandexMetrika() {
               k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
             })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-            ym(${YANDEX_METRIKA_ID}, "init", {
+            ym(${id}, "init", {
               clickmap:true,
               trackLinks:true,
               accurateTrackBounce:true,
@@ -31,7 +31,7 @@ export default function YandexMetrika() {
       <noscript>
         <div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={`https://mc.yandex.ru/watch/${YANDEX_METRIKA_ID}`} style={{ position: 'absolute', left: '-9999px' }} alt="" />
+          <img src={`https://mc.yandex.ru/watch/${id}`} style={{ position: 'absolute', left: '-9999px' }} alt="" />
         </div>
       </noscript>
     </>

@@ -4,7 +4,10 @@ export const SITE_NAME = 'ПРАВОДОК';
 export const SITE_ALT_NAME = 'Правовые документы';
 export const CONTACT_EMAIL = 'info@pravo-dok.ru';
 export const TELEGRAM_URL = 'https://t.me/Vadimdavi';
+// Used while the admin settings cannot be read.
 export const YANDEX_METRIKA_ID = 102650009;
+// Set once the visitor has closed the cookie notice; the server then stops rendering it.
+export const COOKIE_NOTICE = 'cookie_notice';
 
 export const DEFAULT_TITLE = 'ПРАВОДОК — шаблоны юридических документов онлайн';
 export const DEFAULT_DESCRIPTION =

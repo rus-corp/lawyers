@@ -1,9 +1,7 @@
-'use client';
-
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import PageBar from '@/components/PageBar';
 import { ARTICLES, withCount } from '@/lib/text';
+import { enter, stagger } from '@/lib/enter';
 
 interface ArticleCard {
   slug: string;
@@ -48,12 +46,7 @@ export default function ArticlesView({ articles }: { articles: ArticleCard[] }) 
         ) : (
           <div className="grid gap-4 md:grid-cols-2">
             {articles.map((article, index) => (
-              <motion.div
-                key={article.slug}
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.08 }}
-              >
+              <div key={article.slug} className="enter" style={enter({ y: 18, delay: stagger(index, 0.08) })}>
                 <Link
                   href={`/news/${article.slug}`}
                   data-cursor="document"
@@ -70,7 +63,7 @@ export default function ArticlesView({ articles }: { articles: ArticleCard[] }) 
                     <span className="text-[#1B4FD8] transition-transform group-hover:translate-x-1">Читать →</span>
                   </div>
                 </Link>
-              </motion.div>
+              </div>
             ))}
           </div>
         )}

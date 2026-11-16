@@ -23,6 +23,38 @@ export interface DocumentItem {
   pages: number | null;
   tags: string[];
   category: Category;
+  // Present once the backend serves the page content; null while none is written.
+  content?: DocumentContent | null;
+  faq?: DocumentFAQ[];
+}
+
+export interface LawyerInfo {
+  name: string;
+  position: string;
+  experience: string;
+  photo: string | null;
+}
+
+// Texts written in the admin panel for one document page. Empty strings for empty fields.
+export interface DocumentContent {
+  seo_title: string;
+  seo_description: string;
+  h1: string;
+  lead: string;
+  when_needed: string;
+  whats_inside: string;
+  legal_basis: string;
+  filing: string;
+  attachments: string;
+  preview: string;
+  reviewed_by: LawyerInfo | null;
+  // YYYY-MM-DD
+  reviewed_at: string | null;
+}
+
+export interface DocumentFAQ {
+  question: string;
+  answer: string;
 }
 
 // An item of GET categories/<slug>/documents/
@@ -74,6 +106,13 @@ export interface NewsItem {
   text: string;
   slug: string;
   created_at: string;
+}
+
+// GET settings/: what the admin sets for every page of the site.
+export interface SiteSettings {
+  metrika_id: string;
+  yandex_verification: string;
+  google_verification: string;
 }
 
 export interface PageMeta {

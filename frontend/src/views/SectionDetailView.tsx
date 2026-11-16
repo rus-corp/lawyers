@@ -1,9 +1,7 @@
-'use client';
-
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import PageBar from '@/components/PageBar';
 import { DOCUMENTS, formatPrice, pad2, withCount } from '@/lib/text';
+import { enter, stagger } from '@/lib/enter';
 
 interface Doc {
   id: number;
@@ -29,7 +27,7 @@ export default function SectionDetailView({ title, description, categoryTitle, c
       <PageBar variant="flat" backHref={categoryUrl} backLabel={categoryTitle} right={withCount(documents.length, DOCUMENTS)} />
 
       <div className="mx-auto max-w-[1400px] px-6 pb-20 pt-12 md:px-16 lg:px-24">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-14 max-w-3xl">
+        <div className="enter mb-14 max-w-3xl" style={enter({ y: 20 })}>
           <div className="mb-4 text-[10px] uppercase tracking-[0.24em] text-[#C62828]">Подраздел</div>
           <h1
             className={`font-display mb-6 font-black leading-[0.98] tracking-[-0.04em] text-[#1C1915] ${
@@ -42,16 +40,11 @@ export default function SectionDetailView({ title, description, categoryTitle, c
             {description && `${description.trim().replace(/\.$/, '')}. `}
             Выберите подходящий вариант — каждый шаблон можно отредактировать под вашу ситуацию.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {documents.map((document, index) => (
-            <motion.div
-              key={document.id}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.08 }}
-            >
+            <div key={document.id} className="enter" style={enter({ y: 16, delay: stagger(index, 0.08) })}>
               <Link
                 href={document.url}
                 data-cursor="document"
@@ -70,7 +63,7 @@ export default function SectionDetailView({ title, description, categoryTitle, c
                   <span className="shrink-0 text-[12px] text-[#C62828] transition-transform group-hover:translate-x-1">Открыть →</span>
                 </div>
               </Link>
-            </motion.div>
+            </div>
           ))}
         </div>
 

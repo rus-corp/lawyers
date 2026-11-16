@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import PageBar from '@/components/PageBar';
 import { DOCUMENTS, TEMPLATES, formatPrice, normalize, pad2, withCount } from '@/lib/text';
+import { enter, stagger } from '@/lib/enter';
 
 interface Section {
   id: number;
@@ -72,12 +73,7 @@ export default function CategoryDetailView({ title, number, accent, description,
       <div className="max-w-[1400px] mx-auto px-5 md:px-16 lg:px-24 pt-12 pb-16">
 
         {/* Category hero */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="mb-12"
-        >
+        <div className="enter mb-12" style={enter({ y: 20, duration: 0.7 })}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-3 h-[1px]" style={{ background: accent }} />
             <span className="font-display text-[10px] tracking-[0.28em] uppercase text-[#8C8880]">
@@ -95,15 +91,10 @@ export default function CategoryDetailView({ title, number, accent, description,
               {description}
             </p>
           )}
-        </motion.div>
+        </div>
 
         {sections.length > 0 && (
-          <motion.section
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.12 }}
-            className="mb-12"
-          >
+          <section className="enter mb-12" style={enter({ y: 16, delay: 0.12 })}>
             <div className="mb-5 flex items-center justify-between">
               <h2 className="font-display text-[13px] font-bold uppercase tracking-[0.14em] text-[#1C1915]">
                 Подразделы
@@ -128,16 +119,11 @@ export default function CategoryDetailView({ title, number, accent, description,
                 </Link>
               ))}
             </div>
-          </motion.section>
+          </section>
         )}
 
         {/* Search */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="relative mb-10"
-        >
+        <div className="enter relative mb-10" style={enter({ y: 12, duration: 0.5, delay: 0.2 })}>
           <svg className="absolute left-5 top-1/2 -translate-y-1/2 text-[#8C8880]" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" strokeWidth="1.4"/>
             <path d="M10.5 10.5L14 14" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
@@ -170,15 +156,10 @@ export default function CategoryDetailView({ title, number, accent, description,
               </svg>
             </button>
           )}
-        </motion.div>
+        </div>
 
         {/* Toolbar */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="flex items-center justify-between mb-8"
-        >
+        <div className="enter flex items-center justify-between mb-8" style={enter({ duration: 0.3, delay: 0.3 })}>
           <span className="font-display text-[12px] text-[#8C8880]">
             {search ? `Найдено: ${filtered.length}` : `Все документы: ${filtered.length}`}
           </span>
@@ -217,7 +198,7 @@ export default function CategoryDetailView({ title, number, accent, description,
               </button>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* LIST VIEW */}
         {view === 'list' && (
@@ -227,9 +208,8 @@ export default function CategoryDetailView({ title, number, accent, description,
               return (
                 <motion.div
                   key={doc.id}
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.35, delay: i * 0.02, ease: [0.16, 1, 0.3, 1] }}
+                  className="enter"
+                  style={enter({ x: -12, duration: 0.35, delay: stagger(i, 0.02, 20), expo: true })}
                   onHoverStart={() => setHovered(doc.id)}
                   onHoverEnd={() => setHovered(null)}
                 >
@@ -337,9 +317,8 @@ export default function CategoryDetailView({ title, number, accent, description,
                       return (
                         <motion.div
                           key={doc.id}
-                          initial={{ opacity: 0, y: 16 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.4, delay: i * 0.03, ease: [0.16, 1, 0.3, 1] }}
+                          className="enter"
+                          style={enter({ y: 16, duration: 0.4, delay: stagger(i, 0.03, 20), expo: true })}
                           onHoverStart={() => setHovered(doc.id)}
                           onHoverEnd={() => setHovered(null)}
                         >

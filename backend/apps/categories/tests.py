@@ -1,9 +1,11 @@
+from datetime import date
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework.test import APIClient
 from apps.meta.models import MetaTags
 from .forms import DocumentForm
-from .models import Category, Documents, Tag
+from .models import Category, DocumentContent, DocumentFAQ, Documents, Lawyer, Tag
 
 
 class CategoryURLTests(TestCase):
@@ -196,4 +198,73 @@ class AdminPagesTests(TestCase):
     self.assertContains(self.client.get(f'/admin/categories/category/{self.leaf.pk}/change/'), 'name="description"')
     self.assertEqual(self.client.get('/admin/categories/tag/add/').status_code, 200)
     self.assertEqual(self.client.get('/admin/categories/documents/').status_code, 200)
+
+
+class DocumentPageContentTests(TestCase):
+  def setUp(self):
+    self.client = APIClient()
+    root = Category.objects.create(title='Семейное право', slug='family')
+    parent = Category.objects.create(title='Брак', slug='marriage', parent=root)
+    self.leaf = Category.objects.create(title='Иск о расторжении брака', slug='claim', parent=parent)
+    self.document = Documents.objects.create(title='Иск о расторжении брака', slug='divorce', category=self.leaf, file='divorce.docx')
+    self.path = '/api/categories/path/family/marriage/claim/'
+
+  def test_document_without_content(self):
+    data = self.client.get(self.path).data['document']
+    self.assertIsNone(data['content'])
+    self.assertEqual(data['faq'], [])
+
+  def test_content_questions_and_lawyer_are_returned(self):
+    lawyer = Lawyer.objects.create(name='Иванова Анна', slug='ivanova', position='Юрист по семейным спорам')
+    DocumentContent.objects.create(
+      document=self.document, lead='Вступление', when_needed='- Супруг против развода\n- Есть общие дети',
+      reviewed_by=lawyer, reviewed_at=date(2026, 11, 1))
+    DocumentFAQ.objects.create(document=self.document, question='Второй вопрос?', answer='Да', order=2)
+    DocumentFAQ.objects.create(document=self.document, question='Первый вопрос?', answer='Нет', order=1)
+    data = self.client.get(self.path).data['document']
+    self.assertEqual(data['content']['lead'], 'Вступление')
+    self.assertEqual(data['content']['when_needed'], '- Супруг против развода\n- Есть общие дети')
+    self.assertEqual(data['content']['reviewed_by']['name'], 'Иванова Анна')
+    self.assertEqual(data['content']['reviewed_at'], '2026-11-01')
+    self.assertEqual(data['faq'], [{'question': 'Первый вопрос?', 'answer': 'Нет'}, {'question': 'Второй вопрос?', 'answer': 'Да'}])
+
+  def test_content_changes_move_the_sitemap_date(self):
+    stamp = lambda: Documents.objects.get(pk=self.document.pk).updated_at
+    before = stamp()
+    content = DocumentContent.objects.create(document=self.document, lead='Текст')
+    after_content = stamp()
+    self.assertGreater(after_content, before)
+    question = DocumentFAQ.objects.create(document=self.document, question='Вопрос?', answer='Ответ')
+    after_question = stamp()
+    self.assertGreater(after_question, after_content)
+    question.delete()
+    self.assertGreater(stamp(), after_question)
+    lastmod = {item['url']: item['lastmod'] for item in self.client.get('/api/categories/sitemap/').data}
+    self.assertEqual(lastmod['/categories/family/marriage/claim'], stamp().isoformat())
+    content.delete()
+
+  def test_admin_saves_content_and_questions_with_the_document(self):
+    self.client.force_login(get_user_model().objects.create_superuser('admin', 'admin@example.com', 'password'))
+    url = f'/admin/categories/documents/{self.document.pk}/change/'
+    page = self.client.get(url)
+    for field in ('content-0-lead', 'content-0-filing', 'content-0-reviewed_by', 'faq-0-question'):
+      self.assertContains(page, f'name="{field}"')
+    data = {
+      'title': self.document.title, 'slug': self.document.slug, 'category': self.leaf.pk, 'price': 0,
+      'description': '', 'pages': '',
+      'content-TOTAL_FORMS': 1, 'content-INITIAL_FORMS': 0, 'content-MIN_NUM_FORMS': 0, 'content-MAX_NUM_FORMS': 1,
+      'content-0-id': '', 'content-0-document': self.document.pk,
+      'content-0-lead': 'Вступление из админки', 'content-0-filing': '- В районный суд',
+      'faq-TOTAL_FORMS': 1, 'faq-INITIAL_FORMS': 0, 'faq-MIN_NUM_FORMS': 0, 'faq-MAX_NUM_FORMS': 1000,
+      'faq-0-id': '', 'faq-0-document': self.document.pk,
+      'faq-0-question': 'Сколько длится рассмотрение?', 'faq-0-answer': 'Обычно около месяца', 'faq-0-order': 0,
+    }
+    for name in ('seo_title', 'seo_description', 'h1', 'when_needed', 'whats_inside', 'legal_basis',
+                 'attachments', 'preview', 'reviewed_by', 'reviewed_at'):
+      data[f'content-0-{name}'] = ''
+    response = self.client.post(url, data)
+    self.assertEqual(response.status_code, 302, getattr(response, 'context', None) and response.context.get('errors'))
+    self.document.refresh_from_db()
+    self.assertEqual(self.document.content.lead, 'Вступление из админки')
+    self.assertEqual(list(self.document.faq.values_list('question', flat=True)), ['Сколько длится рассмотрение?'])
 

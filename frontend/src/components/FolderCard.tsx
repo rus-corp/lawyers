@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import Link from 'next/link';
 import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 import { TEMPLATES, withCount } from '@/lib/text';
+import { enter, stagger } from '@/lib/enter';
 
 const TAB_COLORS = ['#C62828','#1B4FD8','#2E7D32','#D4A017','#7B1FA2','#00838F','#E8600A','#1565C0'];
 
@@ -40,22 +41,31 @@ export default function FolderCard({
   };
   const onMouseLeave = () => { rotX.set(0); rotY.set(0); };
 
+  // Cards further down the page appear on scroll. Cards on the first screen use the CSS
+  // entrance, which does not wait for JavaScript.
   const enterProps = animateIn
-    ? { initial: { opacity: 0, y: 28 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true as const } }
-    : { initial: { opacity: 0, y: 20 }, animate:    { opacity: 1, y: 0 } };
+    ? {
+        initial: { opacity: 0, y: 28 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true as const },
+        transition: { duration: 0.55, delay: index * 0.07, ease: [0.16, 1, 0.3, 1] as const },
+        className: 'relative select-none',
+        style: { perspective: 800 },
+      }
+    : {
+        className: 'enter relative select-none',
+        style: { perspective: 800, ...enter({ y: 20, duration: 0.55, delay: stagger(index, 0.07), expo: true }) },
+      };
 
   return (
     <motion.div
       ref={ref}
       data-cursor="category"
-      className="relative select-none"
       {...enterProps}
-      transition={{ duration: 0.55, delay: index * 0.07, ease: [0.16, 1, 0.3, 1] }}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
-      style={{ perspective: 800 }}
     >
       <Link href={href} className="block rounded-2xl" onFocus={onHoverStart} onBlur={onHoverEnd}>
         <motion.div

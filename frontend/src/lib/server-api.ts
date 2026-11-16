@@ -12,6 +12,7 @@ import type {
   NewsItem,
   PageMeta,
   SearchItem,
+  SiteSettings,
 } from './types';
 
 const TTL = 60_000;
@@ -134,6 +135,22 @@ export const getPageMeta = cache(async (pagePath: string): Promise<PageMeta | nu
     return null;
   }
 });
+
+let settingsCache: { expires: number; value: Promise<SiteSettings | null> } | null = null;
+
+// Read on every page by the root layout. A failed request is remembered for a minute as well,
+// so an unavailable endpoint does not cost a request per page; callers fall back to defaults on null.
+// The pending request itself is cached, so the layout and its metadata share one call.
+export function getSiteSettings(): Promise<SiteSettings | null> {
+  const now = Date.now();
+  if (settingsCache && settingsCache.expires > now) return settingsCache.value;
+  const value = apiGet<SiteSettings>('settings/', { signal: AbortSignal.timeout(TIMEOUT) }).catch(error => {
+    console.error('Request failed: settings/', error);
+    return null;
+  });
+  settingsCache = { expires: now + TTL, value };
+  return value;
+}
 
 export async function getNews(): Promise<NewsItem[]> {
   return (await cachedGet<NewsItem[]>('news/')) ?? [];

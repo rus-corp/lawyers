@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
 import Logo from './Logo';
 import { CONTACT_EMAIL } from '@/lib/site';
+import { enter } from '@/lib/enter';
 
 const TABS = [
   { label: 'Главная', href: '/', color: 'bg-tab-home border-tab-home', match: (path: string) => path === '/' },
@@ -22,11 +22,9 @@ export default function SiteHeader() {
   const pathname = usePathname();
 
   return (
-    <motion.nav
-      initial={{ opacity: 0, y: -16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.1 }}
-      className="fixed top-0 left-0 right-0 z-[70]"
+    <nav
+      className="enter fixed top-0 left-0 right-0 z-[70]"
+      style={enter({ y: -16, duration: 0.6, delay: 0.1 })}
       aria-label="Основная навигация"
     >
       {/* Warm neutral navigation panel */}
@@ -91,6 +89,6 @@ export default function SiteHeader() {
           })}
         </div>
       </div>
-    </motion.nav>
+    </nav>
   );
 }

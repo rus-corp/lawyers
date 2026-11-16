@@ -17,6 +17,9 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG')
 
+# The public address of the site; shown in the admin settings page.
+SITE_URL = 'https://pravo-dok.ru'
+
 
 ALLOWED_HOSTS = [
     'pravo-dok.ru',
@@ -173,17 +176,24 @@ if not os.path.exists(log_dir):
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'filters': {
+        'skip_missing_meta': {
+            '()': 'lawyers_back.logging_filters.SkipMissingMeta',
+        },
+    },
     'handlers': {
         'console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',  # Указываем формат для консоли
+            'filters': ['skip_missing_meta'],
         },
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': os.path.join(log_dir, 'django_error.log'),
             'formatter': 'verbose',  # Указываем формат для файла
+            'filters': ['skip_missing_meta'],
         },
     },
     'loggers': {

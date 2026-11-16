@@ -2,12 +2,13 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { motion, useScroll, useTransform, useMotionValue, useSpring, useInView, AnimatePresence } from 'framer-motion';
-import HeroAnimation from '@/components/HeroAnimation';
 import FolderCard from '@/components/FolderCard';
 import CatalogSearch from '@/components/CatalogSearch';
 import { TEMPLATES, pad2, withCount } from '@/lib/text';
 import type { SearchItem } from '@/lib/types';
+import { enter } from '@/lib/enter';
 
 interface HomeCategory {
   id: number;
@@ -23,6 +24,10 @@ interface Props {
 }
 
 const ACCENTS = ['#C62828', '#1B4FD8', '#1B4FD8', '#C62828'];
+
+// The animated document card is decoration. Its code loads after the page has rendered,
+// into a box of fixed height, so nothing moves when it appears.
+const HeroAnimation = dynamic(() => import('@/components/HeroAnimation'), { ssr: false });
 
 /* ── Count-up hook ── */
 function useCountUp(target: number, duration = 1200) {
@@ -373,27 +378,19 @@ export default function HomeView({ categories, totalDocs, searchIndex }: Props) 
         <div className="relative z-10 max-w-[1400px] mx-auto px-5 sm:px-8 md:px-16 lg:px-24 w-full">
 
           {/* Label */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="flex items-center gap-3 mb-8"
-          >
+          <div className="enter flex items-center gap-3 mb-8" style={enter({ y: 20, duration: 0.7, delay: 0.2 })}>
             <div className="w-6 h-[1px] bg-[#C62828]" />
             <span className="font-display text-[11px] tracking-[0.25em] uppercase text-[#8C8880] font-medium">
               Правовые документы онлайн
             </span>
-          </motion.div>
+          </div>
 
           <h1 className="contents">
             {/* Row 1: full-width heading line */}
             <span className="mb-2 block" style={{ clipPath: 'inset(-20% 0% -30% 0%)' }}>
-              <motion.span
-                className="flex flex-wrap items-baseline gap-x-4 selection-none"
-                initial={{ y: 80, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                style={{ lineHeight: 1.0 }}
+              <span
+                className="enter flex flex-wrap items-baseline gap-x-4 selection-none"
+                style={{ lineHeight: 1.0, ...enter({ y: 80, duration: 1, delay: 0.3, expo: true }) }}
               >
                 <span className="font-display font-light text-[#1C1915]"
                   style={{ fontSize: 'clamp(34px, 5.5vw, 96px)', letterSpacing: '-0.02em' }}>
@@ -402,7 +399,7 @@ export default function HomeView({ categories, totalDocs, searchIndex }: Props) 
                 <span className="font-display font-black" style={{ fontSize: 'clamp(42px, 7.5vw, 128px)', color: '#1B4FD8', letterSpacing: '-0.03em' }}>
                   документы
                 </span>
-              </motion.span>
+              </span>
             </span>
           </h1>
 
@@ -412,35 +409,32 @@ export default function HomeView({ categories, totalDocs, searchIndex }: Props) 
             {/* Left: rest of heading + subtext + CTA */}
             <div>
               <div className="mb-1" style={{ clipPath: 'inset(-20% 0% -30% 0%)' }}>
-                <motion.div initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 1, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}>
+                <div className="enter" style={enter({ y: 80, duration: 1, delay: 0.45, expo: true })}>
                   <span className="font-display font-black italic text-[#1C1915] selection-none block"
                     style={{ fontSize: 'clamp(42px, 7.5vw, 128px)', letterSpacing: '-0.03em', lineHeight: 1.0, opacity: 0.22 }}>
                     на все случаи
                   </span>
-                </motion.div>
+                </div>
               </div>
 
               <div className="mb-12" style={{ clipPath: 'inset(-20% 0% -30% 0%)' }}>
-                <motion.div initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex items-baseline gap-4">
+                <div className="enter flex items-baseline gap-4" style={enter({ y: 80, duration: 1, delay: 0.6, expo: true })}>
                   <span className="font-display font-black text-[#1C1915] selection-none"
                     style={{ fontSize: 'clamp(42px, 7.5vw, 128px)', letterSpacing: '-0.03em', lineHeight: 1.0 }}>
                     жизни
                   </span>
-                  <motion.span initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: 1.1 }}
-                    className="font-display text-[12px] font-semibold tracking-[0.14em] uppercase self-end mb-2"
-                    style={{ color: '#C62828' }}>
+                  <span
+                    className="enter font-display text-[12px] font-semibold tracking-[0.14em] uppercase self-end mb-2"
+                    style={{ color: '#C62828', ...enter({ x: -10, delay: 1.1 }) }}>
                     {new Date().getFullYear()}
-                  </motion.span>
-                </motion.div>
+                  </span>
+                </div>
               </div>
 
-              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.9 }}
-                className="flex flex-col md:flex-row items-start md:items-end gap-8 md:gap-14">
+              {/* The largest text of the first screen on phones: it shows together with the page.
+                  A later start would fall into the time the phone is busy running scripts. */}
+              <div style={enter({ y: 16, duration: 0.7, delay: 0.1 })}
+                className="enter flex flex-col md:flex-row items-start md:items-end gap-8 md:gap-14">
                 <p className="font-body text-[17px] md:text-[19px] text-[#8C8880] max-w-[340px] leading-relaxed" style={{ fontWeight: 400 }}>
                   Актуальные шаблоны с понятными инструкциями.<br />Быстро, надёжно и без лишней сложности.
                 </p>
@@ -455,47 +449,39 @@ export default function HomeView({ categories, totalDocs, searchIndex }: Props) 
                     </svg>
                   </div>
                 </Link>
-              </motion.div>
+              </div>
             </div>
 
             {/* Right: document card — appears under "документы" */}
-            <motion.div
-              className="hidden md:block relative"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-              style={{ height: 380, marginTop: -8 }}
+            <div
+              className="enter hidden md:block relative"
+              style={{ height: 380, marginTop: -8, ...enter({ y: 30, duration: 0.9, delay: 0.55, expo: true }) }}
             >
               <HeroAnimation />
-            </motion.div>
+            </div>
           </div>
 
           {/* Mobile: animation below */}
-          <motion.div className="relative mt-5 h-[220px] opacity-80 md:hidden"
-            initial={{ opacity: 0 }} animate={{ opacity: 0.8 }} transition={{ delay: 1 }}>
+          <div className="enter relative mt-5 h-[220px] md:hidden" style={enter({ to: 0.8, delay: 1 })}>
             <HeroAnimation />
-          </motion.div>
+          </div>
 
         </div>
 
         {/* Scroll indicator — Figma-aligned: line above text */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        <div
+          style={enter({ delay: 1.6 })}
+          className="enter absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
           aria-hidden="true"
         >
-          <motion.div
-            className="w-[1px] bg-[#B8B4AE]"
-            initial={{ height: 0 }}
-            animate={{ height: 40 }}
-            transition={{ delay: 1.9, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          <div
+            className="enter h-10 w-[1px] origin-top bg-[#B8B4AE]"
+            style={enter({ scaleY: 0, from: 1, duration: 0.8, delay: 1.9, expo: true })}
           />
           <span className="font-display text-[9px] tracking-[0.35em] uppercase text-[#B8B4AE]">
             SCROLL
           </span>
-        </motion.div>
+        </div>
       </motion.section>
 
       {/* ── О НАС ── */}

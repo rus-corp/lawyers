@@ -1,7 +1,5 @@
-'use client';
-
-import { motion } from 'framer-motion';
 import PageBar from '@/components/PageBar';
+import { enter } from '@/lib/enter';
 
 interface Props {
   title: string;
@@ -15,11 +13,7 @@ export default function ArticleDetailView({ title, date, readTime, html }: Props
   return (
     <main className="min-h-screen bg-white">
       <PageBar variant="flat" maxWidth={1000} backHref="/news" backLabel="Все статьи" />
-      <motion.article
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mx-auto max-w-[860px] px-6 py-16 md:px-12 md:py-24"
-      >
+      <article className="enter mx-auto max-w-[860px] px-6 py-16 md:px-12 md:py-24" style={enter({ y: 20 })}>
         <div className="mb-6 flex flex-wrap gap-4 text-[10px] uppercase tracking-[0.16em] text-[#8C8880]">
           <span className="text-[#C62828]">Статья</span>
           <span>{date}</span>
@@ -29,7 +23,7 @@ export default function ArticleDetailView({ title, date, readTime, html }: Props
           {title}
         </h1>
         <div className="rich-text" dangerouslySetInnerHTML={{ __html: html }} />
-      </motion.article>
+      </article>
     </main>
   );
 }

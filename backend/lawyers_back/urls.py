@@ -19,7 +19,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
-from apps.meta.views import MeatTagsView
+from apps.meta.views import MeatTagsView, SiteSettingsView
 
 from django.conf.urls import handler404
 from django.shortcuts import render
@@ -39,6 +39,7 @@ urlpatterns = [
     path('api/backup/', include('apps.backup.urls', namespace='backup')),
     path('api/news/', include('apps.news.urls', namespace='news')),
     path('api/orders/', include('apps.orders.urls', namespace='orders')),
+    path('api/settings/', SiteSettingsView.as_view(), name='site_settings'),
     path('api/', include(router.urls)),
 ]
 

@@ -43,3 +43,4 @@ frontend/.env*.local
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
+seo.md

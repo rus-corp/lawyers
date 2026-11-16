@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useInView } from 'framer-motion';
 import PageBar from '@/components/PageBar';
 import { FONT_BODY, FONT_DISPLAY } from '@/lib/fonts';
+import { enter } from '@/lib/enter';
 
 interface Props {
   totalDocs: number | null;
@@ -258,28 +259,21 @@ export default function AboutView({ totalDocs, sectionsCount }: Props) {
 
         {/* Hero */}
         <div className="mb-24">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex items-center gap-3 mb-6"
-          >
+          <div className="enter flex items-center gap-3 mb-6" style={enter({ y: 12, duration: 0.5 })}>
             <div className="w-3 h-[1px] bg-[#C62828]" />
             <span className="text-[10px] tracking-[0.28em] uppercase text-[#8C8880]" style={{ fontFamily: FONT_DISPLAY }}>
               О платформе
             </span>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-16 items-end">
             <h1>
               {['Делаем право', 'доступным', 'каждому'].map((word, i) => (
                 <span key={i} className="block" style={{ clipPath: 'inset(-20% 0% -30% 0%)' }}>
-                  <motion.span
-                    initial={{ y: 80, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.08 + i * 0.08 }}
-                    className="block font-black leading-none"
+                  <span
+                    className="enter block font-black leading-none"
                     style={{
+                      ...enter({ y: 80, duration: 1, delay: 0.08 + i * 0.08, expo: true }),
                       fontFamily: FONT_DISPLAY,
                       fontSize: 'clamp(40px, 6vw, 96px)',
                       letterSpacing: '-0.04em',
@@ -287,21 +281,16 @@ export default function AboutView({ totalDocs, sectionsCount }: Props) {
                     }}
                   >
                     {word}{' '}
-                  </motion.span>
+                  </span>
                 </span>
               ))}
             </h1>
 
-            <motion.div
-              initial={{ opacity: 0, x: 24 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="pb-2"
-            >
+            <div className="enter pb-2" style={enter({ x: 24, duration: 0.8, delay: 0.4, expo: true })}>
               <p className="text-[16px] text-[#4A4642] leading-[1.75]" style={{ fontFamily: FONT_BODY }}>
                 <span className="font-bold text-[#1C1915]">ПРАВОДОК</span> — это современный онлайн-сервис, созданный для тех, кто стремится грамотно и самостоятельно решать юридические вопросы.
               </p>
-            </motion.div>
+            </div>
           </div>
         </div>
 

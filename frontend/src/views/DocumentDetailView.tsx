@@ -6,9 +6,11 @@ import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import EmailModal from '@/components/EmailModal';
 import Logo from '@/components/Logo';
+import PlainText from '@/components/PlainText';
+import { enter } from '@/lib/enter';
 import { createOrder, fetchPaymentsEnabled } from '@/lib/api';
-import { PAGES, formatPrice, pad2, withCount } from '@/lib/text';
-import type { Breadcrumb } from '@/lib/types';
+import { PAGES, formatDate, formatPrice, pad2, withCount } from '@/lib/text';
+import type { Breadcrumb, DocumentFAQ, LawyerInfo } from '@/lib/types';
 
 export interface InfoBlock {
   title: string;
@@ -16,16 +18,35 @@ export interface InfoBlock {
   items: string[];
 }
 
+// A section of the page written for this document; plain text from the admin panel.
+export interface ContentSection {
+  id: string;
+  title: string;
+  text: string;
+}
+
 interface Props {
   document: { id: number; title: string; price: number; pages: number | null; tags: string[] };
+  heading: string;
   breadcrumbs: Breadcrumb[];
-  description: string;
+  // shown when the document has no lead of its own
+  description?: string;
+  lead: string;
+  preview: string;
+  sections: ContentSection[];
+  faq: DocumentFAQ[];
+  review: { lawyer: LawyerInfo | null; date: string | null } | null;
   infoBlocks: InfoBlock[];
   instruction: { title: string; html: string } | null;
   initialPaymentsEnabled: boolean;
 }
 
 const DEFAULT_MESSAGE = 'Документ будет отправлен на указанную почту в течение нескольких минут.';
+
+const LIST_STYLES = '[&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:pl-5 [&_li+li]:mt-1';
+
+// The template text fades out towards the bottom of the sheet: it is a fragment, not the whole document.
+const PREVIEW_FADE = 'linear-gradient(to bottom, #000 72%, transparent)';
 
 // Real document titles run from two words to a full sentence, so the heading scales with length.
 function titleSize(length: number): string {
@@ -34,7 +55,20 @@ function titleSize(length: number): string {
   return 'clamp(40px, 5.5vw, 88px)';
 }
 
-export default function DocumentDetailView({ document: doc, breadcrumbs, description, infoBlocks, instruction, initialPaymentsEnabled }: Props) {
+export default function DocumentDetailView({
+  document: doc,
+  heading,
+  breadcrumbs,
+  description,
+  lead,
+  preview,
+  sections,
+  faq,
+  review,
+  infoBlocks,
+  instruction,
+  initialPaymentsEnabled,
+}: Props) {
   const router = useRouter();
   const [emailOpen, setEmailOpen] = useState(false);
   const [paymentsEnabled, setPaymentsEnabled] = useState(initialPaymentsEnabled);
@@ -74,18 +108,11 @@ export default function DocumentDetailView({ document: doc, breadcrumbs, descrip
   ].filter((row): row is { label: string; value: string } => Boolean(row.value));
 
   return (
-    <motion.div
-      className="min-h-screen bg-[white]"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-    >
+    <div className="enter min-h-screen bg-[white]" style={enter({ duration: 0.6 })}>
       {/* Header */}
-      <motion.header
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="relative z-20 flex items-center justify-between px-5 md:px-16 py-5 md:py-6 bg-[white]/90 backdrop-blur-sm border-b border-[#E8E4DE]"
+      <header
+        style={enter({ y: -20 })}
+        className="enter relative z-20 flex items-center justify-between px-5 md:px-16 py-5 md:py-6 bg-[white]/90 backdrop-blur-sm border-b border-[#E8E4DE]"
       >
         <Link
           href={backHref}
@@ -105,18 +132,16 @@ export default function DocumentDetailView({ document: doc, breadcrumbs, descrip
             </>
           )}
         </div>
-      </motion.header>
+      </header>
 
       {/* Hero entrance */}
       <div className="pt-12 pb-8 px-5 md:px-16 lg:px-24 max-w-[1400px] mx-auto">
 
         {/* Breadcrumb */}
-        <motion.nav
+        <nav
           aria-label="Хлебные крошки"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="font-display mb-8 flex flex-wrap items-center gap-2 text-[9px] uppercase tracking-[0.14em] text-[#8C8880] sm:mb-10 sm:text-[11px] sm:tracking-[0.2em]"
+          style={enter({ y: 10, duration: 0.5, delay: 0.2 })}
+          className="enter font-display mb-8 flex flex-wrap items-center gap-2 text-[9px] uppercase tracking-[0.14em] text-[#8C8880] sm:mb-10 sm:text-[11px] sm:tracking-[0.2em]"
         >
           <Link href="/categories" data-cursor="pointer" className="transition-colors hover:text-[#C62828]">Документы</Link>
           {parents.map(item => (
@@ -127,41 +152,34 @@ export default function DocumentDetailView({ document: doc, breadcrumbs, descrip
           ))}
           <span className="text-[#C62828]">/</span>
           <span aria-current="page" className="text-[#1C1915]">{doc.title}</span>
-        </motion.nav>
+        </nav>
 
         {/* Document entering animation */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-16 items-start">
 
           {/* Left: Title + content */}
-          <div className="min-w-0">
+          <div className="min-w-0 lg:col-start-1 lg:row-start-1">
             <div className="overflow-hidden mb-6 pb-2">
-              <motion.h1
-                initial={{ y: '110%' }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.25 }}
-                className="font-display font-black text-[#1C1915] leading-[1.02] break-words"
-                style={{ fontSize: titleSize(doc.title.length) }}
+              <h1
+                className="enter font-display font-black text-[#1C1915] leading-[1.02] break-words"
+                style={{ fontSize: titleSize(heading.length), ...enter({ y: '110%', from: 1, duration: 0.9, delay: 0.25, expo: true }) }}
               >
-                {doc.title}
-              </motion.h1>
+                {heading}
+              </h1>
             </div>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.5 }}
-              className={`font-body text-[18px] text-[#8C8880] leading-relaxed max-w-xl ${doc.tags.length > 0 ? 'mb-12' : 'mb-16'}`}
+            <div
+              style={enter({ y: 20, duration: 0.7, delay: 0.2 })}
+              className={`enter font-body text-[18px] text-[#8C8880] leading-relaxed max-w-xl ${doc.tags.length > 0 ? 'mb-12' : 'mb-16'}`}
             >
-              {description}
-            </motion.p>
+              {lead ? <PlainText text={lead} className={`space-y-4 ${LIST_STYLES}`} /> : <p>{description}</p>}
+            </div>
 
             {/* Tags */}
             {doc.tags.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-                className="flex flex-wrap gap-2 mb-16"
+              <div
+                style={enter({ y: 16, delay: 0.6 })}
+                className="enter flex flex-wrap gap-2 mb-16"
               >
                 {doc.tags.map(tag => (
                   <span
@@ -171,16 +189,14 @@ export default function DocumentDetailView({ document: doc, breadcrumbs, descrip
                     {tag}
                   </span>
                 ))}
-              </motion.div>
+              </div>
             )}
 
             {/* Document content — reading mode */}
-            <motion.div
-              initial={{ opacity: 0, y: 30, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.9, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="relative"
-              aria-hidden="true"
+            <div
+              style={enter({ y: 30, scale: 0.98, duration: 0.9, delay: 0.7, expo: true })}
+              className="enter relative"
+              aria-hidden={preview ? undefined : true}
             >
               {/* Paper depth effect */}
               <div className="absolute -bottom-3 -right-3 inset-x-3 h-full bg-[#1C1915] opacity-[0.04] rounded-sm" />
@@ -191,34 +207,49 @@ export default function DocumentDetailView({ document: doc, breadcrumbs, descrip
                 className="relative bg-[#FEFCF9] border border-[#E0DAD3] p-6 sm:p-10 md:p-14"
                 style={{ boxShadow: '0 20px 60px rgba(28,25,21,0.1), 0 4px 16px rgba(28,25,21,0.06)' }}
               >
-                <div className="min-h-[340px] py-5 md:min-h-[640px]">
-                  <div className="mb-12 text-center font-mono md:mb-20 text-[18px] uppercase tracking-[0.12em] text-[#1C1915] break-words md:text-[22px]">
-                    {doc.title}
+                {preview ? (
+                  <div
+                    className="max-h-[560px] overflow-hidden py-2 md:max-h-[760px]"
+                    style={{ maskImage: PREVIEW_FADE, WebkitMaskImage: PREVIEW_FADE }}
+                  >
+                    <PlainText
+                      text={preview}
+                      className={`space-y-5 break-words font-mono text-[12px] leading-[1.9] text-[#3D3935] sm:text-[13px] ${LIST_STYLES}`}
+                    />
                   </div>
-                  <div className="space-y-8">
-                    {[42, 68, 86, 74, 92, 58, 82, 96, 71, 88, 64, 91].map((width, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ scaleX: 0 }}
-                        whileInView={{ scaleX: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.9, delay: index * 0.07, ease: 'linear' }}
-                        className="h-[2px] bg-[#3D3935]/55"
-                        style={{ width: `${width}%`, transformOrigin: 'left' }}
-                      />
-                    ))}
+                ) : (
+                  <div className="min-h-[340px] py-5 md:min-h-[640px]">
+                    <div className="mb-12 text-center font-mono md:mb-20 text-[18px] uppercase tracking-[0.12em] text-[#1C1915] break-words md:text-[22px]">
+                      {doc.title}
+                    </div>
+                    <div className="space-y-8">
+                      {[42, 68, 86, 74, 92, 58, 82, 96, 71, 88, 64, 91].map((width, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ scaleX: 0 }}
+                          whileInView={{ scaleX: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.9, delay: index * 0.07, ease: 'linear' }}
+                          className="h-[2px] bg-[#3D3935]/55"
+                          style={{ width: `${width}%`, transformOrigin: 'left' }}
+                        />
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
-            </motion.div>
+            </div>
+            {preview && (
+              <p className="font-body mt-6 text-[12px] text-[#8C8880]">
+                Начало шаблона. Полный документ в формате DOCX придёт на почту.
+              </p>
+            )}
           </div>
 
           {/* Right: Actions sidebar */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="lg:sticky lg:top-28 space-y-6"
+          <div
+            style={enter({ x: 30, duration: 0.8, delay: 0.6 })}
+            className={`enter lg:sticky lg:top-28 lg:col-start-2 lg:row-start-1 space-y-6 ${sections.length > 0 ? 'lg:row-span-2' : ''}`}
           >
             {/* Price card */}
             <div className="border border-[#E8E4DE] p-8 bg-[#FEFCF9]">
@@ -269,11 +300,63 @@ export default function DocumentDetailView({ document: doc, breadcrumbs, descrip
               ))}
             </div>
 
+            {review && (
+              <div className="border border-[#E8E4DE] p-8">
+                <div className="font-display mb-5 text-[11px] tracking-[0.2em] uppercase text-[#8C8880]">Проверено юристом</div>
+                {review.lawyer && (
+                  <div className="flex items-center gap-4">
+                    {review.lawyer.photo && (
+                      // Photos are served by the site's web server as they are, without resizing.
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={review.lawyer.photo}
+                        alt={review.lawyer.name}
+                        width={56}
+                        height={56}
+                        loading="lazy"
+                        className="h-14 w-14 shrink-0 rounded-full object-cover"
+                      />
+                    )}
+                    <div className="min-w-0">
+                      <div className="font-display text-[15px] font-semibold text-[#1C1915]">{review.lawyer.name}</div>
+                      <div className="font-body mt-1 text-[12px] leading-snug text-[#6A6662]">{review.lawyer.position}</div>
+                      {review.lawyer.experience && (
+                        <div className="font-body mt-1 text-[12px] leading-snug text-[#8C8880]">{review.lawyer.experience}</div>
+                      )}
+                    </div>
+                  </div>
+                )}
+                {review.date && (
+                  <div className={`font-body text-[12px] text-[#8C8880] ${review.lawyer ? 'mt-5' : ''}`}>
+                    Дата проверки: {formatDate(review.date)}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Legal note */}
             <p className="font-body text-[11px] text-[#8C8880] leading-relaxed px-1">
               Документ соответствует действующему законодательству Российской Федерации. Рекомендуем проконсультироваться с юристом перед подписанием.
             </p>
-          </motion.div>
+          </div>
+
+          {/* The page's own texts. Rendered without entrance animation, so they are visible in the HTML as is. */}
+          {sections.length > 0 && (
+            <div className="min-w-0 space-y-14 lg:col-start-1 lg:row-start-2">
+              {sections.map((section, index) => (
+                <section key={section.id} aria-labelledby={`about-${section.id}`} className="border-t border-[#E8E4DE] pt-12">
+                  <div className="mb-3 text-[10px] tracking-[0.18em] text-[#C62828]">{pad2(index + 1)}</div>
+                  <h2
+                    id={`about-${section.id}`}
+                    className="font-display mb-6 text-[28px] font-black leading-tight tracking-[-0.03em] text-[#1C1915] md:text-[36px]"
+                  >
+                    {section.title}
+                  </h2>
+                  <PlainText text={section.text} className="rich-text max-w-[760px]" />
+                </section>
+              ))}
+            </div>
+          )}
         </div>
 
         <motion.section
@@ -288,7 +371,7 @@ export default function DocumentDetailView({ document: doc, breadcrumbs, descrip
               Всё необходимое — в одном письме
             </h2>
           </div>
-          <div className="grid border-l border-t border-[#E8E4DE] md:grid-cols-2">
+          <div className={`grid border-l border-t border-[#E8E4DE] ${infoBlocks.length === 3 ? 'lg:grid-cols-3' : 'md:grid-cols-2'}`}>
             {infoBlocks.map((block, index) => (
               <div key={index} className="border-b border-r border-[#E8E4DE] p-7 md:p-9">
                 <div className="mb-6 text-[10px] tracking-[0.18em] text-[#C62828]">{pad2(index + 1)}</div>
@@ -318,6 +401,39 @@ export default function DocumentDetailView({ document: doc, breadcrumbs, descrip
           </section>
         )}
 
+        {faq.length > 0 && (
+          <section aria-labelledby="faq-title" className="mt-24 border-t border-[#E8E4DE] pt-14">
+            <div className="mx-auto max-w-[860px]">
+              <div className="mb-3 text-[10px] uppercase tracking-[0.24em] text-[#C62828]">Вопросы и ответы</div>
+              <h2
+                id="faq-title"
+                className="font-display mb-10 text-[32px] font-black leading-tight tracking-[-0.03em] text-[#1C1915] md:text-[46px]"
+              >
+                Частые вопросы
+              </h2>
+              <div className="border-t border-[#E8E4DE]">
+                {faq.map((item, index) => (
+                  <details key={index} open={index === 0} className="group border-b border-[#E8E4DE]">
+                    <summary
+                      data-cursor="pointer"
+                      className="flex cursor-pointer list-none items-start justify-between gap-6 py-6 [&::-webkit-details-marker]:hidden"
+                    >
+                      <h3 className="font-display text-[17px] font-bold leading-snug text-[#1C1915] md:text-[19px]">{item.question}</h3>
+                      <span
+                        aria-hidden="true"
+                        className="mt-0.5 shrink-0 text-[22px] leading-none text-[#C62828] transition-transform duration-300 group-open:rotate-45"
+                      >
+                        +
+                      </span>
+                    </summary>
+                    <PlainText text={item.answer} className="rich-text pb-8 md:pr-12" />
+                  </details>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
       </div>
 
       <AnimatePresence>
@@ -331,6 +447,6 @@ export default function DocumentDetailView({ document: doc, breadcrumbs, descrip
           />
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }

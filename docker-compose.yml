@@ -25,6 +25,7 @@ services:
       - lawyers_network
   api:
     container_name: api
+    restart: unless-stopped
     build: 
       context: ./backend
       dockerfile: Dockerfile
@@ -45,6 +46,7 @@ services:
       - lawyers_network
   web:
     container_name: web
+    restart: unless-stopped
     build:
       context: ./frontend
       dockerfile: Dockerfile

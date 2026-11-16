@@ -1,4 +1,5 @@
 import sanitizeHtml from 'sanitize-html';
+import { truncate } from './text';
 
 const ALLOWED_TAGS = [
   ...sanitizeHtml.defaults.allowedTags,
@@ -39,12 +40,7 @@ export function stripHtml(html: string): string {
     .trim();
 }
 
-export function excerpt(html: string, length = 200): string {
-  const text = stripHtml(html);
-  if (text.length <= length) return text;
-  const cut = text.slice(0, length);
-  return `${cut.slice(0, Math.max(cut.lastIndexOf(' '), length - 40)).replace(/[\s.,;:—-]+$/, '')}…`;
-}
+export const excerpt = (html: string, length = 200) => truncate(stripHtml(html), length);
 
 export function readTime(html: string): string {
   const words = stripHtml(html).split(' ').filter(Boolean).length;
